@@ -91,7 +91,7 @@ const Sidebar = () => {
           height="50"
         />
         <div className={`${styles.userDetail} flex flex-col object-cover`}>
-          <span className={`${""} font-[500]`}>John doe</span>
+          <span className={`${""} font-[500]`}>Jaenudin Ngaciro</span>
           <span className={`${""} text-[12px] text-[var(--textSoft)]`}>
             Administrator
           </span>

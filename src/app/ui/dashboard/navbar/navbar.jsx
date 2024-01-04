@@ -19,7 +19,7 @@ const Navbar = () => {
             <input
               type="text"
               placeholder="search ..."
-              className={`${styles.input} bg-transparent border-none text-[var(--textSoft)]`}
+              className={`${styles.input} bg-transparent border-pink-500 focus:outline-none text-[var(--textSoft)]`}
             />         
         </div>
         <div className={`${styles.icons} flex gap-[20px] items-center pl-[1rem]`}>
