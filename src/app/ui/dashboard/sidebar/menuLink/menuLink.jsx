@@ -8,12 +8,11 @@ const MenuLink = ({ item, className }) => {
   return (
     <Link
       href={item.path} 
-      className={`${styles.container} ${pathname === item.path && styles.active} hover:bg-[#2e374a] flex p-2 hover:rounded mt-[5px] ${className}`}
-    >
-      <div className=" flex padding-[20px] align-center gap-[10px] ">
-        <div className=" pt-[4px] mr-2">{item.icon}</div>
+      className={` ${pathname === item.path && styles.active} flex  hover:bg-[#2e374a] p-[20px] align-center gap-[10px] hover:rounded-[10px] mt-[5px]  ${className}`}>
+      
+        <div className=" pt-[4px]">{item.icon}</div>
         <div className="">{item.title}</div>
-      </div>
+      
     </Link>
   );
 };
