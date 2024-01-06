@@ -12,7 +12,7 @@ import {
   MdLogout,
 } from "react-icons/md";
 import MenuLink from "./menuLink/menuLink";
-import avatar from "../../../../../public/its-over-done-meme.png";
+import avatar from "../../../../../../public/its-over-done-meme.png";
 import Image from "next/image";
 
 const menuItems = [
@@ -21,22 +21,22 @@ const menuItems = [
     list: [
       {
         title: "Dashboard",
-        path: "/dashboard",
+        path: "/adminpanel/dashboard",
         icon: <MdDashboard />,
       },
       {
         title: "Users",
-        path: "/dashboard/users",
+        path: "/adminpanel//dashboard/users",
         icon: <MdSupervisedUserCircle />,
       },
       {
         title: "Products",
-        path: "/dashboard/products",
+        path: "/adminpanel//dashboard/products",
         icon: <MdShoppingBag />,
       },
       {
         title: "Transactions",
-        path: "/dashboard/transactions",
+        path: "/adminpanel//dashboard/transactions",
         icon: <MdAttachMoney />,
       },
     ],
@@ -46,17 +46,17 @@ const menuItems = [
     list: [
       {
         title: "Revenue",
-        path: "/dashboard/revenue",
+        path: "/adminpanel//dashboard/revenue",
         icon: <MdWork />,
       },
       {
         title: "Reports",
-        path: "/dashboard/reports",
+        path: "/adminpanel//dashboard/reports",
         icon: <MdAnalytics />,
       },
       {
         title: "Teams",
-        path: "/dashboard/teams",
+        path: "/adminpanel//dashboard/teams",
         icon: <MdPeople />,
       },
     ],
@@ -66,13 +66,13 @@ const menuItems = [
     list: [
       {
         title: "Settings",
-        path: "/dashboard/settings",
+        path: "/adminpanel//dashboard/settings",
         icon: <MdOutlineSettings />,
       },
 
       {
         title: "Help",
-        path: "/dashboard/help",
+        path: "/adminpanel//dashboard/help",
         icon: <MdHelpCenter />,
       },
     ],

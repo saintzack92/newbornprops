@@ -6,8 +6,8 @@ import styles from "../ui/dashboard/dashboard.module.css";
 
 const Dashboard = () => {
   return (
-    <div className={`${styles.wrapper} flex gap-[20px] mt-[20px]`}>
-      <div className={`${styles.main} grow-[3] flex flex-col gap-[20px]`}>
+    <div className={`${styles.wrapper} flex gap-[20px] mt-[20px] justify-between`}>
+      <div className={`${styles.main} flex-[3] flex flex-col gap-[20px] `}>
         <div className={`${styles.card} flex gap-[20px] justify-between`}>
           <Card />
           <Card />
@@ -16,10 +16,9 @@ const Dashboard = () => {
         <Transactions />
         <Chart />
       </div>
-      <div className={`${styles.side} grow-[1]`}>
+      <div className={`${styles.side} flex-[1] right-0`}>
         <RightBar />
       </div>
-      
     </div>
   );
 };
