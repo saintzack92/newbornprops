@@ -102,7 +102,7 @@ const Sidebar = () => {
           return (
             <li key={item.title}>
               <span
-                className={`${styles.cat} text-[var(--textSoft)] font-bold font-[13px]`}
+                className={`${styles.cat} text-[var(--textSoft)] font-bold text-[13px]`}
               >
                 {item.title}
               </span>

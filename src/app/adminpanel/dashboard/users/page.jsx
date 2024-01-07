@@ -1,7 +1,16 @@
-const User = ()=>{
+import styles from '../../../adminpanel/ui/dashboard/search/search.module.css'
+import Search from '../../ui/dashboard/search/search'
+
+const UsersPage = ({placeholder})=>{
     return (
-        <div>User</div>
+        <div className={`${styles.container}`}>
+            <div className={`${styles.top}`}>
+<Search placeholder={placeholder}/>
+
+            </div>
+            <table className={`${styles.table}`}> </table>
+        </div>
     )
 }
 
-export default User
+export default UsersPage 
