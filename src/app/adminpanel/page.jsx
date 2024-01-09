@@ -3,10 +3,12 @@ import Dashboard from './dashboard/page'
 
 const AdminPanel = () => {
   return (
-    <>
-    test
+    <div className=''>
+    
+  
       <Dashboard />
-    </>
+      
+    </div>
   );
 };
 
