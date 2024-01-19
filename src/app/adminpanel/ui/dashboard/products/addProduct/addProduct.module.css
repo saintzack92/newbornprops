@@ -1,0 +1,5 @@
+.formChild {
+    @apply p-[10px];
+    /* @apply bg-[green]; */
+    /* Apply Tailwind padding */
+  }
