@@ -5,10 +5,16 @@ import Image from "next/image";
 const AddProductPage = () => {
   return (
     <div
-      className={`${styles.container} bg-[var(--bgSoft)] p-[20px] rounded-[10px] mt-[20px]`}
+      className={`${styles.container} bg-[var(--bgSoft)] p-[20px] rounded-[10px] mt-[20px] `}
     >
-      <form className={`${styles.form} flex has-[a]:bg-red-500 `}>
-        <input type="text" placeholder="title" name="title" required />
+      <form className={`${styles.form} flex flex-wrap justify-between`}>
+        <input
+          type="text"
+          placeholder="title"
+          name="title"
+          required
+          className={`${styles.formChild} ${styles.formChildInput} `}
+        />
         <select name="cat" id="cat" className={`${styles.formChild}`}>
           <option value="general">Choose a Category</option>
           <option value="computer">Computer</option>
@@ -21,37 +27,39 @@ const AddProductPage = () => {
           placeholder="price"
           name="price"
           required
-          className={`${styles.formChild}`}
+          className={`${styles.formChild} ${styles.formChildInput}`}
         />
         <input
           type="number"
           placeholder="stock"
           name="stock"
           required
-          className={`${styles.formChild}`}
+          className={`${styles.formChild} ${styles.formChildInput}`}
         />
         <input
           type="text"
           placeholder="color"
           name="color"
           required
-          className={`${styles.formChild}`}
+          className={`${styles.formChild} ${styles.formChildInput}`}
         />
         <input
           type="text"
           placeholder="size"
           name="size"
           required
-          className={`${styles.formChild}`}
+          className={`${styles.formChild} ${styles.formChildInput}`}
         />
         <textarea
           name="desc"
           id="desc"
           rows="16"
           placeholder="description"
-          className={`${styles.formChild}`}
+          className={`${styles.formChild} p-[30px]`}
         ></textarea>
-        <button type="submit"></button>
+        <button type="submit" className={`${styles.formChild}`}>
+          Submit
+        </button>
       </form>
       <ul role="list">
         <li class="group/item hover:bg-indigo-100 ...">
@@ -64,9 +72,10 @@ const AddProductPage = () => {
             class="group/edit invisible hover:bg-indigo-200 group-hover/item:visible group-hover/item:rounded-[50px] flex group-hover/item:scale-[80%] group-hover/item:duration-[2000ms] group-hover/item:ease-out group-hover/item:infinite"
             href="tel:bambang"
           >
-            <span class="group-hover/edit:text-yellow-700 group-hover/edit:font-bold">Call</span>
-            <svg class="group-hover/edit:translate-x-0.5 group-hover/edit:text-red-500 group-hover/edit:bg-[yellow]">
-            </svg>
+            <span class="group-hover/edit:text-yellow-700 group-hover/edit:font-bold">
+              Call
+            </span>
+            <svg class="group-hover/edit:translate-x-0.5 group-hover/edit:text-red-500 group-hover/edit:bg-[yellow]"></svg>
           </a>
         </li>
         {`/each`}
