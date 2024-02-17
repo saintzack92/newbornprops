@@ -15,7 +15,7 @@ const AddProductPage = () => {
           required
           className={`${styles.formChild} ${styles.formChildInput} `}
         />
-        <select name="cat" id="cat" className={`${styles.formChild}`}>
+        <select name="cat" id="cat" className={`${styles.formChild} ${styles.formChildInput}`}>
           <option value="general">Choose a Category</option>
           <option value="computer">Computer</option>
           <option value="tv">TV</option>
@@ -55,9 +55,9 @@ const AddProductPage = () => {
           id="desc"
           rows="16"
           placeholder="description"
-          className={`${styles.formChild} p-[30px]`}
+          className={`${styles.formChild} w-[100%] p-[30px]`}
         ></textarea>
-        <button type="submit" className={`${styles.formChild}`}>
+        <button type="submit" className={` w-[100%] p-[30px] !bg-[teal] !text-[var(--text)] !rounded-[5px] cursor-pointer ${styles.formChild}`}>
           Submit
         </button>
       </form>
@@ -69,13 +69,13 @@ const AddProductPage = () => {
             <p>{`person.title`}</p>
           </div>
           <a
-            class="group/edit invisible hover:bg-indigo-200 group-hover/item:visible group-hover/item:rounded-[50px] flex group-hover/item:scale-[80%] group-hover/item:duration-[2000ms] group-hover/item:ease-out group-hover/item:infinite"
+            className="group/edit invisible hover:bg-indigo-200 group-hover/item:visible group-hover/item:rounded-[50px] flex group-hover/item:scale-[80%] group-hover/item:duration-[2000ms] group-hover/item:ease-out group-hover/item:infinite"
             href="tel:bambang"
           >
-            <span class="group-hover/edit:text-yellow-700 group-hover/edit:font-bold">
+            <span className="group-hover/edit:text-yellow-700 group-hover/edit:font-bold">
               Call
             </span>
-            <svg class="group-hover/edit:translate-x-0.5 group-hover/edit:text-red-500 group-hover/edit:bg-[yellow]"></svg>
+            <svg className="group-hover/edit:translate-x-0.5 group-hover/edit:text-red-500 group-hover/edit:bg-[yellow]"></svg>
           </a>
         </li>
         {`/each`}

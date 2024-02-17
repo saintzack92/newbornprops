@@ -26,17 +26,17 @@ const menuItems = [
       },
       {
         title: "Users",
-        path: "/adminpanel//dashboard/users",
+        path: "/adminpanel/dashboard/users",
         icon: <MdSupervisedUserCircle />,
       },
       {
         title: "Products",
-        path: "/adminpanel//dashboard/products",
+        path: "/adminpanel/dashboard/products",
         icon: <MdShoppingBag />,
       },
       {
         title: "Transactions",
-        path: "/adminpanel//dashboard/transactions",
+        path: "/adminpanel/dashboard/transactions",
         icon: <MdAttachMoney />,
       },
     ],
@@ -46,17 +46,17 @@ const menuItems = [
     list: [
       {
         title: "Revenue",
-        path: "/adminpanel//dashboard/revenue",
+        path: "/adminpanel/dashboard/revenue",
         icon: <MdWork />,
       },
       {
         title: "Reports",
-        path: "/adminpanel//dashboard/reports",
+        path: "/adminpanel/dashboard/reports",
         icon: <MdAnalytics />,
       },
       {
         title: "Teams",
-        path: "/adminpanel//dashboard/teams",
+        path: "/adminpanel/dashboard/teams",
         icon: <MdPeople />,
       },
     ],
@@ -66,13 +66,13 @@ const menuItems = [
     list: [
       {
         title: "Settings",
-        path: "/adminpanel//dashboard/settings",
+        path: "/adminpanel/dashboard/settings",
         icon: <MdOutlineSettings />,
       },
 
       {
         title: "Help",
-        path: "/adminpanel//dashboard/help",
+        path: "/adminpanel/dashboard/help",
         icon: <MdHelpCenter />,
       },
     ],

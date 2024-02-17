@@ -12,7 +12,7 @@ const UsersPage = () => {
     >
       <div className={`${styles.top} flex items-center justify-between py-[10px]`}>
         <Search placeholder="Search for a user" />
-        <Link href={"adminpanel/dashboard/users/add"}>
+        <Link href={"users/add"}>
           <button
             className={`${styles.addButton} p-[10px] bg-[#5d57c9] text-[var(--text) rounded-[10px] border-none cursor-pointer`}
           >

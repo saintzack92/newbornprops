@@ -25,7 +25,7 @@ const RightbarCard = ({ title, descHow, descTitle, descThree }) => {
           <h3 className={`${styles.title}font-500 font-[12px] text-[var(--textSoft)]`}>{descHow}</h3>
           <span className={`${styles.subtitle}`}>{descTitle}</span>
           <p className={`${styles.desc}`}>{descThree}</p>
-          <button className={`${styles.button} p-[10px] bg-indigo-300 flex items-center gap-[10px] bg-[#5d57c9] text-[white] border-none rounded-[5px] cursor-pointer w-max`}>
+          <button className={`${styles.button} p-[10px]  flex items-center gap-[10px] bg-[#5d57c9] text-[white] border-none rounded-[5px] cursor-pointer w-max`}>
             <MdPlayCircleFilled />
             <span>Watch</span>
           </button>
