@@ -52,7 +52,7 @@ const UsersPage = () => {
             <td>Active</td>
             <td>
               <div className={`${styles.button} flex gap-[10px]`}>
-                <Link href="/">
+                <Link href="users/test">
                   <button
                     className={`${styles.button} py-[5px] px-[10px] rounded-[5px] text-[var(--text)] border-none cursor-pointer bg-[teal]`}
                   >

@@ -1,5 +1,5 @@
 import { MdSupervisedUserCircle } from "react-icons/md";
-import styles from "./card.module.css";
+import styles from "../card/card.module.css";
 
 const Card = () => {
   return (
@@ -7,8 +7,8 @@ const Card = () => {
       <MdSupervisedUserCircle size={24} />
       <div className={`${styles.texts} flex flex-col gap-[20px]`}>
         <span className={`${styles.title}`}> Total Users</span>
-        <span className={`${styles.number} font-[24px] font-[500] `}> 10.274</span>
-        <span className={`${styles.detail} font-[12px] font-[300]`}>
+        <span className={`${styles.number} font-[500] `}> 10.274</span>
+        <span className={`${styles.detail}  font-[300]`}>
           <span className={`${styles.positive} text-[lime]`}>12% </span>
           more than previous week
         </span>
