@@ -7,10 +7,11 @@ const Input = ({
   error,
   customClasses,
   labelTxt,
-  isTextArea = false
+  isTextArea = false,
+  isSelect=false
   
 }) => {
-//   const finalClasses = `w-full ${customClasses}`;
+  const finalClasses = ` ${customClasses}`;
 
   return (
     <>
@@ -20,10 +21,22 @@ const Input = ({
         type={type}
         name={name}
         placeholder={placeholder}
-        className={customClasses}
+        className={finalClasses}
         
       />
-    ):(
+    ): isSelect ?(
+      name === 'isAdmin' ? (
+        <select name='isAdmin' id='isAdmin' className={customClasses}>
+          <option value={true}>Yes</option>
+          <option value={false}>No</option>
+        </select>
+      ) : name === 'isActive' ? (
+        <select name='isActive' id='isActive' className={customClasses}>
+          <option value={true}>Yes</option>
+          <option value={false}>No</option>
+        </select>
+      ) : null
+    ) : (
         <input
         type={type}
         name={name}
