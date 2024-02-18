@@ -7,7 +7,7 @@ import Image from 'next/image'
 const SingleProductPage = () => {
     return (
         <div className={`${styles.container}  gap-[50px] mt-[20px]`}>
-            <div className={`${styles.infoContainer} flex-[1] text-[var(--textSoft)] font-[500] h-max bg-[var(--bgSoft)] p-[20px] rounded-[10px]`}>
+            <div className={`${styles.infoContainer} flex-[1] text-[var(--textSoft)] font-[500] h-max bg-[var(--bgSoft)] p-[20px] rounded-[10px] text-center`}>
                 <div className={`${styles.imgContainer} w-[100%] h-[300px] relative rounded-[10px] mb-[20px] overflow-hidden`}>
                     <Image src={img} alt='' fill  className='object-contain'/>
                 </div>
