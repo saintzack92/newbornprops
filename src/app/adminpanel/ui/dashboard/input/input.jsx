@@ -38,7 +38,7 @@ const Input = ({
           </select>
         ) : null
       ) : isButton ? (
-        <button className={` ${finalClasses} bg-[#11665e]`}>Update</button>
+        <button className={` ${finalClasses} bg-[#11665e]`}>{name}</button>
       ) : (
         <input
           type={type}
