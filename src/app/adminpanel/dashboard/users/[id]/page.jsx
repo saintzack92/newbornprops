@@ -7,13 +7,13 @@ import Image from 'next/image'
 const SingleUserPage = () => {
     return (
         <div className={`${styles.container} flex gap-[50px] mt-[20px]`}>
-            <div className={`${styles.infoContainer} flex-[1] text-[var(--textSoft)] font-[500] bg-[var(--bgSoft)] p-[20px] rounded-[10px]`}>
+            <div className={`${styles.infoContainer} flex-[1] text-[var(--textSoft)] font-[500] h-max bg-[var(--bgSoft)] p-[20px] rounded-[10px]`}>
                 <div className={`${styles.imgContainer} w-[100%] h-[300px] relative rounded-[10px] mb-[20px] overflow-hidden`}>
                     <Image src={img} alt='' fill />
                 </div>
                 John Doe
             </div>
-            <div className={`${styles.formContainer} flex-[3] text-[var(--textSoft)] p-[20px] rounded-[10px]`}>
+            <div className={`${styles.formContainer} flex-[3] text-[var(--textSoft)] p-[20px] rounded-[10px] bg-[var(--bgSoft)]`}>
                 <form action="" className='flex flex-col'>
 
                     <Input
@@ -56,13 +56,17 @@ const SingleUserPage = () => {
                         isSelect={true}
                         name='isAdmin'
                         customClasses={`${styles}`}
-                        labelTxt='is Admin'
+                        labelTxt='is Admin ?'
                     />
                     <Input
                         isSelect={true}
                         name='isActive'
                         customClasses={`${styles}`}
-                        labelTxt='is Active'
+                        labelTxt='is Active ?'
+                    />
+                    <Input
+                    isButton={true}
+                    customClasses={`mt-[20px] border-none `}
                     />
                 </form>
 
