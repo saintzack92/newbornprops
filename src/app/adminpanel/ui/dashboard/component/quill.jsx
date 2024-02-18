@@ -12,29 +12,53 @@ export const ReactQuil = ({ className, onChange }) => {
         input.setAttribute('type', 'file');
         input.setAttribute('accept', 'image/*');
         input.click();
-
+    
         input.onchange = async () => {
             const file = input.files[0];
             const reader = new FileReader();
+            
             reader.onloadend = () => {
-                const range = quillRef.current.getEditor().getSelection(true);
-                const img = `<img src="${reader.result}" style="max-width: 100%; height: auto;">`; // Example styling for responsive images
-                quillRef.current.getEditor().insertEmbed(range.index, 'html', img);
+                // Create a temporary image to read dimensions
+                const img = new Image();
+                img.src = reader.result;
+                img.onload = () => {
+                    // Log the dimensions of the image
+                    console.log(`Image dimensions: ${img.width}x${img.height}`);
+                    
+                    // Continue with inserting the image into the editor
+                    const range = quillRef.current.getEditor().getSelection(true);
+                    quillRef.current.getEditor().insertEmbed(range.index, 'image', reader.result);
+                };
             };
             reader.readAsDataURL(file);
         };
     };
+    
 
     useEffect(() => {
         if (quillRef.current) {
-            quillRef.current.getEditor().getModule('toolbar').addHandler('image', imageHandler);
+            const editor = quillRef.current.getEditor();
+            editor.getModule('toolbar').addHandler('image', imageHandler);
         }
     }, []);
 
-    const handleEditorChange = (content) => {
-        setValue(content);
-        onChange(content);
+    const handleEditorChange = (html) => {
+        // This function updates the component's state with the editor's content.
+        setValue(html);
+        if (onChange) {
+            onChange(html);
+        }
+    
+        // Add basic inline resizing functionality via CSS (for demonstration purposes).
+        // Note: For a production-level feature, consider a more robust implementation.
+        const images = document.querySelectorAll('.ql-editor img');
+        images.forEach(img => {
+            img.style.cssText = 'max-width: 50%; height: 50%; cursor: nwse-resize;';
+            // Allow basic resizing via CSS. This does not provide UI handles, but lets images be responsive.
+            // Implementing draggable resize handles would require additional JavaScript.
+        });
     };
+    
 
 
     const modules = {
@@ -57,12 +81,12 @@ export const ReactQuil = ({ className, onChange }) => {
 
     return (
         <ReactQuillNoSSR 
-            ref={quillRef}
-            theme="snow"
-            value={value}
-            onChange={handleEditorChange}
-            modules={modules}
-            className={className}
-        />
+        ref={quillRef}
+        theme="snow" 
+        value={value}
+        onChange={handleEditorChange}
+        modules={modules}
+        className={className}
+    />
     );
 };
