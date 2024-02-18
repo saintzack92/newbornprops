@@ -9,7 +9,8 @@ const Input = ({
   labelTxt,
   isTextArea = false,
   isSelect = false,
-  isButton = false
+  isButton = false,
+  rows
 
 }) => {
   const finalClasses = `rounded-[5px]  text-[var(--text)] bg-[var(--bg)] mx-[10px] p-[20px] border-solid border-[#2e374a] border-2 ${customClasses}  `;
@@ -23,6 +24,7 @@ const Input = ({
           name={name}
           placeholder={placeholder}
           className={finalClasses}
+          rows={rows}
 
         />
       ) : isSelect ? (
@@ -35,6 +37,11 @@ const Input = ({
           <select name='isActive' id='isActive' className={finalClasses}>
             <option value={true}>Yes</option>
             <option value={false}>No</option>
+          </select>
+        ) : name === 'category' ? (
+          <select name='category' id='category' className={finalClasses}>
+            <option value="kitchen" >kitchen</option>
+            <option value="computers">computers</option>
           </select>
         ) : null
       ) : isButton ? (

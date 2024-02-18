@@ -24,45 +24,40 @@ const SingleProductPage = () => {
                         labelTxt='Title'
                     />
                     <Input
-                        type='email'
-                        name='email'
-                        placeholder='johndoe@gmail.com'
+                        type='number'
+                        name='price'
+                        placeholder='56000'
                         customClasses={`${styles}`}
-                        labelTxt='Email'
+                        labelTxt='Price'
                     />
                     <Input
-                        type='password'
-                        name='password'
-                        placeholder='*******'
+                        type='number'
+                        name='stock'
+                        placeholder='33'
                         customClasses={`${styles}`}
-                        labelTxt='Password'
+                        labelTxt='Stock'
                     />
                     <Input
                         type='text'
-                        name='phone'
+                        name='color'
                         placeholder='+6289898989'
                         customClasses={`${styles}`}
-                        labelTxt='Phone'
+                        labelTxt='Color'
+                    />
+                    <Input
+                        isSelect={true}
+                        name='category'
+                        customClasses={`${styles}`}
+                        labelTxt='Category'
                     />
                     <Input
                         isTextArea={true}
                         type='text'
-                        name='address'
-                        placeholder='New York'
+                        name='desc'
+                        placeholder='Description'
                         customClasses={`${styles}`}
-                        labelTxt='Address'
-                    />
-                    <Input
-                        isSelect={true}
-                        name='isAdmin'
-                        customClasses={`${styles}`}
-                        labelTxt='is Admin ?'
-                    />
-                    <Input
-                        isSelect={true}
-                        name='isActive'
-                        customClasses={`${styles}`}
-                        labelTxt='is Active ?'
+                        labelTxt='Description'
+                        rows={"10"}
                     />
                     <Input
                     isButton={true}
