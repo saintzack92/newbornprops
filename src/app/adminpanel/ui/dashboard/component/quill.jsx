@@ -1,59 +1,28 @@
-import React, { forwardRef, useEffect, useRef, useState } from "react";
+import React, { useState, forwardRef } from "react";
 import 'react-quill/dist/quill.snow.css';
-import dynamic from 'next/dynamic';
+import ReactQuillWrapper from "./wrapper";
 
-// Import ReactQuill using dynamic import with SSR disabled
-const ReactQuillNoSSR = dynamic(() => import('react-quill'), {
-    ssr: false,
-    loading: () => <p>Loading...</p>,
-  });
-  
-  const ReactQuillWrapper = forwardRef((props, ref) => (
-    <ReactQuillNoSSR ref={ref} {...props} />
-  ));
-  
-// Modify the ReactQuil component to use React.forwardRef
+
 export const ReactQuil = React.forwardRef(({ className, onChange }, ref) => {
     const [value, setValue] = useState('');
-    const quillRef = useRef(null); // Use this ref internally
-
-    const imageHandler = () => {
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();
-
-        input.onchange = async () => {
-            const file = input.files[0];
-            const reader = new FileReader();
-
-            reader.onloadend = () => {
-                const img = new Image();
-                img.src = reader.result;
-                img.onload = () => {
-                    console.log(`Image dimensions: ${img.width}x${img.height}`);
-                    const range = quillRef.current.getEditor().getSelection(true);
-                    quillRef.current.getEditor().insertEmbed(range.index, 'image', reader.result);
-                };
-            };
-            reader.readAsDataURL(file);
-        };
-    };
-
-    useEffect(() => {
-        if (quillRef.current) {
-            const editor = quillRef.current.getEditor();
-            editor.getModule('toolbar').addHandler('image', imageHandler);
-        }
-    }, []);
 
     const handleEditorChange = (html) => {
+        // This function updates the component's state with the editor's content.
         setValue(html);
         if (onChange) {
             onChange(html);
         }
+    
+        // Add basic inline resizing functionality via CSS (for demonstration purposes).
+        // Note: For a production-level feature, consider a more robust implementation.
+        // const images = document.querySelectorAll('.ql-editor img');
+        // images.forEach(img => {
+        //     img.style.cssText = 'max-width: 50%; height: 50%; cursor: nwse-resize;';
+        //     // Allow basic resizing via CSS. This does not provide UI handles, but lets images be responsive.
+        //     // Implementing draggable resize handles would require additional JavaScript.
+        // });
     };
-
+    
     // Define the Quill editor modules and formats
     const modules = {
         toolbar: [
@@ -71,13 +40,22 @@ export const ReactQuil = React.forwardRef(({ className, onChange }, ref) => {
             ['clean'],
             ['link', 'image', 'video']
         ],
+        imageCompressor: {
+            quality:0.15,
+            maxWidth: 1000, // default
+            maxHeight: 1000, // default
+            imageType: 'image/jpeg'
+          }
+        
+        
+            
     };
 
     return (
-        <ReactQuillWrapper  
+        <ReactQuillWrapper 
         ref={ref} // Now forwarding the ref correctly
         theme="snow"
-        value={value}
+        // value={value}
         onChange={handleEditorChange}
         modules={modules}
         className={className}

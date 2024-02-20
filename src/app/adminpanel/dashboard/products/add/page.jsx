@@ -5,6 +5,7 @@ import Image from "next/image";
 import React, { useState,  } from 'react';
 import RichTextEditor, { ReactQuil, ReactQuill } from '../../../ui/dashboard/component/quill'; // Adjust the path as necessary
 import dynamic from 'next/dynamic';
+import MyEditor from "../../../ui/dashboard/component/quill";
 // import ReactQuil from "@/app/adminpanel/ui/dashboard/component/quill";
 
 
@@ -26,7 +27,33 @@ const AddProductPage = () => {
     }));
   };
   const handleContentChange = (contentHtml) => {
-    console.log('Editor Content:', contentHtml); // Directly log the content for debugging
+    console.log('Editor Content:', contentHtml);
+
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(contentHtml, 'text/html');
+  const images = doc.querySelectorAll('img');
+
+  images.forEach((img, index) => {
+    fetch(img.src)
+      .then(response => {
+        const size = response.headers.get('content-length');
+        console.log(`Image ${index + 1} size: ${size ? size + ' bytes' : 'Unknown'}`);
+        return response.blob();
+      })
+      .then(blob => {
+        const imgURL = URL.createObjectURL(blob);
+        const tempImg = new window.Image(); // Use the native Image constructor explicitly
+        tempImg.onload = function() {
+          console.log(`Image ${index + 1} dimensions: ${tempImg.naturalWidth}x${tempImg.naturalHeight}`);
+          URL.revokeObjectURL(imgURL);
+        };
+        tempImg.src = imgURL;
+      })
+      .catch(error => console.error(`Failed to fetch image ${index + 1}:`, error));
+  });
+  
+  
+    // Update your form values or state as needed
     setFormValues(prevState => ({
       ...prevState,
       content: { html: contentHtml },
