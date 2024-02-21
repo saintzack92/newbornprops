@@ -1,7 +1,9 @@
+import Headerd from "../application/components/header.jsx";
+
 export default function Application() {
   return (
     <div>
-      <h3>Home</h3>
+      <Headerd />
     </div>
   );
 }
