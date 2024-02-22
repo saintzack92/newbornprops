@@ -4,7 +4,7 @@ import Link from "next/link";
 // // Import react scroll
 import { Link as LinkScroll } from "react-scroll";
 
-// import ButtonOutline from "../misc/ButtonOutline.";
+import ButtonOutline from "../components/misc/ButtonOutline.";
 import Image from "next/image";
 import LogoVPN from "../../../../public/assets/img/Logo.svg";
 
@@ -103,10 +103,11 @@ const Headers = () => {
         </ul>
         <div className="col-start-10 col-end-12 font-medium flex justify-end items-center">
           <Link href="/">
-            <div className="text-black-600 mx-2 sm:mx-4 capitalize tracking-wide hover:text-orange-500 transition-all">
+            <div className="text-black mx-2 sm:mx-4 capitalize tracking-wide hover:text-orange-500 transition-all">
                 Sign In
             </div>
           </Link>
+          <ButtonOutline>Sign Up</ButtonOutline>
         </div>
       </nav>
     </header>
