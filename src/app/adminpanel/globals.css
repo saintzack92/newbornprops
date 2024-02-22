@@ -58,13 +58,13 @@ a{
     @apply absolute block;
   }
   li.circle-check:before {
-    background-image: url("/assets/Icon/checklist.svg");
+    background-image: url("../../../public/assets/img/Icon/checklist.svg");
     left: -0.7em;
     top: -0.4em;
   }
   li.check:before {
     left: -0.5em;
-    background-image: url("/assets/Icon/jam_check.svg");
+    background-image: url("../../../public/assets/Icon/jam_check.svg");
     top: -0.5em;
     font-size: 400%;
   }
