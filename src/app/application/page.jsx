@@ -1,9 +1,16 @@
 import Headerd from "../application/components/header.jsx";
+import Hero from "../application/hero.jsx";
 
-export default function Application() {
+
+const Application = () => {
   return (
-    <div>
+    <>
       <Headerd />
-    </div>
+      <Hero />
+      {/* {children} */}
+      {/* <Footer /> */}
+    </>
   );
-}
+};
+
+export default Application;
