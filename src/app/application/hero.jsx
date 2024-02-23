@@ -7,22 +7,25 @@ import { motion } from "framer-motion";
 import getScrollAnimation from "../../app/application/components/utils/getScrollAnimation";
 import ScrollAnimationWrapper from "../application/components/ScrollAnimationWrapper";
 import Banner from "../../../public/assets/img/Illustration1.png";
+import icon1 from "../../../public/assets/img/icon/heroicons_sm-user.svg";
+import icon2 from "../../../public/assets/img/icon/gridicons_location.svg";
+import icon3 from "../../../public/assets/img/icon/bx_bxs-server.svg";
 const Hero = ({
   listUser = [
     {
       name: "Users",
       number: "390",
-      icon: "../../../public/assets/icon/heroicons_sm-user.svg",
+      icon: icon1,
     },
     {
       name: "Locations",
       number: "20",
-      icon: "../../../public/assets/icon/gridicons_location.svg",
+      icon: icon2,
     },
     {
       name: "Server",
       number: "50",
-      icon: "../../../public/assets/icon/bx_bxs-server.svg",
+      icon: icon3,
     },
   ],
 }) => {
@@ -73,7 +76,12 @@ const Hero = ({
             >
               <div className="flex mx-auto w-40 sm:w-auto">
                 <div className="flex items-center justify-center bg-orange-100 w-12 h-12 mr-6 rounded-full">
-                  <img src={listUsers.icon} className="h-6 w-6" />
+                  <Image
+                    src={listUsers.icon}
+                    className=""
+                    width={24}
+                    height={24}
+                  />
                 </div>
                 <div className="flex flex-col">
                   <p className="text-xl text-black font-bold">
