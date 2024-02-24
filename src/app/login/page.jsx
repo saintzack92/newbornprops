@@ -1,9 +1,3 @@
-
-const LoginPage = () => {
-  return <div>Login Page </div>;
-};
-
-import Link from "next/link"
 import Input from "../adminpanel/ui/dashboard/input/input"
 
 const style = `p-[30px] border-2 border-solid border-[#2e374a] w-[100%]`
