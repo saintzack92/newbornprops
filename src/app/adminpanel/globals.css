@@ -19,10 +19,15 @@ html {
 }
 
 body{
-    background-color: var(--bg);
-    color:var(--text)
+    background-color: var(--bg) ;
+    color: var(--text) ;
 
 }
+/* body main{
+    background-color: var(--textSoft) !important;
+    color: var(--bg) !important;
+
+} */
 
 a{
     color:inherit;
