@@ -1,13 +1,9 @@
-
-import Dashboard from './dashboard/page'
+import Dashboard from "./dashboard/page";
 
 const AdminPanel = () => {
   return (
-    <div className=''>
-    
-  
-      <Dashboard />
-      
+    <div id="admin">
+      <Dashboard className="" />
     </div>
   );
 };
