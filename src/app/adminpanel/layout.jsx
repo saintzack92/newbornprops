@@ -5,7 +5,7 @@ import styles from '../adminpanel/ui/dashboard/dashboard.module.css'
 
 const Layout =({children})=>{
     return(
-        <div className={styles.container}>
+        <div className={`${styles.container} bg-[var(--bg)] text-[var(--text)]`}>
             <div className={styles.menu}>
                 <Sidebar />
             </div>

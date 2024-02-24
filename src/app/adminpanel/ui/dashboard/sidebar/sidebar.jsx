@@ -81,7 +81,7 @@ const menuItems = [
 
 const Sidebar = () => {
   return (
-    <div className={styles.container}>
+    <div className={`${styles.container}`}>
       <div className={`${styles.user} flex items-center gap-[20px] mb-20px`}>
         <Image
           src={avatar}
