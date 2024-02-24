@@ -2,7 +2,7 @@ import LandingPage from "./application/page";
 
 export default function Home() {
   return (
-    <main>
+    <main className="bg-slate-50">
       <LandingPage />
     </main>
   );

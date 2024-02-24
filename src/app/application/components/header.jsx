@@ -116,7 +116,7 @@ const Headers = () => {
       {/* Mobile Navigation */}
 
       <nav className="fixed lg:hidden bottom-0 left-0 right-0 z-20 px-4 sm:px-8 shadow-t ">
-        <div className="bg-slate-50 sm:px-3">
+        <div className="bg-gray-50 sm:px-3">
           <ul className="flex w-full justify-between items-center text-black">
             <LinkScroll
               activeClass="active"
