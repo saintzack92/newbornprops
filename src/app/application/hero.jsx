@@ -32,10 +32,7 @@ const Hero = ({
   const scrollAnimation = useMemo(() => getScrollAnimation(), []);
 
   return (
-    <div
-      className="max-w-screen-xl mt-28 px-8 xl:px-16 mx-auto bg-gray-50 "
-      id="about"
-    >
+    <div className="max-w-screen-xl mt-28 px-8 xl:px-16 mx-auto  " id="about">
       <ScrollAnimationWrapper>
         <motion.div
           className="grid grid-flow-row sm:grid-flow-col grid-rows-2 md:grid-rows-1 sm:grid-cols-2 gap-8 py-6 sm:py-16"
@@ -76,12 +73,7 @@ const Hero = ({
             >
               <div className="flex mx-auto w-40 sm:w-auto">
                 <div className="flex items-center justify-center bg-orange-100 w-12 h-12 mr-6 rounded-full">
-                  <Image
-                    src={listUsers.icon}
-                    className=""
-                    width={24}
-                    height={24}
-                  />
+                  <Image src={listUsers.icon} width={24} height={24} />
                 </div>
                 <div className="flex flex-col">
                   <p className="text-xl text-black font-bold">

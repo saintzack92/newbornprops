@@ -20,7 +20,7 @@ const Headers = () => {
     <>
       <header
         className={
-          "fixed top-0 w-full z-30 bg-gray-50 transition-all " +
+          "fixed top-0 w-full z-30 transition-all " +
           (scrollActive ? " shadow-md pt-0" : " pt-4")
         }
       >
