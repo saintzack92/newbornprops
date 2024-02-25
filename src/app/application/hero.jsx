@@ -32,7 +32,7 @@ const Hero = ({
   const scrollAnimation = useMemo(() => getScrollAnimation(), []);
 
   return (
-    <div className="max-w-screen-xl mt-28 px-8 xl:px-16 mx-auto  " id="about">
+    <section className="max-w-screen-xl mt-28 px-8 xl:px-16 mx-auto  " id="about">
       <ScrollAnimationWrapper>
         <motion.div
           className="grid grid-flow-row sm:grid-flow-col grid-rows-2 md:grid-rows-1 sm:grid-cols-2 gap-8 py-6 sm:py-16"
@@ -90,7 +90,7 @@ const Hero = ({
           style={{ filter: "blur(114px)" }}
         ></div>
       </div>
-    </div>
+    </section>
   );
 };
 

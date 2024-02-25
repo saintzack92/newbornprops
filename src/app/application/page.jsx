@@ -1,13 +1,18 @@
-import Headerd from "../application/components/header.jsx";
+import Headers from "../application/components/header.jsx";
 import Hero from "../application/hero.jsx";
 
-const Application = () => {
+const Application = ({ customClass }) => {
   return (
     <>
-      <Headerd />
-      <Hero />
-      {/* {children} */}
-      {/* <Footer /> */}
+      <header>
+        <Headers />
+      </header>
+      <main >
+        <Hero />
+        {/* {children} */}
+        {/* <Footer /> */}
+      </main>
+
     </>
   );
 };

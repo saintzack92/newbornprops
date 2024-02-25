@@ -1,9 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
-// // Import react scroll
 import { Link as LinkScroll } from "react-scroll";
-
 import ButtonOutline from "../components/misc/ButtonOutline.";
 import Image from "next/image";
 import LogoVPN from "../../../../public/assets/img/Logo.svg";
@@ -18,13 +16,9 @@ const Headers = () => {
   }, []);
   return (
     <>
-      <header
-        className={
-          "fixed top-0 w-full z-30 transition-all " +
-          (scrollActive ? " shadow-md pt-0" : " pt-4")
-        }
-      >
-        <nav className="max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
+    <nav className={" fixed top-0 w-full z-30 transition-all  ]" +
+        (scrollActive ? " shadow-md pt-0" : " pt-4")}>
+        <div className=" max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
           <div className="col-start-1 col-end-2 flex items-center">
             <Image src={LogoVPN} className="h-8 w-auto" alt="" />
           </div>
@@ -105,13 +99,14 @@ const Headers = () => {
           <div className="col-start-10 col-end-12 font-medium flex justify-end items-center">
             <Link href="/">
               <div className="text-black mx-2 sm:mx-4 capitalize tracking-wide hover:text-orange-500 transition-all">
-                  Sign In
+                Sign In
               </div>
             </Link>
             <ButtonOutline>Sign Up</ButtonOutline>
           </div>
-        </nav>
-      </header>
+        </div>
+      </nav>
+
 
       {/* Mobile Navigation */}
 
@@ -249,6 +244,8 @@ const Headers = () => {
           </ul>
         </div>
       </nav>
+
+
       {/* End Mobile Navigation */}
     </>
   );
