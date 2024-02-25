@@ -16,8 +16,12 @@ const Headers = () => {
   }, []);
   return (
     <>
-    <nav className={" fixed top-0 w-full z-30 transition-all  ]" +
-        (scrollActive ? " shadow-md pt-0" : " pt-4")}>
+      <nav
+        className={
+          " fixed top-0 w-full z-30 bg-gray-50 transition-all  ]" +
+          (scrollActive ? " shadow-md pt-0" : " pt-4")
+        }
+      >
         <div className=" max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
           <div className="col-start-1 col-end-2 flex items-center">
             <Image src={LogoVPN} className="h-8 w-auto" alt="" />
@@ -106,7 +110,6 @@ const Headers = () => {
           </div>
         </div>
       </nav>
-
 
       {/* Mobile Navigation */}
 
@@ -244,7 +247,6 @@ const Headers = () => {
           </ul>
         </div>
       </nav>
-
 
       {/* End Mobile Navigation */}
     </>
