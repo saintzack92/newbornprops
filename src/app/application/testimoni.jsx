@@ -2,11 +2,12 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
 import Image from "next/image";
-import Stars from "../../../public/assets/img/icon/stars.svg";
-import ArrowBack from "../../../public/assets/img/icon/eva_arrow-back-fill.svg";
-import ArrowNext from "../../../public/assets/img/icon/eva_arrow-next-fill.svg";
 
 import People from "../../../public/assets/img/people-3.png";
+
+import {
+ MdArrowBack,MdArrowForward, MdOutlineStar
+} from "react-icons/md";
 const Testimoni = ({
   listTestimoni = [
     {
@@ -112,7 +113,7 @@ const Testimoni = ({
                 <div className="flex flex-none items-center ml-auto order-1 xl:order-2">
                   <p className="text-sm">{listTestimonis.rating}</p>
                   <span className="flex ml-4">
-                    <Image src={Stars} height={16} width={16} />
+                    <MdOutlineStar className="h-6 w-6 text-yellow-400"/>
                   </span>
                 </div>
               </div>
@@ -127,13 +128,13 @@ const Testimoni = ({
             className="mx-4 flex items-center justify-center h-14 w-14 rounded-full bg-white border-orange-500 border hover:bg-orange-500 hover:text-white transition-all text-orange-500 cursor-pointer"
             onClick={sliderRef?.slickPrev}
           >
-            <Image src={ArrowBack} width={24} height={24} />
+           <MdArrowBack className="h-6 w-6"/>
           </div>
           <div
-            className="flex items-center justify-center h-14 w-14 rounded-full bg-white border-orange-500 border hover:bg-orange-500 hover:text-white transition-all fill-orange-500 cursor-pointer"
+            className="flex items-center justify-center h-14 w-14 rounded-full bg-white border-orange-500 border hover:bg-orange-500 hover:text-white transition-all text-orange-500 cursor-pointer"
             onClick={sliderRef?.slickNext}
           >
-            <Image src={ArrowNext} width={24} height={24} className="text-white" />
+            <MdArrowForward className="h-6 w-6"/>
           </div>
         </div>
       </div>
