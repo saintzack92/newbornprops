@@ -1,4 +1,5 @@
 import Headers from "../application/components/header.jsx";
+import Footers from "../application/components/footer.jsx";
 import Hero from "../application/hero.jsx";
 import Feature from "../application/feature.jsx";
 import Pricing from "../application/pricing.jsx";
@@ -13,9 +14,10 @@ const Application = () => {
         <Hero />
         <Feature />
         <Pricing />
-        {/* {children} */}
-        {/* <Footer /> */}
       </main>
+      <footer>
+        <Footers />
+      </footer>
     </>
   );
 };

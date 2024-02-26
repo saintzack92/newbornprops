@@ -62,7 +62,7 @@ const Bayar = () => {
                 <p className="text-lg text-black-600 font-medium capitalize my-2 sm:my-7">
                   Free Plan
                 </p>
-                <ul className="flex flex-col list-inside pl-6 xl:pl-0 items-start justify-start text-left text-black-500 flex-grow">
+                <ul className="flex flex-col list-inside pl-6 xl:pl-0 items-start justify-start text-left text-black flex-grow">
                   <li className="relative check custom-list my-2">
                     Unlimited Bandwitch
                   </li>
@@ -103,10 +103,10 @@ const Bayar = () => {
                     alt="Standard Plan"
                   />
                 </div>
-                <p className="text-lg text-black-600 font-medium capitalize my-2 sm:my-7">
+                <p className="text-lg text-black font-medium capitalize my-2 sm:my-7">
                   Standard Plan{" "}
                 </p>
-                <ul className="flex flex-col list-inside pl-6 xl:pl-0 items-start justify-start text-left text-black-500 flex-grow">
+                <ul className="flex flex-col list-inside pl-6 xl:pl-0 items-start justify-start text-left text-black flex-grow">
                   <li className="relative check custom-list my-2">
                     Unlimited Bandwitch
                   </li>
@@ -124,8 +124,8 @@ const Bayar = () => {
                   </li>
                 </ul>
                 <div className="flex flex-col w-full justify-center mb-8 flex-none mt-12">
-                  <p className="text-2xl text-black-600 text-center mb-4 ">
-                    $9 <span className="text-black-500">/ mo</span>
+                  <p className="text-2xl text-black text-center mb-4 ">
+                    $9 <span className="text-black">/ mo</span>
                   </p>
                   <ButtonOutline>Select</ButtonOutline>
                 </div>
@@ -150,10 +150,10 @@ const Bayar = () => {
                     alt="Premium Plan"
                   />
                 </div>
-                <p className="text-lg text-black-600 font-medium capitalize my-2 sm:my-7">
+                <p className="text-lg text-black font-medium capitalize my-2 sm:my-7">
                   Premium Plan{" "}
                 </p>
-                <ul className="flex flex-col list-inside pl-6 xl:pl-0 items-start justify-start text-left text-black-500 flex-grow">
+                <ul className="flex flex-col list-inside pl-6 xl:pl-0 items-start justify-start text-left text-black flex-grow">
                   <li className="relative check custom-list my-2">
                     Unlimited Bandwitch
                   </li>
@@ -174,8 +174,8 @@ const Bayar = () => {
                   </li>
                 </ul>
                 <div className="flex flex-col w-full justify-center mb-8 flex-none mt-12">
-                  <p className="text-2xl text-black-600 text-center mb-4 ">
-                    $12 <span className="text-black-500">/ mo</span>
+                  <p className="text-2xl text-black text-center mb-4 ">
+                    $12 <span className="text-black">/ mo</span>
                   </p>
 
                   <ButtonOutline>Select</ButtonOutline>
@@ -188,7 +188,7 @@ const Bayar = () => {
           <ScrollAnimationWrapper>
             <motion.h3
               variants={scrollAnimation}
-              className="text-2xl sm:text-3xl lg:text-4xl font-medium text-black-600 leading-relaxed w-9/12 sm:w-6/12 lg:w-4/12 mx-auto"
+              className="text-2xl sm:text-3xl lg:text-4xl font-medium text-black leading-relaxed w-9/12 sm:w-6/12 lg:w-4/12 mx-auto"
             >
               Huge Global Network of Fast VPN{" "}
             </motion.h3>
@@ -251,7 +251,7 @@ const Bayar = () => {
           <ScrollAnimationWrapper>
             <motion.h3
               variants={scrollAnimation}
-              className="text-2xl sm:text-3xl lg:text-4xl font-medium text-black-600 leading-normal w-9/12 sm: lg:w-4/12 mx-auto"
+              className="text-2xl sm:text-3xl lg:text-4xl font-medium text-black leading-normal w-9/12 sm: lg:w-4/12 mx-auto"
             >
               Trusted by Thousands of Happy Customer{" "}
             </motion.h3>
@@ -266,14 +266,14 @@ const Bayar = () => {
 
           <ScrollAnimationWrapper className="w-full flex flex-col py-12">
             <motion.div variants={scrollAnimation}>
-              {/* <Testimoni /> */}
+              <Testimoni />
             </motion.div>
           </ScrollAnimationWrapper>
           <ScrollAnimationWrapper className="relative w-full mt-16">
             <motion.div variants={scrollAnimation} custom={{ duration: 3 }}>
-              <div className="absolute rounded-xl  py-8 sm:py-14 px-6 sm:px-12 lg:px-16 w-full flex flex-col sm:flex-row justify-between items-center z-10 bg-white-500">
+              <div className="absolute rounded-xl  py-8 sm:py-14 px-6 sm:px-12 lg:px-16 w-full flex flex-col sm:flex-row justify-between items-center z-10 bg-white">
                 <div className="flex flex-col text-left w-10/12 sm:w-7/12 lg:w-5/12 mb-6 sm:mb-0">
-                  <h5 className="text-black-600 text-xl sm:text-2xl lg:text-3xl leading-relaxed font-medium">
+                  <h5 className="text-black text-xl sm:text-2xl lg:text-3xl leading-relaxed font-medium">
                     Subscribe Now for <br /> Get Special Features!
                   </h5>
                   <p>Lets subscribe with us and find the fun.</p>

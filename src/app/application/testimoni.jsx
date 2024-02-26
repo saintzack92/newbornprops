@@ -56,7 +56,7 @@ const Testimoni = ({
         </a>
       );
     },
-    dotsClass: "slick-dots w-max absolute mt-20  ",
+    dotsClass: "slick-dots w-max absolute mt-20 ",
     infinite: true,
     speed: 500,
     slidesToShow: 3,
@@ -104,7 +104,7 @@ const Testimoni = ({
                     <p className="text-lg text-black capitalize">
                       {listTestimonis.name}
                     </p>
-                    <p className="text-sm text-black capitalize">
+                    <p className="text-sm text-gray-400 capitalize">
                       {listTestimonis.city},{listTestimonis.country}
                     </p>
                   </div>
@@ -124,16 +124,16 @@ const Testimoni = ({
       <div className="flex w-full items-center justify-end">
         <div className="flex flex-none justify-between w-auto mt-14">
           <div
-            className="mx-4 flex items-center justify-center h-14 w-14 rounded-full bg-white border-orange-500 border hover:bg-orange-500 hover:text-white-500 transition-all text-orange-500 cursor-pointer"
+            className="mx-4 flex items-center justify-center h-14 w-14 rounded-full bg-white border-orange-500 border hover:bg-orange-500 hover:text-white transition-all text-orange-500 cursor-pointer"
             onClick={sliderRef?.slickPrev}
           >
             <Image src={ArrowBack} width={24} height={24} />
           </div>
           <div
-            className="flex items-center justify-center h-14 w-14 rounded-full bg-white border-orange-500 border hover:bg-orange-500 hover:text-white-500 transition-all text-orange-500 cursor-pointer"
+            className="flex items-center justify-center h-14 w-14 rounded-full bg-white border-orange-500 border hover:bg-orange-500 hover:text-white transition-all fill-orange-500 cursor-pointer"
             onClick={sliderRef?.slickNext}
           >
-            <Image src={ArrowNext} width={24} height={24} />
+            <Image src={ArrowNext} width={24} height={24} className="text-white" />
           </div>
         </div>
       </div>

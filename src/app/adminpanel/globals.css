@@ -18,11 +18,7 @@ html {
     box-sizing: border-box;
 }
 
-/* body {
-    background-color: var(--textSoft) !important;
-    color: var(--bg) !important;
 
-} */
 
 a{
     color:inherit;
@@ -58,7 +54,7 @@ a{
     @apply absolute block;
   }
   li.circle-check:before {
-    background-image: url("../../../public/assets/img/Icon/checklist.svg");
+    background-image: url("../../../public/assets/Icon/checklist.svg");
     left: -0.7em;
     top: -0.4em;
   }
