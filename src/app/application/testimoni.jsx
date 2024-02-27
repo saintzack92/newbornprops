@@ -53,11 +53,11 @@ const Testimoni = ({
     customPaging: function (i) {
       return (
         <a className="">
-          <span className="mx-2 rounded-l-full rounded-r-full h-4 w-4 block cursor-pointer transition-all "></span>
+          <span className="mx-2 rounded-l-full rounded-r-full h-5 w-5 block cursor-pointer transition-all "></span>
         </a>
       );
     },
-    dotsClass: "slick-dots w-max absolute mt-20 ",
+    dotsClass: "slick-dots w-max absolute",
     infinite: true,
     speed: 500,
     slidesToShow: 3,
