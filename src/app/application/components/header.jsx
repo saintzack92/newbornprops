@@ -6,6 +6,8 @@ import ButtonOutline from "../components/misc/ButtonOutline.";
 import Image from "next/image";
 import LogoVPN from "../../../../public/assets/img/Logo.svg";
 
+import { MdOutlineMenu, MdClose } from "react-icons/md";
+
 const Headers = () => {
   const [activeLink, setActiveLink] = useState(null);
   const [scrollActive, setScrollActive] = useState(false);
@@ -14,6 +16,12 @@ const Headers = () => {
       setScrollActive(window.scrollY > 20);
     });
   }, []);
+
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const handleNav = () => {
+    setMenuOpen(!menuOpen);
+  };
   return (
     <>
       <nav
@@ -23,10 +31,12 @@ const Headers = () => {
         }
       >
         <div className=" max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
-          <div className="col-start-1 col-end-2 flex items-center">
-            <Image src={LogoVPN} className="h-8 w-auto" alt="" />
-          </div>
-          <ul className="hidden lg:flex col-start-4 col-end-8 text-black  items-center">
+          <Link href={`/`}>
+            <div className="col-start-1 col-end-2 flex items-center">
+              <Image src={LogoVPN} className="h-8 w-auto" alt="" />
+            </div>
+          </Link>
+          <ul className="hidden lg:flex md:flex col-start-4 col-end-8 text-black  justify-end">
             <LinkScroll
               activeClass="active"
               to="about"
@@ -40,7 +50,7 @@ const Headers = () => {
                 "px-4 py-2 mx-2 cursor-pointer animation-hover inline-block relative" +
                 (activeLink === "about"
                   ? " text-orange-500 animation-active "
-                  : " text-black hover:text-orange-500 a")
+                  : " text-black hover:text-orange-500 ")
               }
             >
               About
@@ -100,20 +110,129 @@ const Headers = () => {
               Testimonial
             </LinkScroll>
           </ul>
-          <div className="col-start-10 col-end-12 font-medium flex justify-end items-center">
+          {/* <div className="col-start-10 col-end-12 font-medium flex justify-end items-center">
             <Link href="/">
               <div className="text-black mx-2 sm:mx-4 capitalize tracking-wide hover:text-orange-500 transition-all">
                 Sign In
               </div>
             </Link>
             <ButtonOutline>Sign Up</ButtonOutline>
+          </div> */}
+
+          <div
+            onClick={handleNav}
+            className="lg:hidden md:hidden flex justify-end cursor-pointer "
+          >
+            {menuOpen ? "" : <MdOutlineMenu size={22} />}
+          </div>
+        </div>
+
+        <div
+          className={
+            menuOpen
+              ? "fixed left-0 top-0 w-[65%] sm:hidden h-screen bg-[#ecf0f3] shadow p-7 ease-in duration-500"
+              : "fixed left-[-100%] top-0 p-7 ease-in duration-500 h-screen bg-[#ecf0f3]"
+          }
+        >
+          <div
+            onClick={handleNav}
+            className=" flex  w-full  justify-between cursor-pointer "
+          >
+            <Link href={`/`}>
+              <div className="cursor-pointer ">
+                <Image src={LogoVPN} className="h-6 w-auto" alt="" />
+              </div>
+            </Link>
+            <MdClose size={22} />
+          </div>
+
+          <div className="flex-col py-4 pt-6">
+            <ul>
+              <LinkScroll
+                activeClass="active"
+                to="about"
+                spy={true}
+                smooth={true}
+                duration={1000}
+                onSetActive={() => {
+                  setActiveLink("about");
+                }}
+                onClick={() => setMenuOpen(false)}
+                className={
+                  " flex flex-col animation-hover text-sm pb-2 my-3 cursor-pointer border-b-2 transition-all " +
+                  (activeLink === "about"
+                    ? "  border-orange-500 text-orange-500"
+                    : "  bg-[#ecf0f3]")
+                }
+              >
+                About
+              </LinkScroll>
+
+              <LinkScroll
+                activeClass="active"
+                to="feature"
+                spy={true}
+                smooth={true}
+                duration={1000}
+                onSetActive={() => {
+                  setActiveLink("feature");
+                }}
+                onClick={() => setMenuOpen(false)}
+                className={
+                  " flex flex-col animation-hover text-sm pb-2 my-3 cursor-pointer border-b-2 transition-all " +
+                  (activeLink === "feature"
+                    ? "  border-orange-500 text-orange-500"
+                    : " bg-[#ecf0f3]")
+                }
+              >
+                Feature
+              </LinkScroll>
+              <LinkScroll
+                activeClass="active"
+                to="pricing"
+                spy={true}
+                smooth={true}
+                duration={1000}
+                onSetActive={() => {
+                  setActiveLink("pricing");
+                }}
+                onClick={() => setMenuOpen(false)}
+                className={
+                  " flex flex-col animation-hover text-sm pb-2 my-3 cursor-pointer border-b-2 transition-all " +
+                  (activeLink === "pricing"
+                    ? "  border-orange-500 text-orange-500"
+                    : " bg-[#ecf0f3]")
+                }
+              >
+                Pricing
+              </LinkScroll>
+              <LinkScroll
+                activeClass="active"
+                to="testimoni"
+                spy={true}
+                smooth={true}
+                duration={1000}
+                onSetActive={() => {
+                  setActiveLink("testimoni");
+                }}
+                onClick={() => setMenuOpen(false)}
+                className={
+                  " flex flex-col animation-hover text-sm pb-2 my-3 cursor-pointer border-b-2 transition-all" +
+                  (activeLink === "testimoni"
+                    ? " border-orange-500 text-orange-500"
+                    : " bg-[#ecf0f3] ")
+                }
+              >
+                Testimonial
+              </LinkScroll>
+            </ul>
           </div>
         </div>
       </nav>
 
       {/* Mobile Navigation */}
 
-      <nav className="fixed lg:hidden bottom-0 left-0 right-0 z-20 px-4 sm:px-8 shadow-t ">
+      {/* <nav className="fixed lg:hidden bottom-0 left-0 right-0 z-20 px-4 sm:px-8 shadow-t ">
         <div className="bg-gray-50 sm:px-3">
           <ul className="flex w-full justify-between items-center text-black">
             <LinkScroll
@@ -246,7 +365,7 @@ const Headers = () => {
             </LinkScroll>
           </ul>
         </div>
-      </nav>
+      </nav> */}
 
       {/* End Mobile Navigation */}
     </>

@@ -1,13 +1,10 @@
-// "use client";
 import React, { useState } from "react";
 import Slider from "react-slick";
 import Image from "next/image";
 
 import People from "../../../public/assets/img/people-3.png";
 
-import {
- MdArrowBack,MdArrowForward, MdOutlineStar
-} from "react-icons/md";
+import { MdArrowBack, MdArrowForward, MdOutlineStar } from "react-icons/md";
 const Testimoni = ({
   listTestimoni = [
     {
@@ -113,7 +110,7 @@ const Testimoni = ({
                 <div className="flex flex-none items-center ml-auto order-1 xl:order-2">
                   <p className="text-sm">{listTestimonis.rating}</p>
                   <span className="flex ml-4">
-                    <MdOutlineStar className="h-6 w-6 text-yellow-400"/>
+                    <MdOutlineStar className="h-6 w-6 text-yellow-400" />
                   </span>
                 </div>
               </div>
@@ -128,13 +125,13 @@ const Testimoni = ({
             className="mx-4 flex items-center justify-center h-14 w-14 rounded-full bg-white border-orange-500 border hover:bg-orange-500 hover:text-white transition-all text-orange-500 cursor-pointer"
             onClick={sliderRef?.slickPrev}
           >
-           <MdArrowBack className="h-6 w-6"/>
+            <MdArrowBack className="h-6 w-6" />
           </div>
           <div
             className="flex items-center justify-center h-14 w-14 rounded-full bg-white border-orange-500 border hover:bg-orange-500 hover:text-white transition-all text-orange-500 cursor-pointer"
             onClick={sliderRef?.slickNext}
           >
-            <MdArrowForward className="h-6 w-6"/>
+            <MdArrowForward className="h-6 w-6" />
           </div>
         </div>
       </div>
