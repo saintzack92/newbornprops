@@ -119,9 +119,9 @@ const AddProductPage = () => {
           className={`${styles.formChild} ${styles.formChildInput}`}
           
         />
-        <div className={`gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center `}>
+        <div className={`w-full gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center `}>
           <h1 className="">input your article here</h1>
-          <ReactQuil className={` h-[350px] px-[30px] mb-[20px] `} onChange={handleContentChange} />
+          <ReactQuil className={` h-[550px] px-[30px] mb-[20px] w-full`} onChange={handleContentChange} />
         </div>
 
         <button type="submit" className={` w-[100%] p-[30px] !bg-[teal] !text-[var(--text)] rounded-[5px] cursor-pointer ${styles.formChild}`}>
