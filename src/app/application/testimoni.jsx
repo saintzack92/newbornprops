@@ -1,9 +1,15 @@
+<<<<<<< Updated upstream
+=======
+"use client";
+>>>>>>> Stashed changes
 import React, { useState } from "react";
 import Slider from "react-slick";
 import Image from "next/image";
-
 import People from "../../../public/assets/img/people-3.png";
+<<<<<<< Updated upstream
 
+=======
+>>>>>>> Stashed changes
 import { MdArrowBack, MdArrowForward, MdOutlineStar } from "react-icons/md";
 const Testimoni = ({
   listTestimoni = [
