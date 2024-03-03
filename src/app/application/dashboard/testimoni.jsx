@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import Slider from "react-slick";
 import Image from "next/image";
-import People from "../../../public/assets/img/people-3.png";
+import People from "../../../../public/assets/img/people-3.png";
 
 import { MdArrowBack, MdArrowForward, MdOutlineStar } from "react-icons/md";
 const Testimoni = ({

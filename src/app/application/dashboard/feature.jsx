@@ -3,10 +3,10 @@ import React, { useMemo } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
 
-import getScrollAnimation from "../../app/application/components/utils/getScrollAnimation";
-import ScrollAnimationWrapper from "../application/components/ScrollAnimationWrapper";
+import getScrollAnimation from "../components/utils/getScrollAnimation";
+import ScrollAnimationWrapper from "../components/ScrollAnimationWrapper";
 
-import Illustration2 from "../../../public/assets/img/Illustration2.png";
+import Illustration2 from "../../../../public/assets/img/Illustration2.png";
 const features = [
   "Powerfull online protection.",
   "Internet without borders.",

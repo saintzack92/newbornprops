@@ -1,0 +1,15 @@
+export async function fetchArticle() {
+    try {
+        // Assuming Article is a valid TypeORM entity
+        const article = new Article();
+        article.title = 'test';
+        article.description = 'test description';
+
+        // Use the data source to get the repository and then save the article
+        await AppDataSource.getRepository(Article).save(article);
+        console.log('Article saved:', article);
+    } catch (error) {
+        console.error('Failed to save the article', error);
+        throw error;
+    }
+}

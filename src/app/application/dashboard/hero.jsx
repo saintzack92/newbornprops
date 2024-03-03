@@ -1,15 +1,15 @@
 "use client";
 import React, { useMemo } from "react";
 import Image from "next/image";
-import ButtonPrimary from "../application/components/misc/ButtonPrimary";
+import ButtonPrimary from "../components/misc/ButtonPrimary";
 import { motion } from "framer-motion";
 
-import getScrollAnimation from "../../app/application/components/utils/getScrollAnimation";
-import ScrollAnimationWrapper from "../application/components/ScrollAnimationWrapper";
-import Banner from "../../../public/assets/img/Illustration1.png";
-import icon1 from "../../../public/assets/img/icon/heroicons_sm-user.svg";
-import icon2 from "../../../public/assets/img/icon/gridicons_location.svg";
-import icon3 from "../../../public/assets/img/icon/bx_bxs-server.svg";
+import getScrollAnimation from "../components/utils/getScrollAnimation";
+import ScrollAnimationWrapper from "../components/ScrollAnimationWrapper";
+import Banner from "../../../../public/assets/img/Illustration1.png";
+import icon1 from "../../../../public/assets/img/icon/heroicons_sm-user.svg";
+import icon2 from "../../../../public/assets/img/icon/gridicons_location.svg";
+import icon3 from "../../../../public/assets/img/icon/bx_bxs-server.svg";
 const Hero = ({
   listUser = [
     {
