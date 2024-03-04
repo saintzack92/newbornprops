@@ -1,24 +1,23 @@
 "use client";
 import React, { useMemo } from "react";
-import ButtonOutline from "./components/misc/ButtonOutline.";
-import ButtonPrimary from "./components/misc/ButtonPrimary";
+import ButtonOutline from "../components/misc/ButtonOutline.";
+import ButtonPrimary from "../components/misc/ButtonPrimary";
 import Image from "next/image";
-import Free from "../../../public/assets/img/Free.png";
-import Testimoni from "../application/testimoni";
+import Testimoni from "./testimoni";
 import { motion } from "framer-motion";
 
-import getScrollAnimation from "../../app/application/components/utils/getScrollAnimation";
-import ScrollAnimationWrapper from "../application/components/ScrollAnimationWrapper";
+import getScrollAnimation from "../components/utils/getScrollAnimation";
+import ScrollAnimationWrapper from "../components/ScrollAnimationWrapper";
 
-import Maps from "../../../public/assets/img/HugeGlobal.svg";
-import Premium from "../../../public/assets/img/Premium.png";
-import Standard from "../../../public/assets/img/Standard.png";
-
-import amazon from "../../../public/assets/img/icon/amazon.png";
-import netflix from "../../../public/assets/img/icon/netflix.png";
-import reddit from "../../../public/assets/img/icon/reddit.png";
-import discord from "../../../public/assets/img/icon/discord.png";
-import spotify from "../../../public/assets/img/icon/spotify.png";
+import Free from "../../../../public/assets/img/Free.png";
+import Maps from "../../../../public/assets/img/HugeGlobal.svg";
+import Premium from "../../../../public/assets/img/Premium.png";
+import Standard from "../../../../public/assets/img/Standard.png";
+import amazon from "../../../../public/assets/img/icon/amazon.png";
+import netflix from "../../../../public/assets/img/icon/netflix.png";
+import reddit from "../../../../public/assets/img/icon/reddit.png";
+import discord from "../../../../public/assets/img/icon/discord.png";
+import spotify from "../../../../public/assets/img/icon/spotify.png";
 const Bayar = () => {
   const scrollAnimation = useMemo(() => getScrollAnimation(), []);
 

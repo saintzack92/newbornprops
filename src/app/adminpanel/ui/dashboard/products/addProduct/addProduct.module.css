@@ -10,3 +10,14 @@
   .formChildInput{
 width: 45%;
   }
+  .slugParent{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: var(--bg) ;
+    color: var(--text);
+    border-radius: 5px;
+    margin-bottom: 30px;
+    border: 2px solid #2e374a;
+    align-items: center;
+  }
