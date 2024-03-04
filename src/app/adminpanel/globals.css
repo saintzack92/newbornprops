@@ -32,12 +32,15 @@ a{
     transition: width 0.3s ease 0s, left 0.3s ease 0s;
     @apply w-0 bg-orange-500 left-1/2 block bottom-0 absolute;
   }
+
   .animation-active:after {
     @apply left-0 w-full;
   }
   .animation-hover:hover:after {
     @apply left-0 w-full;
   }
+
+
   
   li.custom-list:before {
     content: "\2022"; /* bullet point, for screen readers */

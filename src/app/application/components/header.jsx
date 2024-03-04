@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import NavLink from "./nav/navLink";
 import { Link as LinkScroll } from "react-scroll";
 import ButtonOutline from "../components/misc/ButtonOutline.";
 import Image from "next/image";
@@ -26,7 +27,7 @@ const Headers = () => {
     <>
       <nav
         className={
-          " fixed top-0 w-full z-30 bg-gray-50 transition-all  ]" +
+          " fixed top-0 w-full z-30 bg-gray-50 transition-all  " +
           (scrollActive ? " shadow-md pt-0" : " pt-4")
         }
       >
@@ -37,7 +38,7 @@ const Headers = () => {
             </div>
           </Link>
           <ul className="hidden lg:flex md:flex col-start-4 col-end-8 text-black  justify-end">
-            <LinkScroll
+            {/* <LinkScroll
               activeClass="active"
               to="about"
               spy={true}
@@ -108,7 +109,8 @@ const Headers = () => {
               }
             >
               Testimonial
-            </LinkScroll>
+            </LinkScroll> */}
+            <NavLink />
           </ul>
           {/* <div className="col-start-10 col-end-12 font-medium flex justify-end items-center">
             <Link href="/">
