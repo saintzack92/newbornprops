@@ -1,6 +1,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import MyLinks from "./myLinks";
+import { MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
 
 const navLinka = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -38,7 +39,18 @@ const navLinka = () => {
               href={linkMenu.link}
             >
               {linkMenu.name}
-            </Link>
+              {linkMenu.submenu === true ? (
+                <span>
+                  {menuOpen ? (
+                    <MdArrowDropDown size={22} />
+                  ) : (
+                    <MdArrowDropUp size={22} />
+                  )}
+                </span>
+              ) : (
+                ""
+              )}
+            </Link>{" "}
             {linkMenu.submenu && (
               <div>
                 <div
