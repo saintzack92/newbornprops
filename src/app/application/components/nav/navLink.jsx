@@ -60,7 +60,7 @@ const navLinka = () => {
                   <div className="py-3">
                     <div className="w-4 h-4 left-3 absolute mt-1 bg-white rotate-45"></div>
                   </div>
-                  <div className="bg-white shadow-sm pr-20 pt-6 pl-6 pb-6">
+                  <div className="bg-white shadow-sm pr-20 pt-6 pl-6 pb-3">
                     {linkMenu.sublinks.map((mysublinks, indexs) => (
                       <div key={indexs}>
                         {mysublinks.sublink.map((slink, indexss) => (
