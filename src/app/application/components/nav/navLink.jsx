@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
 import MyLinks from "./myLinks";
-import { MdArrowDropUp, MdArrowDropDown } from "react-icons/md";
+import { MdChevronLeft, MdChevronRight } from "react-icons/md";
 
 const navLinka = () => {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -42,9 +42,9 @@ const navLinka = () => {
               {linkMenu.submenu === true ? (
                 <span>
                   {menuOpen ? (
-                    <MdArrowDropDown size={22} />
+                    <MdChevronRight size={25} className="rotate-90" />
                   ) : (
-                    <MdArrowDropUp size={22} />
+                    <MdChevronLeft size={25} className="rotate-90" />
                   )}
                 </span>
               ) : (
