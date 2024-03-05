@@ -11,8 +11,10 @@ import Image from "next/image";
 import LogoVPN from "../../../../../public/assets/img/Logo.svg";
 
 const navLinka = () => {
+  const [activeLink, setActiveLink] = useState(null);
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const [menuOpen, setMenuOpen] = useState(false);
+
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const menuRef = useRef();
 
@@ -37,6 +39,13 @@ const navLinka = () => {
   const handleNav = () => {
     // Toggle menuOpen
     setMenuOpen(!menuOpen);
+  };
+
+  const [menuOpenMobile, setMenuOpenMobile] = useState(false);
+
+  const handleNavMobile = () => {
+    // Toggle menuOpen
+    setMenuOpenMobile(!menuOpenMobile);
   };
   return (
     <>
@@ -100,35 +109,92 @@ const navLinka = () => {
       </ul>
 
       <div
-        onClick={handleNav}
+        onClick={handleNavMobile}
         className="lg:hidden md:hidden flex justify-end cursor-pointer "
       >
-        {menuOpen ? "" : <MdOutlineMenu size={22} />}
+        {menuOpenMobile ? "" : <MdOutlineMenu size={22} />}
+      </div>
 
+      <div
+        className={
+          menuOpenMobile
+            ? "fixed left-0 top-0 w-[65%] sm:hidden h-screen bg-[#ecf0f3] shadow p-7 ease-in duration-500"
+            : "fixed left-[-100%] top-0 p-7 ease-in duration-500 h-screen bg-[#ecf0f3]"
+        }
+      >
         <div
-          className={
-            menuOpen
-              ? "fixed left-0 top-0 w-[65%] sm:hidden h-screen bg-[#ecf0f3] shadow p-7 ease-in duration-500"
-              : "fixed left-[-100%] top-0 p-7 ease-in duration-500 h-screen bg-[#ecf0f3]"
-          }
+          onClick={handleNavMobile}
+          className=" flex  w-full  justify-between cursor-pointer "
         >
-          <div
-            onClick={handleNav}
-            className=" flex  w-full  justify-between cursor-pointer "
-          >
-            <Link href={`/`}>
-              <div className="cursor-pointer ">
-                <Image src={LogoVPN} className="h-6 w-auto" alt="foto" />
-              </div>
-            </Link>
-            <MdClose size={22} />
-          </div>
-
-          <div className="flex-col py-4 pt-6">
-            <ul>
-
-            </ul>
+          <Link href={`/`}>
+            <div className="cursor-pointer ">
+              <Image src={LogoVPN} className="h-6 w-auto" alt="foto" />
+            </div>
+          </Link>
+          <MdClose size={22} />
         </div>
+
+        <div className="flex flex-col py-4 pt-6">
+          <ul>
+            {MyLinks().map((linkMenu, index) => (
+              <div className="" key={index}>
+                <div className="">
+                  <Link
+                    className="flex justify-start  text-sm pb-3 my-3 cursor-pointer border-b-2 transition-all bg-[#ecf0f3]"
+                    onClick={linkMenu.submenu === true ? handleNavMobile : ""}
+                    href={linkMenu.link}
+                  >
+                    {linkMenu.name}
+                    {linkMenu.submenu === true ? (
+                      <span className="ml-auto">
+                        {menuOpenMobile ? (
+                          <MdChevronLeft size={22} className="rotate-90 " />
+                        ) : (
+                          <MdChevronRight size={22} className="rotate-90 " />
+                        )}
+                      </span>
+                    ) : (
+                      ""
+                    )}
+                  </Link>{" "}
+                  {linkMenu.submenu && (
+                    <div>
+                      <div
+                        // ref={menuRef}
+                        className={
+                          menuOpenMobile ? "hidden" : "block absolute top-14"
+                        }
+                      >
+                        <div className="py-3">
+                          <div className="w-4 h-4 left-3 absolute mt-1 bg-white rotate-45"></div>
+                        </div>
+                        <div className="bg-white shadow-sm pr-16 pt-6 pl-6 pb-3">
+                          {linkMenu.sublinks.map((mysublinks, indexs) => (
+                            <div key={indexs}>
+                              {mysublinks.sublink.map((slink, indexss) => (
+                                <div
+                                  className="pb-3 text-black border-transparent  hover:text-orange-500 transition-all "
+                                  key={indexss}
+                                >
+                                  <Link
+                                    className=""
+                                    onClick={() => setMenuOpenMobile(false)}
+                                    href={slink.link}
+                                  >
+                                    {slink.name}
+                                  </Link>
+                                </div>
+                              ))}
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            ))}
+          </ul>
         </div>
       </div>
     </>

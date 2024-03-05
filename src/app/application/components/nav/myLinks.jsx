@@ -9,7 +9,7 @@ const myLinks = () => {
     },
     {
       name: "About",
-      link: "#",
+      link: "",
       submenu: true,
       class: "px-4 py-2 mx-3 cursor-pointer inline-block flex justify-end",
       sublinks: [

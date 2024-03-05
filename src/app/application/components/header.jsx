@@ -34,7 +34,7 @@ const Headers = () => {
         <div className=" max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
           <Link href={`/`}>
             <div className="col-start-1 col-end-2 flex items-center">
-              <Image src={LogoVPN} className="h-8 w-auto"  alt="foto" />
+              <Image src={LogoVPN} className="h-8 w-auto" alt="foto" />
             </div>
           </Link>
           <NavLink />
@@ -130,14 +130,14 @@ const Headers = () => {
           </div> */}
         </div>
 
-        <div
+        {/* <div
           className={
             menuOpen
               ? "fixed left-0 top-0 w-[65%] sm:hidden h-screen bg-[#ecf0f3] shadow p-7 ease-in duration-500"
               : "fixed left-[-100%] top-0 p-7 ease-in duration-500 h-screen bg-[#ecf0f3]"
           }
-        >
-          {/* <div
+        > */}
+        {/* <div
             onClick={handleNav}
             className=" flex  w-full  justify-between cursor-pointer "
           >
@@ -149,7 +149,7 @@ const Headers = () => {
             <MdClose size={22} />
           </div> */}
 
-          <div className="flex-col py-4 pt-6">
+        {/* <div className="flex-col py-4 pt-6">
             <ul>
               <LinkScroll
                 activeClass="active"
@@ -230,7 +230,7 @@ const Headers = () => {
               </LinkScroll>
             </ul>
           </div>
-        </div>
+        </div> */}
       </nav>
 
       {/* Mobile Navigation */}
