@@ -204,7 +204,7 @@ const Bayar = () => {
               className="py-12 w-full px-8 mt-16"
               variants={scrollAnimation}
             >
-              <Image src={Maps} className="w-full h-auto" />
+              <Image src={Maps} className="w-full h-auto"  alt="foto"/>
             </motion.div>
           </ScrollAnimationWrapper>
           <ScrollAnimationWrapper>
@@ -217,31 +217,31 @@ const Bayar = () => {
                 src={amazon}
                 height={56}
                 className="w-auto mt-4 lg:mt-2"
-                alt=""
+               alt="foto"
               />
               <Image
                 src={netflix}
                 height={56}
                 className=" w-auto mt-2 lg:mt-0"
-                alt=""
+               alt="foto"
               />
               <Image
                 src={reddit}
                 height={56}
                 className=" w-auto mt-2 lg:mt-0"
-                alt=""
+               alt="foto"
               />
               <Image
                 src={discord}
                 height={56}
                 className=" w-auto mt-2 lg:mt-0"
-                alt=""
+               alt="foto"
               />
               <Image
                 src={spotify}
                 height={56}
                 className=" w-auto mt-2 lg:mt-0"
-                alt=""
+                alt="foto"
               />
             </motion.div>
           </ScrollAnimationWrapper>

@@ -1,6 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
+import NavLink from "./nav/navLink";
 import { Link as LinkScroll } from "react-scroll";
 import ButtonOutline from "../components/misc/ButtonOutline.";
 import Image from "next/image";
@@ -26,17 +27,18 @@ const Headers = () => {
     <>
       <nav
         className={
-          " fixed top-0 w-full z-30 bg-gray-50 transition-all  ]" +
+          " fixed top-0 w-full z-30 bg-gray-50 transition-all  " +
           (scrollActive ? " shadow-md pt-0" : " pt-4")
         }
       >
         <div className=" max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
           <Link href={`/`}>
             <div className="col-start-1 col-end-2 flex items-center">
-              <Image src={LogoVPN} className="h-8 w-auto" alt="" />
+              <Image src={LogoVPN} className="h-8 w-auto"  alt="foto" />
             </div>
           </Link>
-          <ul className="hidden lg:flex md:flex col-start-4 col-end-8 text-black  justify-end">
+          <NavLink />
+          {/* <ul className="hidden lg:flex md:flex col-start-4 col-end-8 text-black  justify-end">
             <LinkScroll
               activeClass="active"
               to="about"
@@ -109,7 +111,8 @@ const Headers = () => {
             >
               Testimonial
             </LinkScroll>
-          </ul>
+          
+          </ul> */}
           {/* <div className="col-start-10 col-end-12 font-medium flex justify-end items-center">
             <Link href="/">
               <div className="text-black mx-2 sm:mx-4 capitalize tracking-wide hover:text-orange-500 transition-all">
@@ -119,12 +122,12 @@ const Headers = () => {
             <ButtonOutline>Sign Up</ButtonOutline>
           </div> */}
 
-          <div
+          {/* <div
             onClick={handleNav}
             className="lg:hidden md:hidden flex justify-end cursor-pointer "
           >
             {menuOpen ? "" : <MdOutlineMenu size={22} />}
-          </div>
+          </div> */}
         </div>
 
         <div
@@ -134,17 +137,17 @@ const Headers = () => {
               : "fixed left-[-100%] top-0 p-7 ease-in duration-500 h-screen bg-[#ecf0f3]"
           }
         >
-          <div
+          {/* <div
             onClick={handleNav}
             className=" flex  w-full  justify-between cursor-pointer "
           >
             <Link href={`/`}>
               <div className="cursor-pointer ">
-                <Image src={LogoVPN} className="h-6 w-auto" alt="" />
+                <Image src={LogoVPN} className="h-6 w-auto"  alt="foto" />
               </div>
             </Link>
             <MdClose size={22} />
-          </div>
+          </div> */}
 
           <div className="flex-col py-4 pt-6">
             <ul>
