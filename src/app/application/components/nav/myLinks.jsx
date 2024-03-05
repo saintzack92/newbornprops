@@ -11,7 +11,7 @@ const myLinks = () => {
       name: "About",
       link: "#",
       submenu: true,
-      class: "px-4 py-2 mx-2 cursor-pointer  inline-block flex justify-end",
+      class: "px-4 py-2 mx-3 cursor-pointer inline-block flex justify-end",
       sublinks: [
         {
           sublink: [
