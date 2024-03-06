@@ -4,7 +4,7 @@ async function createDbConnection() {
     return await mysql.createConnection({
         host: 'localhost',
         user: 'root',
-        password: 'UINw580i!', // Ensure to keep your passwords secure
+        password: 'P@ssw0rd009!', // Ensure to keep your passwords secure
         database: 'adminpanel',
         port: 3306,
     });
@@ -39,7 +39,7 @@ async function initializeDatabase() {
         amountClicking INT DEFAULT 0,
         createBy VARCHAR(255),
         updated_at TIMESTAMP NULL,
-        deleted_at BOOLEAN DEFAULT FALSE
+        deleted_at TIMESTAMP NULL,
     );
 `; // Your SQL for creating the table
 

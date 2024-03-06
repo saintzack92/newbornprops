@@ -5,9 +5,10 @@ export default async function handler(req, res) {
     if (req.method === "GET") {
         try {
             const products = await query({
-                query: 'SELECT * FROM articles', // Ensure table name matches exactly, case-sensitive
+                query: 'SELECT * FROM articles', // Ensure table name matches exactly, case-sensitive,
+                values:[]
             });
-            res.status(200).json(products);
+            res.status(200).json({product: products});
         } catch (error) {
             console.error("Query failed:", error.message);
             res.status(500).json({ error: "Internal server error" });
