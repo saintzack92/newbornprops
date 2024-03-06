@@ -24,6 +24,7 @@
     "recharts": "^2.9.0",
     "reflect-metadata": "^0.2.1",
     "slick-carousel": "^1.8.1",
+    "tailwindcss-debug-screens": "^2.2.1",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {

@@ -1,5 +1,3 @@
-
-
 const myLinks = () => {
   return [
     {
@@ -9,24 +7,20 @@ const myLinks = () => {
         {
           label: "Todo list",
           link: "#",
-         
         },
         {
           label: "Calendar",
           link: "#",
-         
         },
         {
           label: "Reminders",
           link: "#",
-         
         },
         {
           label: "Planning",
           link: "#",
-         
-        }
-      ]
+        },
+      ],
     },
     {
       label: "Compnay",
@@ -34,26 +28,26 @@ const myLinks = () => {
       children: [
         {
           label: "History",
-          link: "#"
+          link: "#",
         },
         {
           label: "Our Team",
-          link: "#"
+          link: "#",
         },
         {
           label: "Blog",
-          link: "#"
-        }
-      ]
+          link: "/login",
+        },
+      ],
     },
     {
       label: "Careers",
-      link: "#"
+      link: "/login",
     },
     {
       label: "About",
-      link: "#"
-    }
+      link: "#",
+    },
   ];
 };
 
