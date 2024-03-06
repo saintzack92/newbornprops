@@ -1,6 +1,9 @@
-import Link from "next/link";
+"use client";
 import React, { useState, useEffect, useRef } from "react";
-import MyLinks from "./myLinks";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
+import { IoIosArrowDown } from "react-icons/io";
+import Link from "next/link";
+import navItems from "./myLinks";
 import {
   MdChevronLeft,
   MdChevronRight,
@@ -9,196 +12,156 @@ import {
 } from "react-icons/md";
 import Image from "next/image";
 import LogoVPN from "../../../../../public/assets/img/Logo.svg";
+import { FiMenu } from "react-icons/fi";
+import { AiOutlineClose } from "react-icons/ai";
 
-const navLinka = () => {
-  const [activeLink, setActiveLink] = useState(null);
+
+
+
+
+export default function navLinka() {
+
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const [menuOpen, setMenuOpen] = useState(false);
-
+  const [animationParent] = useAutoAnimate();
   // eslint-disable-next-line react-hooks/rules-of-hooks
-  const menuRef = useRef();
+  const [isSideMenuOpen, setSideMenue] = useState(false);
+  function openSideMenu() {
+    setSideMenue(true);
+  }
+  function closeSideMenu() {
+    setSideMenue(false);
+  }
 
-  // eslint-disable-next-line react-hooks/rules-of-hooks
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        // Klik dilakukan di luar menu, set menuOpen ke false
-        setMenuOpen(false);
-      }
-    };
-
-    // Menambahkan event listener ketika komponen dimount
-    document.addEventListener("mousedown", handleClickOutside);
-
-    // Membersihkan event listener ketika komponen diunmount
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleNav = () => {
-    // Toggle menuOpen
-    setMenuOpen(!menuOpen);
-  };
-
-  const [menuOpenMobile, setMenuOpenMobile] = useState(false);
-
-  const handleNavMobile = () => {
-    // Toggle menuOpen
-    setMenuOpenMobile(!menuOpenMobile);
-  };
+  
   return (
     <>
-      <ul className="hidden lg:flex md:flex col-start-4 col-end-8 text-black  justify-end">
-        {MyLinks().map((linkMenu, index) => (
-          <div className="" ref={menuRef} key={index}>
-            <div className="">
-              <Link
-                className={linkMenu.class}
-                onClick={linkMenu.submenu === true ? handleNav : ""}
-                href={linkMenu.link}
-              >
-                {linkMenu.name}
-                {linkMenu.submenu === true ? (
-                  <span className="ml-2">
-                    {menuOpen ? (
-                      <MdChevronRight size={22} className="rotate-90" />
-                    ) : (
-                      <MdChevronLeft size={22} className="rotate-90 " />
-                    )}
-                  </span>
-                ) : (
-                  ""
+        {isSideMenuOpen && <MobileNav closeSideMenu={closeSideMenu} />}
+        <div className="hidden md:flex items-center gap-4 transition-all">
+          {navItems().map((d, i) => (
+            <div
+              key={i}
+              
+              className="relative group  px-2 py-3 transition-all "
+            >
+              <Link href={d.link ?? "#"} className="flex cursor-pointer items-center gap-2 text-neutral-400 group-hover:text-black ">
+                <span>{d.label}</span>
+                {d.children && (
+                  <IoIosArrowDown className=" rotate-180  transition-all group-hover:rotate-0" />
                 )}
-              </Link>{" "}
-              {linkMenu.submenu && (
-                <div>
-                  <div
-                    // ref={menuRef}
-                    className={menuOpen ? "block absolute top-14" : "hidden"}
-                  >
-                    <div className="py-3">
-                      <div className="w-4 h-4 left-3 absolute mt-1 bg-white rotate-45"></div>
-                    </div>
-                    <div className="bg-white shadow-sm pr-16 pt-6 pl-6 pb-3">
-                      {linkMenu.sublinks.map((mysublinks, indexs) => (
-                        <div key={indexs}>
-                          {mysublinks.sublink.map((slink, indexss) => (
-                            <div
-                              className="pb-3 text-black border-transparent  hover:text-orange-500 transition-all "
-                              key={indexss}
-                            >
-                              <Link
-                                className=""
-                                onClick={() => setMenuOpen(false)}
-                                href={slink.link}
-                              >
-                                {slink.name}
-                              </Link>
-                            </div>
-                          ))}
-                        </div>
-                      ))}
-                    </div>
-                  </div>
+              </Link>
+
+              {/* dropdown */}
+              {d.children && (
+                <div className="absolute   right-0   top-10 hidden w-auto  flex-col gap-1   rounded-lg bg-white py-3 shadow-md  transition-all group-hover:flex ">
+                  {d.children.map((ch, i) => (
+                    <Link
+                      key={i}
+                      href={ch.link ?? "#"}
+                      className=" flex cursor-pointer items-center  py-1 pl-6 pr-8  text-neutral-400 hover:text-black  "
+                    >
+                     
+                      {/* item */}
+                      <span className="whitespace-nowrap ">
+                        {ch.label}
+                      </span>
+                    </Link>
+                  ))}
                 </div>
               )}
             </div>
-          </div>
-        ))}
-      </ul>
-
-      <div
-        onClick={handleNavMobile}
-        className="lg:hidden md:hidden flex justify-end cursor-pointer "
-      >
-        {menuOpenMobile ? "" : <MdOutlineMenu size={22} />}
-      </div>
-
-      <div
-        className={
-          menuOpenMobile
-            ? "fixed left-0 top-0 w-[65%] sm:hidden h-screen bg-[#ecf0f3] shadow p-7 ease-in duration-500"
-            : "fixed left-[-100%] top-0 p-7 ease-in duration-500 h-screen bg-[#ecf0f3]"
-        }
-      >
-        <div
-          onClick={handleNavMobile}
-          className=" flex  w-full  justify-between cursor-pointer "
-        >
-          <Link href={`/`}>
-            <div className="cursor-pointer ">
-              <Image src={LogoVPN} className="h-6 w-auto" alt="foto" />
-            </div>
-          </Link>
-          <MdClose size={22} />
+          ))}
         </div>
 
-        <div className="flex flex-col py-4 pt-6">
-          <ul>
-            {MyLinks().map((linkMenu, index) => (
-              <div className="" key={index}>
-                <div className="">
-                  <Link
-                    className="flex justify-start  text-sm pb-3 my-3 cursor-pointer border-b-2 transition-all bg-[#ecf0f3]"
-                    onClick={linkMenu.submenu === true ? handleNavMobile : ""}
-                    href={linkMenu.link}
-                  >
-                    {linkMenu.name}
-                    {linkMenu.submenu === true ? (
-                      <span className="ml-auto">
-                        {menuOpenMobile ? (
-                          <MdChevronLeft size={22} className="rotate-90 " />
-                        ) : (
-                          <MdChevronRight size={22} className="rotate-90 " />
-                        )}
-                      </span>
-                    ) : (
-                      ""
-                    )}
-                  </Link>{" "}
-                  {linkMenu.submenu && (
-                    <div>
-                      <div
-                        // ref={menuRef}
-                        className={
-                          menuOpenMobile ? "hidden" : "block absolute top-14"
-                        }
-                      >
-                        <div className="py-3">
-                          <div className="w-4 h-4 left-3 absolute mt-1 bg-white rotate-45"></div>
-                        </div>
-                        <div className="bg-white shadow-sm pr-16 pt-6 pl-6 pb-3">
-                          {linkMenu.sublinks.map((mysublinks, indexs) => (
-                            <div key={indexs}>
-                              {mysublinks.sublink.map((slink, indexss) => (
-                                <div
-                                  className="pb-3 text-black border-transparent  hover:text-orange-500 transition-all "
-                                  key={indexss}
-                                >
-                                  <Link
-                                    className=""
-                                    onClick={() => setMenuOpenMobile(false)}
-                                    href={slink.link}
-                                  >
-                                    {slink.name}
-                                  </Link>
-                                </div>
-                              ))}
-                            </div>
-                          ))}
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            ))}
-          </ul>
-        </div>
-      </div>
+        <FiMenu
+        onClick={openSideMenu}
+        className="cursor-pointer text-4xl ml-auto md:hidden"
+      />
     </>
   );
 };
 
-export default navLinka;
+
+function MobileNav({ closeSideMenu }) {
+  return (
+    <div className="fixed left-0 top-0 flex h-full min-h-screen w-full justify-end bg-black/60 md:hidden">
+      <div className=" h-full w-[65%] bg-white px-4 py-4">
+        <section className="flex justify-end">
+          <AiOutlineClose
+            onClick={closeSideMenu}
+            className="cursor-pointer text-4xl "
+          />
+        </section>
+        <div className=" flex flex-col text-base  gap-2 transition-all">
+          {navItems().map((d, i) => (
+            <SingleNavItem
+              key={i}
+              label={d.label}
+             
+              link={d.link}
+            >
+              {d.children}
+            </SingleNavItem>
+          ))}
+        </div>
+
+        {/* <section className="  flex  flex-col   gap-8  mt-4 items-center">
+          <button className="h-fit text-neutral-400 transition-all hover:text-black/90">
+            Login
+          </button>
+
+          <button className="w-full  max-w-[200px]  rounded-xl border-2 border-neutral-400 px-4 py-2 text-neutral-400 transition-all hover:border-black hover:text-black/90">
+            Register
+          </button>
+        </section> */}
+      </div>
+    </div>
+  );
+}
+
+
+
+function SingleNavItem() {
+  const [animationParent] = useAutoAnimate();
+  const [isItemOpen, setItem] = useState(false);
+
+  function toggleItem() {
+    return setItem(!isItemOpen);
+  }
+
+  return(
+    <Link
+    ref={animationParent}
+    onClick={toggleItem}
+    href={d.link ?? "#"}
+    className="relative   px-2 py-3 transition-all "
+  >
+    <p className="flex cursor-pointer items-center gap-2 text-neutral-400 group-hover:text-black ">
+      <span>{d.label}</span>
+      {d.children && (
+        // rotate-180
+        <IoIosArrowDown
+          className={`text-xs transition-all  ${isItemOpen && " rotate-180"}`}
+        />
+      )}
+    </p>
+
+    {/* dropdown */}
+    {isItemOpen && d.children && (
+      <div className="  w-auto  flex-col gap-1   rounded-lg bg-white py-3   transition-all flex ">
+        {d.children.map((ch, i) => (
+          <Link
+            key={i}
+            href={ch.link ?? "#"}
+            className=" flex cursor-pointer items-center  py-1 pl-6 pr-8  text-neutral-400 hover:text-black  "
+          >
+            {/* image */}
+            {/* item */}
+            <span className="whitespace-nowrap   pl-3 ">{ch.label}</span>
+          </Link>
+        ))}
+      </div>
+    )}
+  </Link>
+  )
+
+}
