@@ -1,30 +1,59 @@
+
+
 const myLinks = () => {
   return [
     {
-      name: "Home",
-      link: "/",
-      submenu: false,
-
-      class: `px-4 py-2 mx-2 cursor-pointer animation-hover   inline-block relative`,
+      label: "Features",
+      link: "#",
+      children: [
+        {
+          label: "Todo list",
+          link: "#",
+         
+        },
+        {
+          label: "Calendar",
+          link: "#",
+         
+        },
+        {
+          label: "Reminders",
+          link: "#",
+         
+        },
+        {
+          label: "Planning",
+          link: "#",
+         
+        }
+      ]
     },
     {
-      name: "About",
-      link: "",
-      submenu: true,
-      class: "px-4 py-2 mx-3 cursor-pointer inline-block flex justify-end",
-      sublinks: [
+      label: "Compnay",
+      link: "#",
+      children: [
         {
-          sublink: [
-            {
-              name: "Sejarah",
-              link: "/",
-            },
-            { name: "Visi", link: "/" },
-            { name: "Misi", link: "/login" },
-          ],
+          label: "History",
+          link: "#"
         },
-      ],
+        {
+          label: "Our Team",
+          link: "#"
+        },
+        {
+          label: "Blog",
+          link: "#"
+        }
+      ]
     },
+    {
+      label: "Careers",
+      link: "#"
+    },
+    {
+      label: "About",
+      link: "#"
+    }
   ];
 };
 
