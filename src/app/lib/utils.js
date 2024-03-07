@@ -39,7 +39,7 @@ async function initializeDatabase() {
         amountClicking INT DEFAULT 0,
         createBy VARCHAR(255),
         updated_at TIMESTAMP NULL,
-        deleted_at TIMESTAMP NULL,
+        deleted_at TIMESTAMP NULL
     );
 `; // Your SQL for creating the table
 
