@@ -4,14 +4,6 @@ import { useAutoAnimate } from "@formkit/auto-animate/react";
 import { IoIosArrowDown } from "react-icons/io";
 import Link from "next/link";
 import navItems from "./myLinks";
-import {
-  MdChevronLeft,
-  MdChevronRight,
-  MdOutlineMenu,
-  MdClose,
-} from "react-icons/md";
-import Image from "next/image";
-import LogoVPN from "../../../../../public/assets/img/Logo.svg";
 import { FiMenu } from "react-icons/fi";
 import { AiOutlineClose } from "react-icons/ai";
 
