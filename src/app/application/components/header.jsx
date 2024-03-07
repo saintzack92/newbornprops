@@ -31,7 +31,7 @@ const Headers = () => {
           (scrollActive ? " shadow-md pt-0" : " pt-4")
         }
       >
-        <div className=" max-w-screen-xl px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
+        <div className=" max-w-screen-xl text-sm px-6 sm:px-8 lg:px-16 mx-auto grid grid-flow-col py-3 sm:py-4">
           <Link href={`/`}>
             <div className="col-start-1 col-end-2 flex items-center">
               <Image src={LogoVPN} className="h-8 w-auto" alt="foto" />
