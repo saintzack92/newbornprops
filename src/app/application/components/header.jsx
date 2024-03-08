@@ -37,7 +37,7 @@ const Headers = () => {
               <Image src={LogoVPN} className="h-8 w-auto" alt="foto" />
             </div>
           </Link>
-          <NavLink />
+          <NavLink/>
           {/* <ul className="hidden lg:flex md:flex col-start-4 col-end-8 text-black  justify-end">
             <LinkScroll
               activeClass="active"

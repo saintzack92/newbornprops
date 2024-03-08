@@ -1,3 +1,4 @@
+
 "use client";
 import React, { useMemo } from "react";
 import ButtonOutline from "../components/misc/ButtonOutline.";
@@ -10,7 +11,8 @@ import getScrollAnimation from "../components/utils/getScrollAnimation";
 import ScrollAnimationWrapper from "../components/ScrollAnimationWrapper";
 
 import Free from "../../../../public/assets/img/Free.png";
-import Maps from "../../../../public/assets/img/HugeGlobal.svg";
+// import Maps from "../../../../public/assets/img/indonesia.svg";
+import Maps from "../components/mapsIndonesia";
 import Premium from "../../../../public/assets/img/Premium.png";
 import Standard from "../../../../public/assets/img/Standard.png";
 import amazon from "../../../../public/assets/img/icon/amazon.png";
@@ -204,7 +206,11 @@ const Bayar = () => {
               className="py-12 w-full px-8 mt-16"
               variants={scrollAnimation}
             >
-              <Image src={Maps} className="w-full h-auto"  alt="foto"/>
+              {/* <Image src={Maps} className="w-full h-auto"  alt="foto"/> */}
+<Maps/>
+              
+
+
             </motion.div>
           </ScrollAnimationWrapper>
           <ScrollAnimationWrapper>

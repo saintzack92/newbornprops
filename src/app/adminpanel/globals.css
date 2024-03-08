@@ -79,3 +79,7 @@ a{
     @apply bg-orange-500 rounded-l-full  rounded-r-full w-12 mt-20;
   }
   
+
+  g:hover {
+    fill: red;
+  }
