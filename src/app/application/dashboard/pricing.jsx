@@ -1,4 +1,3 @@
-
 "use client";
 import React, { useMemo } from "react";
 import ButtonOutline from "../components/misc/ButtonOutline.";
@@ -207,10 +206,7 @@ const Bayar = () => {
               variants={scrollAnimation}
             >
               {/* <Image src={Maps} className="w-full h-auto"  alt="foto"/> */}
-<Maps/>
-              
-
-
+              <Maps />
             </motion.div>
           </ScrollAnimationWrapper>
           <ScrollAnimationWrapper>
@@ -223,25 +219,25 @@ const Bayar = () => {
                 src={amazon}
                 height={56}
                 className="w-auto mt-4 lg:mt-2"
-               alt="foto"
+                alt="foto"
               />
               <Image
                 src={netflix}
                 height={56}
                 className=" w-auto mt-2 lg:mt-0"
-               alt="foto"
+                alt="foto"
               />
               <Image
                 src={reddit}
                 height={56}
                 className=" w-auto mt-2 lg:mt-0"
-               alt="foto"
+                alt="foto"
               />
               <Image
                 src={discord}
                 height={56}
                 className=" w-auto mt-2 lg:mt-0"
-               alt="foto"
+                alt="foto"
               />
               <Image
                 src={spotify}
