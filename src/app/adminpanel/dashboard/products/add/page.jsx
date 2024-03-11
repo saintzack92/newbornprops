@@ -12,6 +12,7 @@ const AddProductPage = () => {
     slug: "",
     click: "",
     isActive: "",
+    fileUrl:"",
     content: { html: "" },
   });
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
@@ -199,7 +200,7 @@ const AddProductPage = () => {
             <input
               type="file"
               id="fileUpload"
-              name="myFile"
+              name="fileUrl"
               accept="image/*"
               className="hidden"
               onChange={handleImageChange}
