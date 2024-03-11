@@ -19,6 +19,10 @@ const AddProductPage = () => {
 
   const handleImageChange = (e) => {
     e.preventDefault();
+    if (e.target.files.length === 0) {
+      // No file was selected (user clicked cancel)
+      return; // Simply return without doing anything
+  }
 
     let reader = new FileReader();
     let file = e.target.files[0];
