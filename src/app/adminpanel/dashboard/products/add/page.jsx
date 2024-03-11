@@ -181,13 +181,14 @@ const AddProductPage = () => {
           className={`w-full gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2`}
         >
           <div
-            className={`w-[95%] px-[20px] gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2`}
+            className={`w-[95%] px-[20px] gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2 relative z-0 h-[400px]`}
           >
             {imagePreviewUrl && (
               <img
                 src={imagePreviewUrl}
                 alt="Image Preview"
-                style={{ width: "100%", height: "100px" }} // Adjust styling as needed
+                style={{ width: "100%" }} // Adjust styling as needed
+                className={`z-10 flex absolute object-contain h-full`}
               />
             )}
 
@@ -202,7 +203,7 @@ const AddProductPage = () => {
             />
             <label
               htmlFor="fileUpload"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline absolute bottom-2 z-50"
             >
               Select File
             </label>
