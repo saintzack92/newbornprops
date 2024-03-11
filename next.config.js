@@ -8,6 +8,10 @@ const nextConfig = {
           source: '/',
           destination: '/application',
         },
+        {
+          source:'/login',
+          destination:'/application/auth/login'
+        }
       ];
     },
   };
