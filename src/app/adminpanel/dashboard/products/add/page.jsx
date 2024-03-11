@@ -19,10 +19,7 @@ const AddProductPage = () => {
 
   const handleImageChange = (e) => {
     e.preventDefault();
-    if (e.target.files.length === 0) {
-      // No file was selected (user clicked 'cancel')
-      return; // Exit the function early
-  }
+
     let reader = new FileReader();
     let file = e.target.files[0];
 
@@ -184,15 +181,13 @@ const AddProductPage = () => {
           className={`w-full gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2`}
         >
           <div
-            className={`w-[95%] px-[20px] gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] h-[15vw]
-            bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2 relative z-`}
+            className={`w-[95%] px-[20px] gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2`}
           >
             {imagePreviewUrl && (
               <img
                 src={imagePreviewUrl}
                 alt="Image Preview"
-                style={{ width: "auto" }} // Adjust styling as needed
-                className="absolute object-contain h-full z-1"
+                style={{ width: "100%", height: "100px" }} // Adjust styling as needed
               />
             )}
 
@@ -207,15 +202,15 @@ const AddProductPage = () => {
             />
             <label
               htmlFor="fileUpload"
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline absolute bottom-2  z-10"
+              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
               Select File
             </label>
           </div>
           <h1>Input your article here</h1>
           <ReactQuil
-            className="h-[850px] px-[30px] mb-[20px] w-full"
-          // onChange={handleContentChange}
+            className="h-[550px] px-[30px] mb-[20px] w-full"
+            // onChange={handleContentChange}
           />
         </div>
 
