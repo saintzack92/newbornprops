@@ -13,7 +13,7 @@ const ProductsPage = ()=>{
     >
       <div className={`${styles.top} flex items-center justify-between py-[10px]`}>
         <Search placeholder="Search for a user" />
-        <Link href={"products/add"}>
+        <Link href={"articles/add"}>
           <button
             className={`${styles.addButton} p-[10px] bg-[#5d57c9] text-[var(--text) rounded-[10px] border-none cursor-pointer`}
           >
@@ -53,7 +53,7 @@ const ProductsPage = ()=>{
             <td>72</td>
             <td>
               <div className={`${styles.button} flex gap-[10px]`}>
-                <Link href="products/test">
+                <Link href="articles/test">
                   <button
                     className={`${styles.button} py-[5px] px-[10px] rounded-[5px] text-[var(--text)] border-none cursor-pointer bg-[teal]`}
                   >

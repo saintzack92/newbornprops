@@ -31,7 +31,12 @@ const menuItems = [
       },
       {
         title: "Products",
-        path: "/adminpanel/dashboard/products",
+        path: "/adminpanel/dashboard/articles",
+        icon: <MdShoppingBag />,
+      },
+      {
+        title: "Surveys",
+        path: "/adminpanel/dashboard/surveys",
         icon: <MdShoppingBag />,
       },
       {
