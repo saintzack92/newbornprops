@@ -8,13 +8,14 @@ import { ReactQuil } from "../../../ui/dashboard/component/quill"; // Adjust the
 const AddProductPage = () => {
   const [formValues, setFormValues] = useState({
     title: "",
-    category: "", // Assuming 'general' is a default value
+    category: "",
     slug: "",
-    click: "",
-    isActive: "",
-    fileUrl:"",
+    click: 0, // If this is meant to be a number, you might initialize it as null or 0.
+    isActive: false, // Initialize as false rather than an empty string.
+    fileUrl: "", // This is okay, but ensure you're using it as intended.
     content: { html: "" },
   });
+  
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
 
   const handleImageChange = (e) => {
@@ -22,7 +23,7 @@ const AddProductPage = () => {
     if (e.target.files.length === 0) {
       // No file was selected (user clicked cancel)
       return; // Simply return without doing anything
-  }
+    }
 
     let reader = new FileReader();
     let file = e.target.files[0];
@@ -215,8 +216,14 @@ const AddProductPage = () => {
           <h1>Input your survey article here</h1>
           <ReactQuil
             className="h-[550px] px-[30px] mb-[20px] w-full"
-            // onChange={handleContentChange}
+            onChange={(htmlContent) => {
+              setFormValues((prevState) => ({
+                ...prevState,
+                content: { html: htmlContent },
+              }));
+            }}
           />
+
         </div>
 
         <button
