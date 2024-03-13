@@ -210,7 +210,7 @@ const handleSubmit = async (e) => {
           <div
             className={`w-[95%] gap-[20px] flex flex-col rounded-[5px]  mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2 relative z-0 h-[400px]`}
           >
-            {imagePreviewUrl && (
+            {imagePreviewUrl ? (
           // <div className="flex  bg-[blue] w-full">
           <div className={`w-[100%] h-full  gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
           >
@@ -221,7 +221,7 @@ const handleSubmit = async (e) => {
               style={{ width: "100%" }} // Adjust styling as needed
               className={`z-10 flex absolute object-contain h-full `}
             />
-          </div>)}
+          </div>):<div>tidak ada gambar ditampilkan</div>}
 
             {!imagePreviewUrl && "Upload your main image here"}
             <input
