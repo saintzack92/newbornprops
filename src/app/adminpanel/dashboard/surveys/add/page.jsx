@@ -121,24 +121,9 @@ const AddProductPage = () => {
           placeholder="title"
           name="title"
           required
-          className={`${styles.formChild} ${styles.formChildInput} `}
+          className={`${styles.formChild} ${styles.formChildInput} !w-[100%] `}
           onChange={handleChange}
         />
-        <select
-          name="category"
-          id="category"
-          className={`${styles.formChild} ${styles.formChildInput}`}
-          onChange={handleChange}
-          value={formValues.category}
-        >
-          <option value="" disabled>
-            Choose a Category
-          </option>
-          <option value="computer">Computer</option>
-          <option value="tv">TV</option>
-          <option value="keyboard">Keyboard</option>
-          <option value="modem">Modem</option>
-        </select>
 
         <div className={`${styles.slugParent} w-[45%] gap-1`}>
           <input
@@ -172,6 +157,18 @@ const AddProductPage = () => {
         <select
           name="isActive"
           id="isActive"
+          className={`${styles.formChild} ${styles.formChildInput}`}
+          value={formValues.isActive} // Controlled component approach
+          onChange={handleChange} // Ensure you have a handler function to update state
+        >
+          <option value="">Is Active?</option>{" "}
+          {/* No value for placeholder option */}
+          <option value={true}>Yes</option>
+          <option value={false}>No</option>
+        </select>
+        <select
+          name="isHighlights"
+          id="isHighlights"
           className={`${styles.formChild} ${styles.formChildInput}`}
           value={formValues.isActive} // Controlled component approach
           onChange={handleChange} // Ensure you have a handler function to update state

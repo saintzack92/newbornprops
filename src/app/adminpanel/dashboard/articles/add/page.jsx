@@ -11,7 +11,8 @@ const AddProductPage = () => {
     category: "",
     slug: "",
     click: 0, // If this is meant to be a number, you might initialize it as null or 0.
-    isActive: false, // Initialize as false rather than an empty string.
+    isActive: true, // Initialize as false rather than an empty string.
+    isHighlights: false, // Initialize as false rather than an empty string.
     fileUrl: "", // This is okay, but ensure you're using it as intended.
     content: { html: "" },
   });
@@ -22,7 +23,7 @@ const AddProductPage = () => {
     if (e.target.files.length === 0) {
       // No file was selected (user clicked cancel)
       return; // Simply return without doing anything
-  }
+    }
 
     let reader = new FileReader();
     let file = e.target.files[0];
@@ -168,18 +169,36 @@ const AddProductPage = () => {
           className={`${styles.formChild} ${styles.formChildInput}`}
           onChange={handleChange}
         />
-        <select
-          name="isActive"
-          id="isActive"
-          className={`${styles.formChild} ${styles.formChildInput}`}
-          value={formValues.isActive} // Controlled component approach
-          onChange={handleChange} // Ensure you have a handler function to update state
-        >
-          <option value="">Is Active?</option>{" "}
-          {/* No value for placeholder option */}
-          <option value={true}>Yes</option>
-          <option value={false}>No</option>
-        </select>
+        <div className={` w-[45%] flex flex-col h-[50%] justify-between items-center border-none `}>
+          <label className="text-left w-full text-[#8f94a1]">isActive</label>
+          <select
+            name="isActive"
+            id="isActive"
+            className={`w-full p-[30px] bg-[var(--bg)] text-[var(--text)] rounded-[5px] border-[2px] border-solid border-[#2e374a]`}
+            value={formValues.isActive} // Controlled component approach
+            onChange={handleChange} // Ensure you have a handler function to update state
+          >
+            <option value="" disabled>Is Active?</option>{" "}
+            <option value={true}>Yes</option>
+            <option value={false}>No</option>
+          </select>
+        </div>
+        <div className={`w-[45%] flex flex-col h-[50%] justify-between items-center border-none `}>
+          <label className="text-left w-full text-[#8f94a1]">isHighlights</label>
+          <select
+            name="isHighlights"
+            id="isHighlights"
+            className={`${styles.formChild} w-full`}
+            value={formValues.isHighlights} // Controlled component approach
+            onChange={handleChange} // Ensure you have a handler function to update state
+          >
+            <option value="" disabled>Is Active?</option>{" "}
+            {/* No value for placeholder option */}
+            <option value={true}>Yes</option>
+            <option value={false}>No</option>
+          </select>
+        </div>
+
 
         <div
           className={`w-full gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2`}
@@ -214,7 +233,7 @@ const AddProductPage = () => {
           </div>
           <h1>Input your article here</h1>
           <ReactQuil
-            className="h-[550px] px-[30px] mb-[20px] w-full"
+            className="h-[550px] px-[30px] mb-[20px] w-full "
             onChange={(htmlContent) => {
               setFormValues((prevState) => ({
                 ...prevState,
