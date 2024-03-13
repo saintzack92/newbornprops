@@ -1,7 +1,7 @@
 "use client";
 import styles from "../../../ui/dashboard/products/addProduct/addProduct.module.css";
-import img from "../../../../../../public/7.jpg";
-import Image from "next/image";
+
+
 import React, { useRef, useState } from "react";
 import { ReactQuil } from "../../../ui/dashboard/component/quill"; // Adjust the path as necessary
 
@@ -10,109 +10,109 @@ const AddProductPage = () => {
     title: "",
     category: "",
     slug: "",
-    click: 0, // If this is meant to be a number, you might initialize it as null or 0.
-    isActive: true, // Initialize as false rather than an empty string.
-    isHighlights: false, // Initialize as false rather than an empty string.
-    fileUrl: "", // This is okay, but ensure you're using it as intended.
-    content: { html: "" },
-  });
+    amountClicking: 0, // Assuming this is intended to be 'amountClicking' on the backend.
+    active: false, // Initialize according to your default need, false seems logical if activation is a deliberate choice.
+    highlights: false, // Same reasoning as `active`.
+    file: "",
+    description: "", // Changed from 'content' to 'description' to match backend DTO.
+    createBy: "", // Add this if you're not automatically setting it on the backend based on user session or token.
+});
+
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const fileInputRef = useRef(null); // Using useRef for the file input
 
   const handleImageChange = (e) => {
     e.preventDefault();
     if (e.target.files.length === 0) {
-      // No file was selected (user clicked cancel)
-      return; // Simply return without doing anything
+      return;
     }
-
-    let reader = new FileReader();
     let file = e.target.files[0];
-
+    console.log(file); // Confirm the file object is captured
+    let reader = new FileReader();
     reader.onloadend = () => {
       setImagePreviewUrl(reader.result);
     };
-
     reader.readAsDataURL(file);
   };
+  
   const handleRemoveImage = () => {
     setImagePreviewUrl(''); // Use setImagePreviewUrl to update state
     // Reset the file input
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormValues((prevState) => ({
+ // When handling the change event of an input field
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setFormValues((prevState) => ({
       ...prevState,
       [name]: value,
-    }));
-  };
+  }));
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  if (name === "title") {
+      const newSlug = generateSlug(value); // value is the input's current value
+      setFormValues((prevState) => ({
+          ...prevState,
+          slug: newSlug,
+      }));
+  }
+};
 
-    // Check for category selection and file selection
-    if (!formValues.category) {
-      alert("Please select a valid category");
-      return;
-    }
 
-    const fileInput = document.getElementById("fileUpload");
-    const file = fileInput.files[0];
-    if (!file) {
+  
+const generateSlug = (title) => {
+  // Ensure title is a string before proceeding
+  if (typeof title === 'string' && title) {
+      return title
+          .toLowerCase()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9-]/g, "")
+          .replace(/-+/g, "-");
+  }
+  return ""; // Return empty string if no title or title is not a string
+};
+
+
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  
+  // Ensure file is selected
+  const fileInput = document.getElementById("fileUpload");
+  const file = fileInput.files[0];
+  if (!file) {
       alert("Please upload an image.");
       return;
-    }
+  }
 
-    const formData = new FormData();
+  const formData = new FormData();
+  formData.append("file", file);
 
-    // Append the file
-    formData.append("image", file);
-
-    // Append other form data
-    for (const key in formValues) {
-      if (key === "content") {
-        formData.append(key, JSON.stringify(formValues[key])); // Assuming content needs to be stringified
-      } else {
-        formData.append(key, formValues[key]);
+  // Append all other form values to formData
+  Object.keys(formValues).forEach((key) => {
+      if (key !== "file") { // Don't re-append the file
+          formData.append(key, formValues[key]);
       }
-    }
+  });
 
-    try {
-      const response = await fetch("/api/upload", {
-        // Adjust the endpoint as needed
-        method: "POST",
-        body: formData, // No Content-Type header needed; fetch adds it automatically with the correct boundary
+  console.log("Form Values on Submit:", formValues); // Debugging
+
+  try {
+      const response = await fetch("http://localhost:3000/article/create", {
+          method: "POST",
+          body: formData,
       });
 
-      if (!response.ok) throw new Error("Network response was not ok");
+      if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+      }
 
       const data = await response.json();
       console.log("Success:", data);
-      alert("Product added successfully!");
-      // Here, you might want to reset form state or redirect the user
-    } catch (error) {
+      alert("Article added successfully!");
+  } catch (error) {
       console.error("Error:", error);
-      alert("Failed to add the product.");
-    }
-  };
-
-  const generateSlug = () => {
-    const { title } = formValues;
-
-    if (title) {
-      const slug = title
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-z0-9-]/g, "")
-        .replace(/-+/g, "-");
-
-      setFormValues((prevValues) => ({
-        ...prevValues,
-        slug: slug,
-      }));
-    }
-  };
+      alert("Failed to add the article.");
+  }
+};
 
   return (
     <div
@@ -144,6 +144,7 @@ const AddProductPage = () => {
           <option value="tv">TV</option>
           <option value="keyboard">Keyboard</option>
           <option value="modem">Modem</option>
+          <option value="hukum">Hukum</option>
         </select>
 
         <div className={`${styles.slugParent} w-[45%] gap-1`}>
@@ -169,8 +170,8 @@ const AddProductPage = () => {
         <input
           disabled
           type="number"
-          placeholder="click"
-          name="click"
+          placeholder="jumlah klik"
+          name="amountClicking"
           required
           className={`${styles.formChild} ${styles.formChildInput}`}
           onChange={handleChange}
@@ -178,10 +179,10 @@ const AddProductPage = () => {
         <div className={` w-[45%] flex flex-col h-[50%] justify-between items-center border-none `}>
           <label className="text-left w-full text-[#8f94a1]">isActive</label>
           <select
-            name="isActive"
-            id="isActive"
+            name="active"
+            id="active"
             className={`w-full p-[30px] bg-[var(--bg)] text-[var(--text)] rounded-[5px] border-[2px] border-solid border-[#2e374a]`}
-            value={formValues.isActive} // Controlled component approach
+            value={formValues.active} // Controlled component approach
             onChange={handleChange} // Ensure you have a handler function to update state
           >
             <option value="" disabled>Is Active?</option>{" "}
@@ -192,24 +193,20 @@ const AddProductPage = () => {
         <div className={`w-[45%] flex flex-col h-[50%] justify-between items-center border-none `}>
           <label className="text-left w-full text-[#8f94a1]">isHighlights</label>
           <select
-            name="isHighlights"
-            id="isHighlights"
+            name="highlights"
+            id="highlights"
             className={`${styles.formChild} w-full`}
-            value={formValues.isHighlights} // Controlled component approach
+            value={formValues.highlights} // Controlled component approach
             onChange={handleChange} // Ensure you have a handler function to update state
           >
             <option value="" disabled>Is Active?</option>{" "}
-            {/* No value for placeholder option */}
             <option value={true}>Yes</option>
             <option value={false}>No</option>
           </select>
         </div>
-
-
         <div
           className={`w-full gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2`}
         >
-           
           <div
             className={`w-[95%] gap-[20px] flex flex-col rounded-[5px]  mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2 relative z-0 h-[400px]`}
           >
@@ -224,16 +221,13 @@ const AddProductPage = () => {
               style={{ width: "100%" }} // Adjust styling as needed
               className={`z-10 flex absolute object-contain h-full `}
             />
-          </div>
-            
-            
-        )}
+          </div>)}
 
             {!imagePreviewUrl && "Upload your main image here"}
             <input
               type="file"
               id="fileUpload"
-              name="fileUrl"
+              name="file"
               accept="image/*"
               className="hidden"
               onChange={handleImageChange}
@@ -251,7 +245,7 @@ const AddProductPage = () => {
             onChange={(htmlContent) => {
               setFormValues((prevState) => ({
                 ...prevState,
-                content: { html: htmlContent },
+                description: htmlContent, // Directly use the string provided by ReactQuil
               }));
             }}
           />
