@@ -215,14 +215,14 @@ const AddProductPage = () => {
           >
             {imagePreviewUrl && (
           // <div className="flex  bg-[blue] w-full">
-          <div className={`w-[100%] h-full px-[20px] gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
+          <div className={`w-[100%] h-full  gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
           >
-            <button onClick={handleRemoveImage} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-2 z-50 absolute  ">X</button> 
+            <button onClick={handleRemoveImage} className="bg-[#dc3e3edd] hover:bg-[#dc3e3e] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-2 z-50 absolute  ">X</button> 
             <img
               src={imagePreviewUrl}
               alt="Image Preview"
               style={{ width: "100%" }} // Adjust styling as needed
-              className={`z-10 flex absolute object-contain h-full`}
+              className={`z-10 flex absolute object-contain h-full `}
             />
           </div>
             

@@ -34,6 +34,11 @@ const AddProductPage = () => {
 
     reader.readAsDataURL(file);
   };
+  const handleRemoveImage = () => {
+    setImagePreviewUrl(''); // Use setImagePreviewUrl to update state
+    // Reset the file input
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prevState) => ({
@@ -183,15 +188,19 @@ const AddProductPage = () => {
           className={`w-full gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2`}
         >
           <div
-            className={`w-[95%] px-[20px] gap-[20px] flex flex-col rounded-[5px] py-[80px] mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2 relative z-0 h-[400px]`}
+            className={`w-[95%] gap-[20px] flex flex-col rounded-[5px]  mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2 relative z-0 h-[400px]`}
           >
             {imagePreviewUrl && (
-              <img
-                src={imagePreviewUrl}
-                alt="Image Preview"
-                style={{ width: "100%" }} // Adjust styling as needed
-                className={`z-10 flex absolute object-contain h-full`}
-              />
+              <div className={`w-[100%] h-full  gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
+              >
+                <button onClick={handleRemoveImage} className="bg-[#dc3e3edd] hover:bg-[#dc3e3e] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-2 z-50 absolute  ">X</button> 
+                <img
+                  src={imagePreviewUrl}
+                  alt="Image Preview"
+                  style={{ width: "100%" }} // Adjust styling as needed
+                  className={`z-10 flex absolute object-contain h-full `}
+                />
+              </div>
             )}
 
             {!imagePreviewUrl && "Upload your main image here"}
