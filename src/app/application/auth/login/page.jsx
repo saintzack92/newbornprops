@@ -1,33 +1,52 @@
 "use client"; // import Input from "../../../adminpanel/ui/dashboard/input/input";
 import Input from "@/app/adminpanel/ui/dashboard/input/input";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
+
+import Cookies from "js-cookie";
+import { useRouter } from 'next/navigation'
 
 const style = `p-[30px] border-2 border-solid border-[#2e374a] w-[100%]`;
 
 const LoginPage = () => {
+  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
+  const router = useRouter();
+
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      const data = {
+      let datas = {
         username: username,
         password: password,
       };
 
       const res = await axios.post(
-        "http://localhost:3000/auth/login", // Assuming your login API endpoint is '/api/login'
-        data,
+        `http://localhost:3000/auth/login`, // Assuming your login API endpoint is '/api/login'
+        datas,
         { headers: { "Content-Type": "application/json" } }
       );
-      console.log(res); // Handle the response accordingly
+      Cookies.set("token", res.data.access_token);
+      // Cookies.remove('token');
+      //redirect to dashboard
+      router.push("/adminpanel/dashboard");
+      // console.log(res.access_token); // Handle the response accordingly
     } catch (error) {
       console.error("Error:", error);
     }
   };
+
+  useEffect(() => {
+    //check token
+    if (Cookies.get("token")) {
+      //redirect page dashboard
+      router.push("/adminpanel/dashboard");
+    }
+  }, []);
 
   return (
     <div className="w-[100%] h-[100vh] flex items-center justify-center">
