@@ -14,23 +14,44 @@ const LoginPage = () => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      await axios.post(`http://localhost:3000/auth/login`, {
-        email,
-        password,
-      }, {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      });
-  
-      // Wait for the navigation to complete
-      router.push("/adminpanel/dashboard");
-      // window.location.href = "/adminpanel/dashboard";
+      const res = await axios.post(
+        `http://localhost:3000/auth/login`,
+        {
+          email,
+          password,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      );
 
+      console.log(res.data);
+
+      if (res.status === 200 || res.status === 201) {
+        localStorage.setItem("user", res.data.loginResponse.user);
+        localStorage.setItem("email", res.data.loginResponse.email);
+        localStorage.setItem("role", res.data.loginResponse.role);
+        localStorage.setItem("token", res.data.loginResponse.access_token);
+        router.push("/adminpanel/dashboard");
+      } else {
+        router.push("/login");
+      }
+      // Wait for the navigation to complete
+      // window.location.href = "/adminpanel/dashboard";
     } catch (error) {
       console.error("Error:", error);
+      router.push("/login");
     }
   };
-  
+
+  useEffect(() => {
+    let value;
+    // Get the value from local storage if it exists
+    value = localStorage.getItem("email") || "";
+    setEmail(value);
+  }, []);
+
   return (
     <div className="w-[100%] h-[100vh] flex items-center justify-center">
       <form
@@ -41,7 +62,7 @@ const LoginPage = () => {
           Login
         </h1>
         <input
-          type="text"
+          type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}

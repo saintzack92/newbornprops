@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import styles from "./sidebar.module.css";
 import {
   MdDashboard,
@@ -91,14 +91,23 @@ const Sidebar = () => {
   const router = useRouter();
   const handleLogout = async () => {
     try {
-      await axios.post('http://localhost:3000/auth/logout', {}, { withCredentials: true });
+      await axios.post(
+        "http://localhost:3000/auth/logout",
+        {},
+        { withCredentials: true }
+      );
+
+      localStorage.removeItem("user");
+      localStorage.removeItem("token");
+      localStorage.removeItem("role");
+      localStorage.removeItem("email");
       // After successful logout, redirect to login page or clear client-side authentication state
-      router.push('/login');
+      router.push("/login");
     } catch (error) {
-      console.error('Logout error:', error);
+      console.error("Logout error:", error);
     }
   };
-  
+
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.user} flex items-center gap-[20px] mb-20px`}>
@@ -110,9 +119,11 @@ const Sidebar = () => {
           height="50"
         />
         <div className={`${styles.userDetail} flex flex-col object-cover`}>
-          <span className={`${""} font-[500]`}>Jaenudin Ngaciro</span>
+          <span className={`${""} font-[500]`}>
+            {localStorage.getItem("user")}
+          </span>
           <span className={`${""} text-[12px] text-[var(--textSoft)]`}>
-            Administrator
+            {localStorage.getItem("role")}
           </span>
         </div>
       </div>
@@ -132,9 +143,10 @@ const Sidebar = () => {
           );
         })}
       </ul>
-      <button 
-      onClick={handleLogout}
-      className="flex p-[20px] w-[100%] mt-[5px] items-center cursor-pointer rounded-[10px] gap-[10px] hover:bg-[#2e374a]">
+      <button
+        onClick={handleLogout}
+        className="flex p-[20px] w-[100%] mt-[5px] items-center cursor-pointer rounded-[10px] gap-[10px] hover:bg-[#2e374a]"
+      >
         <MdLogout />
         Logout
       </button>
