@@ -1,25 +1,84 @@
-// import Input from "../../../adminpanel/ui/dashboard/input/input";
-
+"use client"; // import Input from "../../../adminpanel/ui/dashboard/input/input";
 import Input from "@/app/adminpanel/ui/dashboard/input/input";
 
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+// import { withIronSession } from "next-iron-session";
+
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
+
 const style = `p-[30px] border-2 border-solid border-[#2e374a] w-[100%]`;
+
 const LoginPage = () => {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+
+  const router = useRouter();
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    try {
+      let datas = {
+        username: username,
+        password: password,
+      };
+
+      const res = await axios.post(
+        `http://localhost:3000/auth/login`, // Assuming your login API endpoint is '/api/login'
+        datas,
+        { headers: { "Content-Type": "application/json" } }
+      );
+      Cookies.set("token", res.data.access_token);
+      // Cookies.remove('token');
+      //redirect to dashboard
+
+      // const user = { username: res.data.user, role: res.data.role, email:res.data.email };
+      // session.set("user", user);
+      // await session.save();
+
+      router.push("/adminpanel/dashboard");
+
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  };
+
+  useEffect(() => {
+    //check token
+    if (Cookies.get("token")) {
+      //redirect page dashboard
+      router.push("/adminpanel/dashboard");
+    }
+  }, [router]);
+
   return (
     <div className="w-[100%] h-[100vh] flex items-center justify-center">
       <form
-        action=""
+        // onSubmit={handleLogin}
         className="bg-[var(--bgSoft)] p-[50px] rounded-[10px] w-[500px] h-[500px] flex flex-col justify-center gap-[30px] items-center relative z-0"
       >
         <h1 className="relative z-10 font-[1000] text-[30px] mb-[-30px]">
           Login
         </h1>
-        <Input type={"text"} placeholder={"username"} customClasses={style} />
-        <Input
-          type={"password"}
-          placeholder={"password"}
-          customClasses={style}
+        <input
+          type="text"
+          placeholder="Username"
+          value={username}
+          onChange={(e) => setUsername(e.target.value)}
+          className={style}
         />
-        <Input isButton={true} name={"Login"} customClasses={`${style}`} />
+        <input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className={style}
+        />
+        <button type="submit" className={style} onClick={handleLogin}>
+          Login
+        </button>
       </form>
     </div>
   );
