@@ -3,14 +3,14 @@ import Input from "@/app/adminpanel/ui/dashboard/input/input";
 
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+// import { withIronSession } from "next-iron-session";
 
 import Cookies from "js-cookie";
-import { useRouter } from 'next/navigation'
+import { useRouter } from "next/navigation";
 
 const style = `p-[30px] border-2 border-solid border-[#2e374a] w-[100%]`;
 
 const LoginPage = () => {
-  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
@@ -33,8 +33,13 @@ const LoginPage = () => {
       Cookies.set("token", res.data.access_token);
       // Cookies.remove('token');
       //redirect to dashboard
+
+      // const user = { username: res.data.user, role: res.data.role, email:res.data.email };
+      // session.set("user", user);
+      // await session.save();
+
       router.push("/adminpanel/dashboard");
-      // console.log(res.access_token); // Handle the response accordingly
+
     } catch (error) {
       console.error("Error:", error);
     }
@@ -46,7 +51,7 @@ const LoginPage = () => {
       //redirect page dashboard
       router.push("/adminpanel/dashboard");
     }
-  }, []);
+  }, [router]);
 
   return (
     <div className="w-[100%] h-[100vh] flex items-center justify-center">
