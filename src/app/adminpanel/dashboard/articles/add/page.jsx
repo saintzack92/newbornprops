@@ -98,6 +98,7 @@ const handleSubmit = async (e) => {
   try {
       const response = await fetch("http://localhost:3000/article/create", {
           method: "POST",
+          credentials: 'include',
           body: formData,
       });
 

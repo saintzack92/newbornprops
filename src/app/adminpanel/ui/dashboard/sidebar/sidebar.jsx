@@ -1,3 +1,4 @@
+"use client"
 import styles from "./sidebar.module.css";
 import {
   MdDashboard,
@@ -14,6 +15,8 @@ import {
 import MenuLink from "./menuLink/menuLink";
 import avatar from "../../../../../../public/its-over-done-meme.png";
 import Image from "next/image";
+import axios from "axios";
+import { useRouter } from "next/navigation";
 
 const menuItems = [
   {
@@ -85,6 +88,17 @@ const menuItems = [
 ];
 
 const Sidebar = () => {
+  const router = useRouter();
+  const handleLogout = async () => {
+    try {
+      await axios.post('http://localhost:3000/auth/logout', {}, { withCredentials: true });
+      // After successful logout, redirect to login page or clear client-side authentication state
+      router.push('/login');
+    } catch (error) {
+      console.error('Logout error:', error);
+    }
+  };
+  
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.user} flex items-center gap-[20px] mb-20px`}>
@@ -118,7 +132,9 @@ const Sidebar = () => {
           );
         })}
       </ul>
-      <button className="flex p-[20px] w-[100%] mt-[5px] items-center cursor-pointer rounded-[10px] gap-[10px] hover:bg-[#2e374a]">
+      <button 
+      onClick={handleLogout}
+      className="flex p-[20px] w-[100%] mt-[5px] items-center cursor-pointer rounded-[10px] gap-[10px] hover:bg-[#2e374a]">
         <MdLogout />
         Logout
       </button>
