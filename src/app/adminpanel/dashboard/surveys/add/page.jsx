@@ -12,7 +12,7 @@ const AddProductPage = () => {
     slug: "",
     click: 0, // If this is meant to be a number, you might initialize it as null or 0.
     isActive: false, // Initialize as false rather than an empty string.
-    fileUrl: "", // This is okay, but ensure you're using it as intended.
+    file: "", // This is okay, but ensure you're using it as intended.
     content: { html: "" },
   });
   
@@ -207,7 +207,7 @@ const AddProductPage = () => {
             <input
               type="file"
               id="fileUpload"
-              name="fileUrl"
+              name="file"
               accept="image/*"
               className="hidden"
               onChange={handleImageChange}
