@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 const style = `p-[30px] border-2 border-solid border-[#2e374a] w-[100%]`;
 
 const LoginPage = () => {
-  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const router = useRouter();
@@ -15,7 +15,7 @@ const LoginPage = () => {
     e.preventDefault();
     try {
       await axios.post(`http://localhost:3000/auth/login`, {
-        username,
+        email,
         password,
       }, {
         headers: { "Content-Type": "application/json" },
@@ -42,9 +42,9 @@ const LoginPage = () => {
         </h1>
         <input
           type="text"
-          placeholder="Username"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
           className={style}
         />
         <input
