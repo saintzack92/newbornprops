@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import {setToken} from '../../../lib/authToken'
+import {isTokenExpired} from '../../../lib/authToken'
 
 const style = `p-[30px] border-2 border-solid border-[#2e374a] w-[100%]`;
 
@@ -26,31 +28,33 @@ const LoginPage = () => {
         }
       );
 
-      console.log(res.data);
+      // console.log(res.data);
 
       if (res.status === 200 || res.status === 201) {
         localStorage.setItem("user", res.data.loginResponse.user);
         localStorage.setItem("email", res.data.loginResponse.email);
         localStorage.setItem("role", res.data.loginResponse.role);
-        localStorage.setItem("token", res.data.loginResponse.access_token);
+        // localStorage.setItem("token", res.data.loginResponse.access_token);
+        setToken(res.data.loginResponse.access_token)
         router.push("/adminpanel/dashboard");
       } else {
         router.push("/login");
+        alert('opps ada yang salah')
       }
       // Wait for the navigation to complete
       // window.location.href = "/adminpanel/dashboard";
     } catch (error) {
-      console.error("Error:", error);
+      // console.error("Error:", error)
+      alert('opps ada yang salah');
       router.push("/login");
     }
   };
-
-  useEffect(() => {
-    let value;
-    // Get the value from local storage if it exists
-    value = localStorage.getItem("email") || "";
-    setEmail(value);
-  }, []);
+  // useEffect(() => {
+  //   let value;
+  //   // Get the value from local storage if it exists
+  //   value = localStorage.getItem("email") || "";
+  //   setEmail(value);
+  // }, []);
 
   return (
     <div className="w-[100%] h-[100vh] flex items-center justify-center">
