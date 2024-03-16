@@ -2,10 +2,12 @@
 import styles from "../../../ui/dashboard/products/addProduct/addProduct.module.css";
 
 
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ReactQuil } from "../../../ui/dashboard/component/quill"; // Adjust the path as necessary
+import { useRouter } from "next/router";
 
 const AddProductPage = () => {
+  
   const [formValues, setFormValues] = useState({
     title: "",
     category: "",
@@ -16,8 +18,8 @@ const AddProductPage = () => {
     file: "",
     description: "", // Changed from 'content' to 'description' to match backend DTO.
     createBy: "", // Add this if you're not automatically setting it on the backend based on user session or token.
-});
-
+  });
+  const [userLocalStorage, setUserLocalStorage] = useState('null');
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const fileInputRef = useRef(null); // Using useRef for the file input
 
@@ -34,87 +36,104 @@ const AddProductPage = () => {
     };
     reader.readAsDataURL(file);
   };
-  
+
   const handleRemoveImage = () => {
     setImagePreviewUrl(''); // Use setImagePreviewUrl to update state
     // Reset the file input
     if (fileInputRef.current) fileInputRef.current.value = '';
   };
- // When handling the change event of an input field
-const handleChange = (e) => {
-  const { name, value } = e.target;
-  setFormValues((prevState) => ({
+  // When handling the change event of an input field
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormValues((prevState) => ({
       ...prevState,
       [name]: value,
-  }));
+    }));
 
-  if (name === "title") {
+    if (name === "title") {
       const newSlug = generateSlug(value); // value is the input's current value
       setFormValues((prevState) => ({
-          ...prevState,
-          slug: newSlug,
+        ...prevState,
+        slug: newSlug,
       }));
-  }
-};
+    }
+  };
 
 
-  
-const generateSlug = (title) => {
-  // Ensure title is a string before proceeding
-  if (typeof title === 'string' && title) {
+
+  const generateSlug = (title) => {
+    // Ensure title is a string before proceeding
+    if (typeof title === 'string' && title) {
       return title
-          .toLowerCase()
-          .replace(/\s+/g, "-")
-          .replace(/[^a-z0-9-]/g, "")
-          .replace(/-+/g, "-");
-  }
-  return ""; // Return empty string if no title or title is not a string
-};
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-z0-9-]/g, "")
+        .replace(/-+/g, "-");
+    }
+    return ""; // Return empty string if no title or title is not a string
+  };
 
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  
-  // Ensure file is selected
-  const fileInput = document.getElementById("fileUpload");
-  const file = fileInput.files[0];
-  if (!file) {
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Ensure file is selected
+    const fileInput = document.getElementById("fileUpload");
+    const file = fileInput.files[0];
+    if (!file) {
       alert("Please upload an image.");
       return;
-  }
+    }
 
-  const formData = new FormData();
-  formData.append("file", file);
+    const formData = new FormData();
+    formData.append("file", file);
 
-  // Append all other form values to formData
-  Object.keys(formValues).forEach((key) => {
+    // Append all other form values to formData
+    Object.keys(formValues).forEach((key) => {
       if (key !== "file") { // Don't re-append the file
-          formData.append(key, formValues[key]);
+        formData.append(key, formValues[key]);
       }
-  });
+    });
 
-  console.log("Form Values on Submit:", formValues); // Debugging
+    console.log("Form Values on Submit:", formValues); // Debugging
+    useEffect(() => {
+      const user = localStorage.getItem('token');
+      console.log(user, 'userLocalStorage');
+      setUserLocalStorage(user);
+      const fetchData = async () => {
+        try {
+          const response = await fetch("http://localhost:3000/article/create", {
+            method: "POST",
+            credentials: 'include', // Include credentials for cookies, etc.
+            headers: {
+              // Don't set 'Content-Type': 'application/json',
+              'Authorization': `Bearer ${userLocalStorage}`,
+            },
+            body: formData,
+          });
 
-  try {
-      const response = await fetch("http://localhost:3000/article/create", {
-          method: "POST",
-          credentials: 'include',
-          body: formData,
-      });
+          if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+          }
 
-      if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+          const data = await response.json();
+          console.log("Success:", data);
+          alert("Article added successfully!");
+        } catch (error) {
+          console.error("Error:", error);
+          alert("Failed to add the article.");
+        }
       }
+      fetchData()
+    }, [])
 
-      const data = await response.json();
-      console.log("Success:", data);
-      alert("Article added successfully!");
-  } catch (error) {
-      console.error("Error:", error);
-      alert("Failed to add the article.");
-  }
-};
-
+  };
+  const handleQuillChange = (content) => {
+    setFormValues(prevState => ({
+      ...prevState,
+      description: content,
+    }));
+  };
   return (
     <div
       className={`${styles.container} bg-[var(--bgSoft)] p-[20px] rounded-[10px] mt-[20px] `}
@@ -136,11 +155,8 @@ const handleSubmit = async (e) => {
           id="category"
           className={`${styles.formChild} ${styles.formChildInput}`}
           onChange={handleChange}
-          value={formValues.category}
-        >
-          <option value="" disabled>
-            Choose a Category
-          </option>
+          value={formValues.category}>
+          <option value="" disabled>Choose a Category</option>
           <option value="computer">Computer</option>
           <option value="tv">TV</option>
           <option value="keyboard">Keyboard</option>
@@ -162,8 +178,7 @@ const handleSubmit = async (e) => {
           <button
             type="button"
             className={`p-[25px] text-[var(--text)] rounded-[5px] border-none transition  bg-[teal] hover:bg-[#257272]`} // You will need to create this class
-            onClick={generateSlug}
-          >
+            onClick={generateSlug}>
             Random
           </button>
         </div>
@@ -212,17 +227,17 @@ const handleSubmit = async (e) => {
             className={`w-[95%] gap-[20px] flex flex-col rounded-[5px]  mb-[20px] bg-[var(--bg)] justify-center text-center items-center border-solid border-[#2e374a] border-2 relative z-0 h-[400px]`}
           >
             {imagePreviewUrl ? (
-          // <div className="flex  bg-[blue] w-full">
-          <div className={`w-[100%] h-full  gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
-          >
-            <button onClick={handleRemoveImage} className="bg-[#dc3e3edd] hover:bg-[#dc3e3e] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-2 z-50 absolute  ">X</button> 
-            <img
-              src={imagePreviewUrl}
-              alt="Image Preview"
-              style={{ width: "100%" }} // Adjust styling as needed
-              className={`z-10 flex absolute object-contain h-full `}
-            />
-          </div>):<div>tidak ada gambar ditampilkan</div>}
+              // <div className="flex  bg-[blue] w-full">
+              <div className={`w-[100%] h-full  gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
+              >
+                <button onClick={handleRemoveImage} className="bg-[#dc3e3edd] hover:bg-[#dc3e3e] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-2 z-50 absolute  ">X</button>
+                <img
+                  src={imagePreviewUrl}
+                  alt="Image Preview"
+                  style={{ width: "100%" }} // Adjust styling as needed
+                  className={`z-10 flex absolute object-contain h-full `}
+                />
+              </div>) : <div>tidak ada gambar ditampilkan</div>}
 
             {!imagePreviewUrl && "Upload your main image here"}
             <input
@@ -242,7 +257,8 @@ const handleSubmit = async (e) => {
           </div>
           <h1>Input your article here</h1>
           <ReactQuil
-            className="h-[550px] px-[30px] mb-[20px] w-full "
+
+            className={`${styles.formCreate} h-[550px] px-[30px] mb-[20px] w-full box-border`}
             onChange={(htmlContent) => {
               setFormValues((prevState) => ({
                 ...prevState,

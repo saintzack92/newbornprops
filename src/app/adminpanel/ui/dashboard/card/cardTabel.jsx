@@ -1,7 +1,7 @@
 import { MdPeople } from "react-icons/md";
 import styles from "./card.module.css";
 
-const CardTable = ({ isPositive, className, classTd, status }) => {
+const CardTable = ({ isPositive, className, classTd, status, title, category, description, isActive, isHighlights }) => {
     // Function to generate a random Tailwind CSS color class
     const getRandomColor = () => {
         const colors = [ 'bg-blue-500', 'bg-yellow-500', 'bg-indigo-500', 'bg-purple-500'];
@@ -18,10 +18,20 @@ const CardTable = ({ isPositive, className, classTd, status }) => {
                        : '';
 
     // Handle status text display
+    const stripHtmlAndTruncate = (html, length = 50) => {
+      if (html === null || html === undefined) return ""; // Return empty string if input is null or undefined
+      const text = html.replace(/<\/?[^>]+(>|$)/g, ""); // Strip HTML tags
+      return text.length > length ? text.substr(0, length) + '...' : text; // Truncate
+    };
+    
+    const processedDescription = stripHtmlAndTruncate(description);
+    
     const statusText = isStatusDefined ? status.charAt(0).toUpperCase() + status.slice(1) : '';
-
+    const activeText = isActive ? "On" : "Off";
+    const highlightsText = isHighlights ? "On" : "Off";
     // Determine icon color
     const iconColorClass = isPositive ? getRandomColor() : "bg-green-500";
+    
 
     return (
       <tr className="items-center *:p-[10px]">
@@ -30,13 +40,17 @@ const CardTable = ({ isPositive, className, classTd, status }) => {
             size={40}
             className={`${iconColorClass} text-[red] bg-green-300 rounded-full p-[3px] object-cover ${className}`}
           />
-          <div>Mukidi</div>
+          <div>{title}</div>
         </td>
         <td className={`${classTd}`}>
-          <span className={`${styles.status} ${statusColor}`}>{statusText}</span>
+          <span className={`${styles.status} ${statusColor}`}>{category}</span>
         </td>
-        <td className={`${classTd}`}>14.04.2024</td>
-        <td className={`${classTd}`}>$32.000</td>
+        <td className={`${classTd}`}>{processedDescription}</td>
+        <td className={`${classTd}`}><label className="toggle-switch inline-block relative w-14 h-7">
+          <input type="checkbox" checked={isActive} readOnly className="peer sr-only"/>
+          <span className="slider absolute peer-checked:bg-blue-500 bg-gray-300 inset-y-1 left-1 w-5 h-5 rounded-full transition-all duration-300 ease-in-out after:absolute after:left-1 after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-lg after:transition-all after:duration-300 after:ease-in-out"></span>
+        </label></td>
+        <td className={`${classTd}`}>{highlightsText}</td>
       </tr>
     );
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Add options to your props
 const Input = ({
   type,
   name,
@@ -10,50 +11,31 @@ const Input = ({
   isTextArea = false,
   isSelect = false,
   isButton = false,
-  rows
-
+  rows,
+  value,
+  onChange,
+  disabled = false,
+  options = [], // New prop for select options
 }) => {
-  const finalClasses = `rounded-[5px]  text-[var(--text)] bg-[var(--bg)] mx-[10px] p-[20px] border-solid border-[#2e374a] border-2 ${customClasses}  `;
+  const finalClasses = `rounded-[5px] text-[var(--text)] bg-[var(--bg)] mx-[10px] p-[20px] border-solid border-[#2e374a] border-2 ${customClasses}`;
 
   return (
     <>
-      <label className='font-[12px]'>{labelTxt} </label>
+      <label className='font-[12px]'>{labelTxt}</label>
       {isTextArea ? (
-        <textarea
-          type={type}
-          name={name}
-          placeholder={placeholder}
-          className={finalClasses}
-          rows={rows}
-
-        />
+        <textarea {...{name, placeholder, value, onChange, className: finalClasses, rows}} />
       ) : isSelect ? (
-        name === 'isAdmin' ? (
-          <select name='isAdmin' id='isAdmin' className={finalClasses}>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
-          </select>
-        ) : name === 'isActive' ? (
-          <select name='isActive' id='isActive' className={finalClasses}>
-            <option value={true}>Yes</option>
-            <option value={false}>No</option>
-          </select>
-        ) : name === 'category' ? (
-          <select name='category' id='category' className={finalClasses}>
-            <option value="kitchen" >kitchen</option>
-            <option value="computers">computers</option>
-          </select>
-        ) : null
+        <select {...{name, id: name, value, onChange, className: finalClasses}}>
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>{option.label}</option>
+          ))}
+        </select>
       ) : isButton ? (
-        <button className={` ${finalClasses} bg-[#11665e]`}>{name}</button>
+        <button className={finalClasses + " bg-[#11665e]"}>{labelTxt}</button>
       ) : (
-        <input
-          type={type}
-          name={name}
-          placeholder={placeholder}
-          className={finalClasses}
-        />
-      )}  {error && <div className="text-red-500 py-2">{error}</div>}
+        <input {...{type, name, placeholder, value, onChange, disabled, className: finalClasses}} />
+      )}
+      {error && <div className="text-red-500 py-2">{error}</div>}
     </>
   );
 };

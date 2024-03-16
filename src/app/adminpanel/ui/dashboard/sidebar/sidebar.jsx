@@ -17,6 +17,7 @@ import avatar from "../../../../../../public/its-over-done-meme.png";
 import Image from "next/image";
 import axios from "axios";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const menuItems = [
   {
@@ -88,6 +89,7 @@ const menuItems = [
 ];
 
 const Sidebar = () => {
+  
   const router = useRouter();
   const handleLogout = async () => {
     try {
@@ -107,7 +109,17 @@ const Sidebar = () => {
       console.error("Logout error:", error);
     }
   };
+  const [userLocalStorage, setUserLocalStorage] = useState('user name');
+  const [roleLocalStorage, setRoleLocalStorage] = useState('role');
 
+  // Use useEffect to ensure code runs in the client side
+  useEffect(() => {
+    const user = localStorage.getItem('user');
+    const role = localStorage.getItem('role');
+    console.log(user, 'sideBarLocalStorage');
+    setUserLocalStorage(user);
+    setRoleLocalStorage(role);
+  }, []);
   return (
     <div className={`${styles.container}`}>
       <div className={`${styles.user} flex items-center gap-[20px] mb-20px`}>
@@ -120,10 +132,10 @@ const Sidebar = () => {
         />
         <div className={`${styles.userDetail} flex flex-col object-cover`}>
           <span className={`${""} font-[500]`}>
-            {localStorage.getItem("user")}
+            {userLocalStorage}
           </span>
           <span className={`${""} text-[12px] text-[var(--textSoft)]`}>
-            {localStorage.getItem("role")}
+            {roleLocalStorage}
           </span>
         </div>
       </div>

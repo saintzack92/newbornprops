@@ -4,9 +4,15 @@ import Link from "next/link";
 import Image from "next/image";
 import img from "../../../../../public/its-over-done-meme.png";
 import Pagination from "../../ui/dashboard/pagination/pagination";
+import { useRouter } from "next/navigation";
   
 
 const ProductsPage = ()=>{
+  const router = useRouter()
+	
+	const handlingRoute = (slug) => {
+		router.push(`/${slug}`)
+	}
     return (
         <div
       className={`${styles.container} p-[20px] bg-[var(--bgSoft)] rounded-[10px] mt-[20px]`}
@@ -53,7 +59,10 @@ const ProductsPage = ()=>{
             <td>72</td>
             <td>
               <div className={`${styles.button} flex gap-[10px]`}>
-                <Link href="articles/test">
+                <Link 
+                action={()=>{}}
+                href="articles/test
+                ">
                   <button
                     className={`${styles.button} py-[5px] px-[10px] rounded-[5px] text-[var(--text)] border-none cursor-pointer bg-[teal]`}
                   >
