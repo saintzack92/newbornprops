@@ -22,7 +22,7 @@ export async function middleware(request:any) {
 
   // Extract the access_token from the cookieHeader
   const accessToken = getCookieValue(cookieHeader, 'access_token');
-  console.log(accessToken);
+  // console.log(accessToken);
   
   
   
