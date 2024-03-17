@@ -1,15 +1,17 @@
-"use client"
-import { MdPeople } from "react-icons/md";
-import styles from "./transactions.module.css";
-import Image from "next/image";
-import CardTable from "../card/cardTabel";
+  "use client"
+  // Make sure all your imports are correct
 import { useEffect, useState } from "react";
+import styles from "./transactions.module.css";
+import CardTable from "../card/cardTabel";
+import Pagination from "../pagination/pagination";
+// import CardTable from "../card/cardTable"; // Ensure this path is correct
 
 const Transactions = () => {
   const [formData, setFormData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(0); // Assuming you know total pages or calculate based on total items
-  const itemsPerPage = 10; // Assuming each page shows 10 items
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 10;
+
   useEffect(() => {
     const userToken = localStorage.getItem('token');
     if (!userToken) {
@@ -17,53 +19,46 @@ const Transactions = () => {
       return;
     }
 
-    // Check if currentPage is not a number or is less than 1
-    const validCurrentPage = isNaN(currentPage) || currentPage < 1 ? 1 : currentPage;
-
     const fetchData = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/article/all?page=${validCurrentPage}&limit=${itemsPerPage}`, {
+        const response = await fetch(`http://localhost:3000/article/all?page=${currentPage}&limit=${itemsPerPage}`, {
           method: "GET",
           headers: {
             'Authorization': `Bearer ${userToken}`,
           },
         });
-
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
         setFormData(data.articles);
-        setTotalPages(Math.ceil(data.totalItems / itemsPerPage));
+        // Set totalPages based on the response, assuming "lastPage" is the total number of pages
+        setTotalPages(data.lastPage); // Adjusted to use the lastPage from the response
       } catch (error) {
         console.error("Failed to fetch data:", error);
       }
     };
 
     fetchData();
-  }, [currentPage, itemsPerPage]); // itemsPerPage is included to keep the dependencies array consistent
+  }, [currentPage]); // Removed itemsPerPage from dependencies since it's a constant
 
   const handlePrevPage = () => {
-    setCurrentPage(prev => Math.max(1, prev - 1));
+    setCurrentPage(prevPage => Math.max(1, prevPage - 1));
   };
 
   const handleNextPage = () => {
-    setCurrentPage(prev => Math.min(totalPages, prev + 1));
+    setCurrentPage(prevPage => Math.min(totalPages, prevPage + 1));
   };
-  
+
   return (
-    <div
-      className={`${styles.container} bg-[var(--bgSoft)] rounded-[10px] p-[20px] `}
-    >
-      <h2
-        className={`${styles.title} mb-[20px] font-[200] text-[var(--softColor)] `}
-      >
+    <div className={`${styles.container} bg-[var(--bgSoft)] rounded-[10px] p-[20px]`}>
+      <h2 className={`${styles.title} mb-[20px] font-[200] text-[var(--softColor)]`}>
         Latest Transactions
       </h2>
       <table className={`${styles.table} w-[100%]`}>
         <thead>
-          <tr className="*:p-[10px] ">
+          <tr>
             <td>Title</td>
             <td>Category</td>
             <td>Slug</td>
@@ -71,28 +66,33 @@ const Transactions = () => {
             <td>isHighlights</td>
           </tr>
         </thead>
-        <tbody className="">
+        <tbody>
           {formData.map((formDatas) => (
             <CardTable
-              key={formDatas.id} // Assuming each transaction has a unique id
-              title={formDatas.title} // Assuming API provides this or you define the logic
+              key={formDatas.id}
+              title={formDatas.title}
               category={formDatas.category}
-              description={formDatas.description} // Format the date as needed
-              isActive={formDatas.active} // Format the amount as needed
-              isHighlights={formDatas.highlights} // Use this to toggle On/Off
+              description={formDatas.description}
+              isActive={formDatas.active}
+              isHighlights={formDatas.highlights}
             />
           ))}
         </tbody>
       </table>
-      <div className="pagination-controls">
-        <button onClick={handlePrevPage} disabled={currentPage === 1}>
+      {/* <div className="pagination-controls">
+        <button onClick={handlePrevPage} disabled={currentPage <= 1}>
           Previous
         </button>
-        <button onClick={handleNextPage} disabled={currentPage === totalPages}>
+        <button onClick={handleNextPage} disabled={currentPage >= totalPages}>
           Next
         </button>
+      </div> */}
+      <div>
+      <Pagination />
       </div>
+      
     </div>
   );
 };
+
 export default Transactions;

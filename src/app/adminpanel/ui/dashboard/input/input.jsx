@@ -18,22 +18,25 @@ const Input = ({
   options = [], // New prop for select options
 }) => {
   const finalClasses = `rounded-[5px] text-[var(--text)] bg-[var(--bg)] mx-[10px] p-[20px] border-solid border-[#2e374a] border-2 ${customClasses}`;
+  console.log("Select value:", value); // Add this inside the Input component, in the isSelect conditional rendering block
 
   return (
     <>
       <label className='font-[12px]'>{labelTxt}</label>
       {isTextArea ? (
-        <textarea {...{name, placeholder, value, onChange, className: finalClasses, rows}} />
+        <textarea {...{ name, placeholder, value, onChange, className: finalClasses, rows }} />
       ) : isSelect ? (
-        <select {...{name, id: name, value, onChange, className: finalClasses}}>
-          {options.map((option) => (
-            <option key={option.value} value={option.value}>{option.label}</option>
+        <select {...{ name, id: name, value, onChange, className: finalClasses }}>
+          {options.map((option, index) => (
+            <option key={index} value={option.value} selected={value === option.value}>
+              {option.label}
+            </option>
           ))}
         </select>
       ) : isButton ? (
         <button className={finalClasses + " bg-[#11665e]"}>{labelTxt}</button>
       ) : (
-        <input {...{type, name, placeholder, value, onChange, disabled, className: finalClasses}} />
+        <input {...{ type, name, placeholder, value, onChange, disabled, className: finalClasses }} />
       )}
       {error && <div className="text-red-500 py-2">{error}</div>}
     </>

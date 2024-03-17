@@ -1,18 +1,64 @@
+"use client"
 import styles from "../../../adminpanel/ui/dashboard/products/products.module.css";
 import Search from "../../ui/dashboard/search/search";
 import Link from "next/link";
-import Image from "next/image";
-import img from "../../../../../public/its-over-done-meme.png";
 import Pagination from "../../ui/dashboard/pagination/pagination";
 import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
+import CardTable from "../../ui/dashboard/card/cardTabel";
   
 
 const ProductsPage = ()=>{
   const router = useRouter()
-	
-	const handlingRoute = (slug) => {
-		router.push(`/${slug}`)
-	}
+  
+  const [formData, setFormData] = useState([]);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
+  const itemsPerPage = 10;
+
+  useEffect(() => {
+    const userToken = localStorage.getItem('token');
+    if (!userToken) {
+      console.log('No user token found');
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`http://localhost:3000/article/all?page=${currentPage}&limit=${itemsPerPage}`, {
+          method: "GET",
+          headers: {
+            'Authorization': `Bearer ${userToken}`,
+          },
+        });
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        console.log(data.articles); // Check if articles contain a 'slug' property
+        setFormData(data.articles);
+        // Set totalPages based on the response, assuming "lastPage" is the total number of pages
+        setTotalPages(data.lastPage); // Adjusted to use the lastPage from the response
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, [currentPage]); // Removed itemsPerPage from dependencies since it's a constant
+
+  const handlePrevPage = () => {
+    setCurrentPage(prevPage => Math.max(1, prevPage - 1));
+  };
+
+  const handleNextPage = () => {
+    setCurrentPage(prevPage => Math.min(totalPages, prevPage + 1));
+  };
+  const handleViewProduct = (slug) => {
+    router.push(`articles/${slug}`); // Navigate to the single product page
+  };
+
     return (
         <div
       className={`${styles.container} p-[20px] bg-[var(--bgSoft)] rounded-[10px] mt-[20px]`}
@@ -39,48 +85,29 @@ const ProductsPage = ()=>{
             <td>Action</td>
           </tr>
         </thead>
-        <tbody>
-          <tr>
-            <td>
-              <div className="flex items-center gap-[10px] py-[10px]">
-                <Image
-                  src={img}
-                  alt=""
-                  width={40}
-                  height={40}
-                  className={`${styles.userImage} rounded-[50%] object-cover`}
-                />
-                Iphone
-              </div>
-            </td>
-            <td>desc</td>
-            <td>$999</td>
-            <td>13.01.2023</td>
-            <td>72</td>
-            <td>
-              <div className={`${styles.button} flex gap-[10px]`}>
-                <Link 
-                action={()=>{}}
-                href="articles/test
-                ">
-                  <button
-                    className={`${styles.button} py-[5px] px-[10px] rounded-[5px] text-[var(--text)] border-none cursor-pointer bg-[teal]`}
-                  >
-                    View
-                  </button>
-                </Link>
-                <button
-                  className={`${styles.button} py-[5px] px-[10px] rounded-[5px] text-[var(--text)] border-none cursor-pointer bg-[crimson]`}
-                >
-                  Delete
-                </button>
-              </div>
-            </td>
-            <td></td>
-          </tr>
+        <tbody >
+        {formData.map((formDatas) => (
+          
+            <CardTable
+              key={formDatas.id}
+              title={formDatas.title}
+              category={formDatas.category}
+              description={formDatas.description}
+              isActive={formDatas.active}
+              isHighlights={formDatas.highlights}
+              slug={formDatas.slug} // Ensure this is correctly passed
+
+            />
+            
+          ))}
         </tbody>
       </table>
-      <Pagination />
+      <Pagination 
+      nextFunc={handleNextPage}
+      prevPage={handlePrevPage}
+      currentPage={currentPage}
+      totalPages={totalPages}
+      />
     </div>
     )
 }
