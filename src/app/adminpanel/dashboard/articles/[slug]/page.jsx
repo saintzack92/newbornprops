@@ -7,11 +7,12 @@ import Image from 'next/image'
 import { ReactQuil } from '@/app/adminpanel/ui/dashboard/component/quill'
 import { usePathname } from 'next/navigation'
 
+
+
 const SingleProductPage = () => {
-    const searchParams = usePathname(); // Correct way to use useSearchParams
-    console.log(searchParams, 'searchParams');
+    const searchParams = usePathname();
     const slug = searchParams.split("/").pop();
-    console.log(slug, "this is the slug");
+    const [editorContent, setEditorContent] = useState('')
     const [formData, setFormData] = useState({
         title: '',
         category: '',
@@ -20,13 +21,46 @@ const SingleProductPage = () => {
         color: '',
         desc: '',
         isAdmin: false,
+        active: false,
+        amountClicking: 0
         // Add other fields as necessary
     });
+    const allCategories = [
+        { value: 'category1', label: 'Category 1' },
+        { value: 'category2', label: 'Category 2' },
+        { value: 'hukum', label: 'Hukum' },
+        { value: 'nasional', label: 'Nasional' },
+        { value: 'keluarga', label: 'Keluarga' },
+        // Include other categories as needed
+    ];
+    const activeCategories = [
+        { value: false, label: 'Tidak Aktif ' },
+        { value: true, label: 'Aktif' }
+        // Include other categories as needed
+    ];
+    const categoryOptions = () => {
+        let options = allCategories.slice(); // Clone the allCategories array
+        if (formData.category && !options.some(option => option.value === formData.category)) {
+            // If formData.category exists and is not in the options list, add it
+            options.unshift({ value: formData.category, label: formData.category.charAt(0).toUpperCase() + formData.category.slice(1) }); // Capitalize the first letter
+        }
+        return options;
+    };
+    const activeOptions = () => {
+        let options = activeCategories.slice(); // Clone the allCategories array
+        if (formData.active && !options.some(option => option.value === formData.active)) {
+            // If formData.category exists and is not in the options list, add it
+            options.unshift({ value: formData.active, label: formData.active.charAt(0).toUpperCase() + formData.active.slice(1) }); // Capitalize the first letter
+        }
+        return options;
+    };
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData((prevState) => ({
+        // Special handling for boolean values (like "active" field)
+        const newValue = name === 'active' ? value === 'true' : value;
+        setFormData(prevState => ({
             ...prevState,
-            [name]: value,
+            [name]: newValue,
         }));
     };
 
@@ -35,6 +69,7 @@ const SingleProductPage = () => {
             console.log('slug is :', null)
             return
         };
+
         const userToken = localStorage.getItem('token'); // Retrieve token from localStorage
         console.log(userToken, 'userToken');
 
@@ -55,10 +90,10 @@ const SingleProductPage = () => {
                 const data = await response.json();
                 setFormData(currentData => ({
                     ...currentData,
-                    // Set a default category if none is fetched, or use the fetched one
-                    category: data.category || 'defaultCategoryValue',
-                    ...data
+                    ...data,
+                    category: data.category || 'defaultCategoryValue', // Good practice
                 }));
+                setEditorContent(data.description || '');
             } else {
                 console.error("Failed to fetch data:", response.statusText);
             }
@@ -149,11 +184,9 @@ const SingleProductPage = () => {
                         name='category'
                         customClasses={`${styles}`}
                         labelTxt='Category'
-                        value={formData.category} // Ensure this reflects the current category
-                        onChange={handleChange} // Update formData state when the user selects a new category
-                        options={[{ value: '', label: 'Select a category' }, // Default option
-                        { value: 'category1', label: 'Category 1' },
-                        { value: 'category2', label: 'Category 2' }]}
+                        value={formData.category} // Set the selected option based on formData.category
+                        onChange={handleChange} // Update formData state when a new option is selected
+                        options={categoryOptions()}
                     />
                     <Input
                         type='text'
@@ -170,29 +203,34 @@ const SingleProductPage = () => {
                         placeholder='jumlah klik'
                         customClasses={`${styles}`}
                         labelTxt='jumlah klik'
+                        value={formData.amountClicking}
                         disabled={true}
                     />
                     <Input
                         isSelect={true}
-                        name='isActive'
-                        customClasses={`${styles}`}
-                        labelTxt='isActive?'
+                        name='active'
+                        customClasses={styles}
+                        labelTxt='Active?'
+                        value={String(formData.active)} // Convert boolean to string for select
+                        onChange={handleChange}
+                        options={activeOptions()}
                     />
                     <Input
                         isSelect={true}
-                        name='isActive'
+                        name='highlights'
                         customClasses={`${styles}`}
-                        labelTxt='isActive?'
+                        labelTxt='highlights?'
+                        value={String(formData.highlights)} // Convert boolean to string for select
+                        onChange={handleChange}
+                        options={activeOptions()}
+
                     />
                     <ReactQuil
-
-                        className={`${styles.formCreate} h-[400px]  p-[20px] mb-[50px] w-full box-border`}
+                        className={`${styles.formCreate} h-[400px] p-[20px] mb-[50px] w-full box-border`}
                         onChange={(htmlContent) => {
-                            setFormValues((prevState) => ({
-                                ...prevState,
-                                description: htmlContent, // Directly use the string provided by ReactQuil
-                            }));
+                            setEditorContent(htmlContent); // This might not be necessary if you're not doing anything else with the content outside of submitting it.
                         }}
+                        value={editorContent} // This ensures the editor is initialized with the content from the API
                     />
                     <Input
                         isButton={true}

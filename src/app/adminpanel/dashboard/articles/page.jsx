@@ -78,10 +78,10 @@ const ProductsPage = ()=>{
         <thead className="">
           <tr>
             <td>Title</td>
+            <td>Category</td>
             <td>Description</td>
-            <td>Price</td>
-            <td>Created At</td>
-            <td>Stock</td>
+            <td>Active</td>
+            <td>Highlights</td>
             <td>Action</td>
           </tr>
         </thead>
