@@ -124,12 +124,7 @@ const AddProductPage = () => {
     }
   };
   
-  const handleQuillChange = (content) => {
-    setFormValues(prevState => ({
-      ...prevState,
-      description: content,
-    }));
-  };
+  
   return (
     <div
       className={`${styles.container} bg-[var(--bgSoft)] p-[20px] rounded-[10px] mt-[20px] `}
