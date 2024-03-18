@@ -76,7 +76,7 @@ const AddProductPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Ensure file is selected
     const fileInput = document.getElementById("fileUpload");
     const file = fileInput.files[0];
@@ -84,50 +84,46 @@ const AddProductPage = () => {
       alert("Please upload an image.");
       return;
     }
-
+  
     const formData = new FormData();
     formData.append("file", file);
-
+  
     // Append all other form values to formData
     Object.keys(formValues).forEach((key) => {
       if (key !== "file") { // Don't re-append the file
         formData.append(key, formValues[key]);
       }
     });
-
+  
     console.log("Form Values on Submit:", formValues); // Debugging
-    useEffect(() => {
-      const user = localStorage.getItem('token');
-      console.log(user, 'userLocalStorage');
-      setUserLocalStorage(user);
-      const fetchData = async () => {
-        try {
-          const response = await fetch("http://localhost:3000/article/create", {
-            method: "POST",
-            credentials: 'include', // Include credentials for cookies, etc.
-            headers: {
-              // Don't set 'Content-Type': 'application/json',
-              'Authorization': `Bearer ${userLocalStorage}`,
-            },
-            body: formData,
-          });
-
-          if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-          }
-
-          const data = await response.json();
-          console.log("Success:", data);
-          alert("Article added successfully!");
-        } catch (error) {
-          console.error("Error:", error);
-          alert("Failed to add the article.");
-        }
+    
+    const user = localStorage.getItem('token');
+    console.log(user, 'userLocalStorage');
+  
+    try {
+      const response = await fetch("http://localhost:3000/article/create", {
+        method: "POST",
+        credentials: 'include', // Include credentials for cookies, etc.
+        headers: {
+          // Don't set 'Content-Type': 'application/json',
+          'Authorization': `Bearer ${user}`,
+        },
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-      fetchData()
-    }, [])
-
+  
+      const data = await response.json();
+      console.log("Success:", data);
+      alert("Article added successfully!");
+    } catch (error) {
+      console.error("Error:", error);
+      alert("Failed to add the article.");
+    }
   };
+  
   const handleQuillChange = (content) => {
     setFormValues(prevState => ({
       ...prevState,
