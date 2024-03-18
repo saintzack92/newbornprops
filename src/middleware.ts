@@ -88,6 +88,7 @@ async function refreshToken(request:any) {
 
 
 export async function middleware(request:any) {
+  let response = NextResponse.next();
   const cookieHeader = request.headers.get('cookie') || '';
   const accessToken = getCookieValue(cookieHeader, 'access_token');
 
@@ -102,8 +103,10 @@ export async function middleware(request:any) {
     if (validationResponse.status === 401) {
       const newTokens = await refreshToken(request);
       if (newTokens) {
-        // Handle setting new tokens in cookies or local storage as appropriate
-        // Redirect or allow the request to continue based on your app's flow
+        response.cookies.set('access_token', newTokens.access_token, { httpOnly: true, sameSite: 'strict' });
+      if (newTokens.refresh_token) {
+        response.cookies.set('refresh_token', newTokens.refresh_token, { httpOnly: true, sameSite: 'strict' });
+      }
       } else {
         // If token refresh failed, redirect to login
         return NextResponse.redirect(new URL('/login', request.url));

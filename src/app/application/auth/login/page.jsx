@@ -49,13 +49,6 @@ const LoginPage = () => {
       router.push("/login");
     }
   };
-  // useEffect(() => {
-  //   let value;
-  //   // Get the value from local storage if it exists
-  //   value = localStorage.getItem("email") || "";
-  //   setEmail(value);
-  // }, []);
-
   return (
     <div className="w-[100%] h-[100vh] flex items-center justify-center">
       <form
