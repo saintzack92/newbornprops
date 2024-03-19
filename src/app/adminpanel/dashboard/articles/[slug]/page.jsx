@@ -26,25 +26,9 @@ const SingleProductPage = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const fileInputRef = useRef(null); // Using useRef for the file input
 
-  const handleImageChange = (e) => {
-    e.preventDefault();
-    if (e.target.files.length === 0) {
-      return;
-    }
-    let file = e.target.files[0];
-    console.log(file); // Confirm the file object is captured
-    let reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreviewUrl(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
+ 
 
-  const handleRemoveImage = () => {
-    setImagePreviewUrl(""); // Use setImagePreviewUrl to update state
-    // Reset the file input
-    if (fileInputRef.current) fileInputRef.current.value = "";
-  };
+  
   const allCategories = [
     { value: "category1", label: "Category 1" },
     { value: "category2", label: "Category 2" },
@@ -203,14 +187,9 @@ const SingleProductPage = () => {
             <div
               className={`w-[100%] h-full  gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
             >
-              <button
-                onClick={handleRemoveImage}
-                className="bg-[#dc3e3edd] hover:bg-[#dc3e3e] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-2 z-50 absolute  "
-              >
-                X
-              </button>
-              <img
-                src={imagePreviewUrl}
+              
+              <Image
+                src={'imagePreviewUrl'}
                 alt="Image Preview"
                 style={{ width: "100%" }} // Adjust styling as needed
                 className={`z-10 flex absolute object-contain h-full `}
@@ -219,22 +198,7 @@ const SingleProductPage = () => {
           ) : (
             <div>tidak ada gambar ditampilkan</div>
           )}
-
-          {!imagePreviewUrl && "Upload your main image here"}
-          <input
-            type="file"
-            id="fileUpload"
-            name="file"
-            accept="image/*"
-            className="hidden"
-            onChange={handleImageChange}
-          />
-          <label
-            htmlFor="fileUpload"
-            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline absolute bottom-2 z-50"
-          >
-            Select File
-          </label>
+          
         </div>
         John Doe
       </div>
