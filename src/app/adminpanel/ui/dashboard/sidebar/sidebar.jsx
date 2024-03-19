@@ -100,7 +100,7 @@ const Sidebar = () => {
       );
 
       localStorage.removeItem("user");
-      localStorage.removeItem("token");
+      localStorage.removeItem("access_token");
       localStorage.removeItem("role");
       localStorage.removeItem("email");
       // After successful logout, redirect to login page or clear client-side authentication state

@@ -2,8 +2,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import {setToken} from '../../../lib/authToken'
-import {isTokenExpired} from '../../../lib/authToken'
+
 
 const style = `p-[30px] border-2 border-solid border-[#2e374a] w-[100%]`;
 
@@ -34,8 +33,11 @@ const LoginPage = () => {
         localStorage.setItem("user", res.data.loginResponse.user);
         localStorage.setItem("email", res.data.loginResponse.email);
         localStorage.setItem("role", res.data.loginResponse.role);
-        // localStorage.setItem("token", res.data.loginResponse.access_token);
-        setToken(res.data.loginResponse.access_token)
+
+        const access = res.data.loginResponse.access_token;
+
+        localStorage.setItem("token", access);
+
         router.push("/adminpanel/dashboard");
       } else {
         router.push("/login");
@@ -61,6 +63,7 @@ const LoginPage = () => {
         <input
           type="email"
           placeholder="Email"
+          required="required"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
           className={style}
@@ -69,6 +72,7 @@ const LoginPage = () => {
           type="password"
           placeholder="Password"
           value={password}
+          required="required"
           onChange={(e) => setPassword(e.target.value)}
           className={style}
         />
