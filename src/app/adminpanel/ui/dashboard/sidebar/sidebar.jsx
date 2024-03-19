@@ -89,7 +89,6 @@ const menuItems = [
 ];
 
 const Sidebar = () => {
-  
   const router = useRouter();
   const handleLogout = async () => {
     try {
@@ -100,25 +99,22 @@ const Sidebar = () => {
       );
 
       localStorage.removeItem("user");
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("role");
-      localStorage.removeItem("email");
+      localStorage.removeItem("token");
       // After successful logout, redirect to login page or clear client-side authentication state
       router.push("/login");
     } catch (error) {
       console.error("Logout error:", error);
     }
   };
-  const [userLocalStorage, setUserLocalStorage] = useState('user name');
-  const [roleLocalStorage, setRoleLocalStorage] = useState('role');
+  const [userLocalStorage, setUserLocalStorage] = useState("user name");
+  const [roleLocalStorage, setRoleLocalStorage] = useState("role");
 
   // Use useEffect to ensure code runs in the client side
   useEffect(() => {
-    const user = localStorage.getItem('user');
-    const role = localStorage.getItem('role');
-    console.log(user, 'sideBarLocalStorage');
-    setUserLocalStorage(user);
-    setRoleLocalStorage(role);
+    const user = JSON.parse(localStorage.getItem("user"));
+    // console.log(user, 'sideBarLocalStorage');
+    setUserLocalStorage(user["user"]);
+    setRoleLocalStorage(user["role"]);
   }, []);
   return (
     <div className={`${styles.container}`}>
@@ -131,9 +127,7 @@ const Sidebar = () => {
           height="50"
         />
         <div className={`${styles.userDetail} flex flex-col object-cover`}>
-          <span className={`${""} font-[500]`}>
-            {userLocalStorage}
-          </span>
+          <span className={`${""} font-[500]`}>{userLocalStorage}</span>
           <span className={`${""} text-[12px] text-[var(--textSoft)]`}>
             {roleLocalStorage}
           </span>
