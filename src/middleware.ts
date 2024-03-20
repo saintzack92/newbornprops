@@ -1,6 +1,5 @@
 // import { NextResponse } from "next/server";
 
-
 // function getCookieValue(cookieString:any, cookieName:any) {
 //   const name = cookieName + "=";
 //   const decodedCookie = decodeURIComponent(cookieString);
@@ -23,9 +22,7 @@
 //   // Extract the access_token from the cookieHeader
 //   const accessToken = getCookieValue(cookieHeader, 'access_token');
 //   // console.log(accessToken);
-  
-  
-  
+
 //   // Check if access_token is not empty
 //   if (accessToken) {
 //       // Make a request to the backend validation endpoint with the Authorization header
@@ -67,7 +64,10 @@ function getCookieValue(cookieString: any, cookieName: any) {
 }
 
 async function refreshToken(request: any) {
-  const refreshToken = getCookieValue(request.headers.get('cookie'), 'refresh_token');
+  const refreshToken = getCookieValue(
+    request.headers.get("cookie"),
+    "refresh_token"
+  );
   if (!refreshToken) return null;
 
   const response = await fetch(`http://localhost:3000/auth/refresh`, {
@@ -76,27 +76,31 @@ async function refreshToken(request: any) {
     body: JSON.stringify({ refresh_token: refreshToken }),
   });
   console.log(JSON.stringify(response, null, 4));
-  console.log(refreshToken, 'refresh token function in middleware');
-
+  console.log(refreshToken, "refresh token function in middleware");
 
   if (!response.ok) return null;
   return await response.json();
 }
 
 export async function middleware(request: any) {
-  const accessToken = getCookieValue(request.headers.get('cookie'), 'access_token');
+  const accessToken = getCookieValue(
+    request.headers.get("cookie"),
+    "access_token"
+  );
   const url = request.nextUrl.clone(); // Clone the URL to modify it
 
-  if (!accessToken && !url.pathname.startsWith('/login')) {
-    url.pathname = '/login';
+  if (!accessToken && !url.pathname.startsWith("/login")) {
+    url.pathname = "/login";
     return NextResponse.redirect(url);
   }
 
-
   if (accessToken) {
-    const validationResponse = await fetch(`http://localhost:3000/auth/status`, {
-      headers: { 'Authorization': `Bearer ${accessToken}` },
-    });
+    const validationResponse = await fetch(
+      `http://localhost:3000/auth/status`,
+      {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      }
+    );
 
     if (validationResponse.ok) {
       if (url.pathname === "/login") {
@@ -114,7 +118,7 @@ export async function middleware(request: any) {
           sameSite: "strict",
         });
         setToken(newTokens.data.loginResponse.access_token);
-        
+
         if (newTokens.refresh_token)
           response.cookies.set("refresh_token", newTokens.refresh_token, {
             path: "/",
@@ -125,13 +129,25 @@ export async function middleware(request: any) {
       }
     }
   }
+  // This could be in your main App component or a specific component loaded on every page
+  useEffect(() => {
+    const checkLocalStorage = async () => {
+      // Assuming you store some key in localStorage as part of your session management
+      const isSessionActive = localStorage.getItem("token");
+      if (!isSessionActive) {
+        // localStorage key not found, implying session should be cleared
+        await fetch("/api/clear-session", { method: "POST" });
+      }
+    };
+
+    checkLocalStorage();
+  }, []);
 
   // Redirect to login if not accessing login page and no valid access token
   if (!url.pathname.startsWith("/login")) {
     url.pathname = "/login";
     return NextResponse.redirect(url);
   }
-
 
   return NextResponse.next();
 }
