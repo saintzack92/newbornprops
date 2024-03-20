@@ -90,31 +90,35 @@ const menuItems = [
 
 const Sidebar = () => {
   const router = useRouter();
+
   const handleLogout = async () => {
     try {
+      // Send a request to the logout endpoint, server clears HTTP-only cookies
       await axios.post(
         "http://localhost:3000/auth/logout",
         {},
         { withCredentials: true }
       );
 
+      // Clear local storage if used for storing non-sensitive data (Optional)
       localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      // After successful logout, redirect to login page or clear client-side authentication state
+
+      // Redirect to login page
       router.push("/login");
     } catch (error) {
       console.error("Logout error:", error);
     }
   };
-  const [userLocalStorage, setUserLocalStorage] = useState("user name");
-  const [roleLocalStorage, setRoleLocalStorage] = useState("role");
 
-  // Use useEffect to ensure code runs in the client side
+  const [userLocalStorage, setUserLocalStorage] = useState("");
+  const [roleLocalStorage, setRoleLocalStorage] = useState("");
+
   useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
-    // console.log(user, 'sideBarLocalStorage');
-    setUserLocalStorage(user["user"]);
-    setRoleLocalStorage(user["role"]);
+    // Consider using a more secure method for managing user-specific information
+    const user = JSON.parse(localStorage.getItem("userDetails") || "{}");
+    console.log(user, 'user local storage');
+    setUserLocalStorage(user.user || "User Name");
+    setRoleLocalStorage(user.role || "Role");
   }, []);
   return (
     <div className={`${styles.container}`}>

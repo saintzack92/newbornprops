@@ -22,30 +22,29 @@ const LoginPage = () => {
         },
         {
           headers: { "Content-Type": "application/json" },
-          withCredentials: true,
+          withCredentials: true, // This is crucial
         }
       );
-
-
+  
       if (res.status === 200 || res.status === 201) {
+        const userDetails = {
+          user: res.data.user,
+          role: res.data.role,
+          email: res.data.email,
+        };
 
-        const access = res.data.loginResponse.access_token;
-
-        localStorage.setItem("token", access);
-
-        const user = { user: res.data.loginResponse.user, email: res.data.loginResponse.email, role: res.data.loginResponse.role };
-        localStorage.setItem("user", JSON.stringify(user));
-
+        // Store user details in local storage
+        localStorage.setItem("userDetails", JSON.stringify(userDetails));
         router.push("/adminpanel/dashboard");
       } else {
-        router.push("/login");
-        alert("opps ada yang salah");
+        alert("Something went wrong. Please try again.");
       }
     } catch (error) {
-      alert("opps ada yang salah");
-      router.push("/login");
+      console.error("Login error:", error);
+      alert("Login failed. Please check your credentials.");
     }
   };
+  
   return (
     <div className="w-[100%] h-[100vh] flex items-center justify-center">
       <form

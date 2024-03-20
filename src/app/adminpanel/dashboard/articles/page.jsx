@@ -17,37 +17,30 @@ const ProductsPage = ()=>{
   const itemsPerPage = 10;
 
   useEffect(() => {
-    const userToken = localStorage.getItem('token');
-    if (!userToken) {
-      console.log('No user token found');
-      return;
-    }
-
     const fetchData = async () => {
       try {
         const response = await fetch(`http://localhost:3000/article/all?page=${currentPage}&limit=${itemsPerPage}`, {
           method: "GET",
-          headers: {
-            'Authorization': `Bearer ${userToken}`,
-          },
+          credentials: 'include', // Include credentials to send cookies
         });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
 
         const data = await response.json();
-        console.log(data.articles); // Check if articles contain a 'slug' property
         setFormData(data.articles);
-        // Set totalPages based on the response, assuming "lastPage" is the total number of pages
-        setTotalPages(data.lastPage); // Adjusted to use the lastPage from the response
+        setTotalPages(data.lastPage);
       } catch (error) {
         console.error("Failed to fetch data:", error);
+        // Consider redirecting to login if unauthorized
+        if (error.message.includes('401')) {
+          router.push('/login');
+        }
       }
     };
 
     fetchData();
-  }, [currentPage]); // Removed itemsPerPage from dependencies since it's a constant
-
+  }, [currentPage, router]);
   const handlePrevPage = () => {
     setCurrentPage(prevPage => Math.max(1, prevPage - 1));
   };

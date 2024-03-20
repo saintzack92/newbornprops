@@ -14,17 +14,14 @@ const SingleProductPage = () => {
   const [formData, setFormData] = useState({
     title: "",
     category: "",
-    price: "",
-    stock: "",
-    color: "",
-    desc: "",
-    isAdmin: false,
+    highlights:false,
     active: false,
     amountClicking: 0,
+    description:"",
+    slug:''
     // Add other fields as necessary
   });
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
-  const fileInputRef = useRef(null); // Using useRef for the file input
 
  
 
@@ -75,13 +72,19 @@ const SingleProductPage = () => {
   };
   const handleChange = (e) => {
     const { name, value } = e.target;
-    // Special handling for boolean values (like "active" field)
-    const newValue = name === "active" ? value === "true" : value;
+    // Special handling for boolean values (like "active" and "highlights" fields)
+    let newValue;
+    if (name === "active" || name === "highlights") {
+      newValue = value === "true";
+    } else {
+      newValue = value;
+    }
     setFormData((prevState) => ({
       ...prevState,
       [name]: newValue,
     }));
   };
+  
 
   useEffect(() => {
     if (!slug) {
@@ -127,39 +130,26 @@ const SingleProductPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Ensure file is selected
-    const fileInput = document.getElementById("fileUpload");
-    const file = fileInput.files[0];
-    if (!file) {
-      alert("Please upload an image.");
-      return;
-    }
+   
+    const updatedFormData = {
+      ...formData,
+      description: editorContent, // Assuming 'desc' is the field for the editor content
+    };
 
-    const formData = new FormData();
-    formData.append("file", file);
-
-    // Append all other form values to formData
-    Object.keys(formValues).forEach((key) => {
-      if (key !== "file") {
-        // Don't re-append the file
-        formData.append(key, formValues[key]);
-      }
-    });
-
-    console.log("Form Values on Submit:", formValues); // Debugging
+    // console.log("Form Values on Submit:", formValues); // Debugging
 
     const user = localStorage.getItem("token");
     console.log(user, "userLocalStorage");
-
+    const id = formData.id
     try {
-      const response = await fetch("http://localhost:3000/article/update", {
+      const response = await fetch(`http://localhost:3000/article/update/${id}`, {
         method: "PATCH",
         credentials: "include", // Include credentials for cookies, etc.
         headers: {
-          // Don't set 'Content-Type': 'application/json',
+          'Content-Type': 'application/json',
           Authorization: `Bearer ${user}`,
         },
-        body: formData,
+        body: JSON.stringify(updatedFormData),
       });
 
       if (!response.ok) {
@@ -271,6 +261,7 @@ const SingleProductPage = () => {
             isButton={true}
             customClasses={`mt-[20px] border-none p-[20px]  `}
             name={"Update"}
+            labelTxt={'Update'}
           />
         </form>
       </div>

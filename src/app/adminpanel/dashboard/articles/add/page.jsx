@@ -1,48 +1,24 @@
 "use client";
 import styles from "../../../ui/dashboard/products/addProduct/addProduct.module.css";
-
-
 import React, { useEffect, useRef, useState } from "react";
 import { ReactQuil } from "../../../ui/dashboard/component/quill"; // Adjust the path as necessary
 import { useRouter } from "next/router";
 
 const AddProductPage = () => {
-  
   const [formValues, setFormValues] = useState({
     title: "",
     category: "",
     slug: "",
-    amountClicking: 0, // Assuming this is intended to be 'amountClicking' on the backend.
-    active: false, // Initialize according to your default need, false seems logical if activation is a deliberate choice.
-    highlights: false, // Same reasoning as `active`.
+    amountClicking: 0,
+    active: false,
+    highlights: false,
     file: "",
-    description: "", // Changed from 'content' to 'description' to match backend DTO.
-    createBy: "", // Add this if you're not automatically setting it on the backend based on user session or token.
+    description: "",
+    createBy: "",
   });
-  const [userLocalStorage, setUserLocalStorage] = useState('null');
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
-  const fileInputRef = useRef(null); // Using useRef for the file input
+  const fileInputRef = useRef(null);
 
-  const handleImageChange = (e) => {
-    e.preventDefault();
-    if (e.target.files.length === 0) {
-      return;
-    }
-    let file = e.target.files[0];
-    console.log(file); // Confirm the file object is captured
-    let reader = new FileReader();
-    reader.onloadend = () => {
-      setImagePreviewUrl(reader.result);
-    };
-    reader.readAsDataURL(file);
-  };
-
-  const handleRemoveImage = () => {
-    setImagePreviewUrl(''); // Use setImagePreviewUrl to update state
-    // Reset the file input
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
-  // When handling the change event of an input field
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prevState) => ({
@@ -51,7 +27,7 @@ const AddProductPage = () => {
     }));
 
     if (name === "title") {
-      const newSlug = generateSlug(value); // value is the input's current value
+      const newSlug = generateSlug(value); // Ensure this function exists or is defined elsewhere
       setFormValues((prevState) => ({
         ...prevState,
         slug: newSlug,
@@ -59,72 +35,114 @@ const AddProductPage = () => {
     }
   };
 
-
-
   const generateSlug = (title) => {
     // Ensure title is a string before proceeding
-    if (typeof title === 'string' && title) {
+    if (typeof title === "string" && title) {
       return title
         .toLowerCase()
         .replace(/\s+/g, "-")
         .replace(/[^a-z0-9-]/g, "")
         .replace(/-+/g, "-");
     }
-    return ""; // Return empty string if no title or title is not a string
+    return "";
   };
 
+  const handleImageChange = async (e) => {
+    if (e.target.files.length === 0) {
+      return;
+    }
+    const file = e.target.files[0];
+    const imageUrl = await uploadImageToAWS(file); // Pass the file directly
+    setImagePreviewUrl(imageUrl);
+    setFormValues((prev) => ({ ...prev, file: imageUrl }));
+  };
+
+  const handleRemoveImage = () => {
+    setImagePreviewUrl("");
+    if (fileInputRef.current) fileInputRef.current.value = "";
+  };
+
+  const replaceBase64Images = async () => {
+    const doc = new DOMParser().parseFromString(
+      formValues.description,
+      "text/html"
+    );
+    const images = doc.querySelectorAll("img");
+    for (let img of images) {
+      if (img.src.startsWith("data:")) {
+        const imageUrl = await uploadImageToAWS(
+          await fetch(img.src).then((r) => r.blob())
+        );
+        img.src = imageUrl;
+      }
+    }
+    const updatedDescription = doc.body.innerHTML;
+    setFormValues((prev) => ({ ...prev, description: updatedDescription }));
+  };
+
+  const uploadImageToAWS = async (file) => {
+    console.log("Uploading image to AWS", file);
+    const formData = new FormData();
+    formData.append("file", file);
+
+    const uploadResponse = await fetch("http://localhost:3000/upload/single", {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!uploadResponse.ok) {
+      console.error("Failed to upload image to AWS");
+      throw new Error("Failed to upload image to AWS");
+    }
+
+    const uploadData = await uploadResponse.json();
+    console.log("Image uploaded to AWS, URL:", uploadData.url);
+    return uploadData.url; // The AWS URL for the uploaded image
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    // Ensure file is selected
-    const fileInput = document.getElementById("fileUpload");
-    const file = fileInput.files[0];
-    if (!file) {
-      alert("Please upload an image.");
-      return;
+
+    // Replace inline base64 images in ReactQuil editor with AWS URLs
+    await replaceBase64Images();
+
+    // Upload main image if selected and update formValues with AWS URL
+    if (
+      fileInputRef.current &&
+      fileInputRef.current.files &&
+      fileInputRef.current.files[0]
+    ) {
+      console.log("File selected for upload:", fileInputRef.current.files[0]);
+      // Upload main image if selected and update formValues with AWS URL
+      const imageUrl = await uploadImageToAWS(fileInputRef.current.files[0]);
+      formValues.file = imageUrl; // Update the file URL in formValues
+      console.log("Main image uploaded, URL:", imageUrl);
+    } else {
+      console.log("No main image selected for upload.");
     }
-  
-    const formData = new FormData();
-    formData.append("file", file);
-  
-    // Append all other form values to formData
-    Object.keys(formValues).forEach((key) => {
-      if (key !== "file") { // Don't re-append the file
-        formData.append(key, formValues[key]);
-      }
-    });
-  
-    console.log("Form Values on Submit:", formValues); // Debugging
-    
-    const user = localStorage.getItem('token');
-    console.log(user, 'userLocalStorage');
-  
+
+    // Now, submit the formValues including the AWS URL for the main image and updated content
     try {
       const response = await fetch("http://localhost:3000/article/create", {
         method: "POST",
-        credentials: 'include', // Include credentials for cookies, etc.
         headers: {
-          // Don't set 'Content-Type': 'application/json',
-          'Authorization': `Bearer ${user}`,
+          "Content-Type": "application/json",
         },
-        body: formData,
+        credentials: 'include', // Ensure credentials are included with fetch requests
+        body: JSON.stringify(formValues),
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
-      const data = await response.json();
-      console.log("Success:", data);
+
       alert("Article added successfully!");
+      // Redirect or reset form as necessary
     } catch (error) {
-      console.error("Error:", error);
+      console.error("Failed to submit article:", error);
       alert("Failed to add the article.");
     }
   };
-  
-  
   return (
     <div
       className={`${styles.container} bg-[var(--bgSoft)] p-[20px] rounded-[10px] mt-[20px] `}
@@ -146,8 +164,11 @@ const AddProductPage = () => {
           id="category"
           className={`${styles.formChild} ${styles.formChildInput}`}
           onChange={handleChange}
-          value={formValues.category}>
-          <option value="" disabled>Choose a Category</option>
+          value={formValues.category}
+        >
+          <option value="" disabled>
+            Choose a Category
+          </option>
           <option value="computer">Computer</option>
           <option value="tv">TV</option>
           <option value="keyboard">Keyboard</option>
@@ -169,7 +190,8 @@ const AddProductPage = () => {
           <button
             type="button"
             className={`p-[25px] text-[var(--text)] rounded-[5px] border-none transition  bg-[teal] hover:bg-[#257272]`} // You will need to create this class
-            onClick={generateSlug}>
+            onClick={generateSlug}
+          >
             Random
           </button>
         </div>
@@ -183,7 +205,9 @@ const AddProductPage = () => {
           className={`${styles.formChild} ${styles.formChildInput}`}
           onChange={handleChange}
         />
-        <div className={` w-[45%] flex flex-col h-[50%] justify-between items-center border-none `}>
+        <div
+          className={` w-[45%] flex flex-col h-[50%] justify-between items-center border-none `}
+        >
           <label className="text-left w-full text-[#8f94a1]">isActive</label>
           <select
             name="active"
@@ -192,13 +216,19 @@ const AddProductPage = () => {
             value={formValues.active} // Controlled component approach
             onChange={handleChange} // Ensure you have a handler function to update state
           >
-            <option value="" disabled>Is Active?</option>{" "}
+            <option value="" disabled>
+              Is Active?
+            </option>{" "}
             <option value={true}>Yes</option>
             <option value={false}>No</option>
           </select>
         </div>
-        <div className={`w-[45%] flex flex-col h-[50%] justify-between items-center border-none `}>
-          <label className="text-left w-full text-[#8f94a1]">isHighlights</label>
+        <div
+          className={`w-[45%] flex flex-col h-[50%] justify-between items-center border-none `}
+        >
+          <label className="text-left w-full text-[#8f94a1]">
+            isHighlights
+          </label>
           <select
             name="highlights"
             id="highlights"
@@ -206,7 +236,9 @@ const AddProductPage = () => {
             value={formValues.highlights} // Controlled component approach
             onChange={handleChange} // Ensure you have a handler function to update state
           >
-            <option value="" disabled>Is Active?</option>{" "}
+            <option value="" disabled>
+              Is Active?
+            </option>{" "}
             <option value={true}>Yes</option>
             <option value={false}>No</option>
           </select>
@@ -219,16 +251,25 @@ const AddProductPage = () => {
           >
             {imagePreviewUrl ? (
               // <div className="flex  bg-[blue] w-full">
-              <div className={`w-[100%] h-full  gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
+              <div
+                className={`w-[100%] h-full  gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
               >
-                <button onClick={handleRemoveImage} className="bg-[#dc3e3edd] hover:bg-[#dc3e3e] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-2 z-50 absolute  ">X</button>
+                <button
+                  onClick={handleRemoveImage}
+                  className="bg-[#dc3e3edd] hover:bg-[#dc3e3e] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-2 z-50 absolute  "
+                >
+                  X
+                </button>
                 <img
                   src={imagePreviewUrl}
-                  alt="Image Preview"
+                  alt="Single Image"
                   style={{ width: "100%" }} // Adjust styling as needed
                   className={`z-10 flex absolute object-contain h-full `}
                 />
-              </div>) : <div>tidak ada gambar ditampilkan</div>}
+              </div>
+            ) : (
+              <div>tidak ada gambar ditampilkan</div>
+            )}
 
             {!imagePreviewUrl && "Upload your main image here"}
             <input
@@ -248,7 +289,6 @@ const AddProductPage = () => {
           </div>
           <h1>Input your article here</h1>
           <ReactQuil
-
             className={`${styles.formCreate} h-[550px] px-[30px] mb-[20px] w-full box-border`}
             onChange={(htmlContent) => {
               setFormValues((prevState) => ({
