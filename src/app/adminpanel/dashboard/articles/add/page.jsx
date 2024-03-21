@@ -52,7 +52,7 @@ const AddProductPage = () => {
       return;
     }
     const file = e.target.files[0];
-    
+
     // FileReader to convert image file to base64 string
     const reader = new FileReader();
     reader.onloadend = () => {
@@ -60,11 +60,10 @@ const AddProductPage = () => {
       setImagePreviewUrl(reader.result);
     };
     reader.readAsDataURL(file);
-  
+
     // Keep the File object in formValues for later upload
     setFormValues((prev) => ({ ...prev, file: file }));
   };
-  
 
   const handleRemoveImage = () => {
     setImagePreviewUrl("");
@@ -111,31 +110,31 @@ const AddProductPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Replace inline base64 images in ReactQuil editor with AWS URLs
     await replaceBase64Images();
-  
+
     // Check if there's a file to upload
     if (formValues.file && formValues.file instanceof File) {
       try {
         const imageUrl = await uploadImageToAWS(formValues.file);
         setFormValues((prev) => ({ ...prev, file: imageUrl }));
         console.log("Image uploaded to AWS, URL:", imageUrl);
-  
+
         // Now, submit the formValues including the AWS URL for the main image and updated content
         const response = await fetch("http://localhost:3000/article/create", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          credentials: 'include', // Ensure credentials are included with fetch requests
+          credentials: "include", // Ensure credentials are included with fetch requests
           body: JSON.stringify({ ...formValues, file: imageUrl }), // Use the AWS image URL
         });
-  
+
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-  
+
         alert("Article added successfully!");
         // Redirect or reset form as necessary
       } catch (error) {
@@ -147,7 +146,7 @@ const AddProductPage = () => {
       // Handle case where there's no image selected (optional)
     }
   };
-  
+
   return (
     <div
       className={`${styles.container} bg-[var(--bgSoft)] p-[20px] rounded-[10px] mt-[20px] `}
