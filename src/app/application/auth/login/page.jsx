@@ -25,7 +25,7 @@ const LoginPage = () => {
           withCredentials: true, // This is crucial
         }
       );
-  
+
       if (res.status === 200 || res.status === 201) {
         const userDetails = {
           user: res.data.user,
@@ -35,7 +35,9 @@ const LoginPage = () => {
 
         // Store user details in local storage
         localStorage.setItem("userDetails", JSON.stringify(userDetails));
+        console.log("Before navigating to dashboard");
         router.push("/adminpanel/dashboard");
+        console.log("After navigating to dashboard");
       } else {
         alert("Something went wrong. Please try again.");
       }
@@ -44,10 +46,11 @@ const LoginPage = () => {
       alert("Login failed. Please check your credentials.");
     }
   };
-  
+
   return (
     <div className="w-[100%] h-[100vh] flex items-center justify-center">
       <form
+        onSubmit={handleLogin}
         // onSubmit={handleLogin}
         className="bg-[var(--bgSoft)] p-[50px] rounded-[10px] w-[500px] h-[500px] flex flex-col justify-center gap-[30px] items-center relative z-0"
       >
@@ -70,7 +73,7 @@ const LoginPage = () => {
           onChange={(e) => setPassword(e.target.value)}
           className={style}
         />
-        <button type="submit" className={style} onClick={handleLogin}>
+        <button type="submit" className={style}>
           Login
         </button>
       </form>

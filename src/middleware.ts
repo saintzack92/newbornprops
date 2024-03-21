@@ -1,5 +1,6 @@
-import { NextResponse } from "next/server";
+import { NextResponse } from 'next/server';
 
+// Helper to parse cookies
 function getCookieValue(cookieString:any, cookieName:any) {
   const name = `${cookieName}=`;
   const ca = decodeURIComponent(cookieString ?? '').split(';');
@@ -10,72 +11,45 @@ function getCookieValue(cookieString:any, cookieName:any) {
   return '';
 }
 
+// Attempts to refresh the access token
 async function refreshToken(request:any) {
   try {
     const response = await fetch(`http://localhost:3000/auth/refresh`, {
       method: 'POST',
-      credentials: 'include', // Ensure cookies are included in the request
+      credentials: 'include', // Sends cookies along with the request
       headers: { 'Content-Type': 'application/json' },
-      // No need to explicitly send the refresh token in the body
     });
 
     if (!response.ok) throw new Error('Failed to refresh token');
-    return await response.json();
+    // No need to manually set cookies here; if the refresh is successful,
+    // the response from your backend should include a Set-Cookie header
+    return true;
   } catch (error) {
     console.error('Error refreshing token:', error);
-    return null;
+    return false;
   }
 }
 
 export async function middleware(request:any) {
-  console.log('Middleware invoked for request to:', request.nextUrl.pathname);
-
-  const accessToken = getCookieValue(request.headers.get('cookie'), 'access_token');
   const url = request.nextUrl.clone();
+  const cookieString = request.headers.get('cookie');
+  const accessToken = getCookieValue(cookieString, 'access_token');
 
-  if (!accessToken && !url.pathname.startsWith('/login')) {
-    console.log('Redirecting to login due to missing access token');
-    url.pathname = '/login';
-    return NextResponse.redirect(url);
-  }
-
-  if (accessToken) {
-    try {
-      console.log('Validating access token');
-      const validationResponse = await fetch(`${process.env.API_URL}/auth/status`, {
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-      });
-
-      if (validationResponse.ok) {
-        console.log('Access token validated successfully');
-        return NextResponse.next();
-      }
-
-      console.log('Access token validation failed, attempting to refresh');
-      const newTokens = await refreshToken(request);
-      if (newTokens && newTokens.access_token) {
-        console.log('Token refreshed successfully');
-        // Continue with setting cookies and returning response
-      }
-    } catch (error) {
-      console.error('Middleware error:', error);
-      return new Response('An error occurred.', {
-        status: 500,
-        headers: {
-          'Content-Type': 'text/plain',
-        },
-      });
+  if (!accessToken && url.pathname !== '/login') {
+    // Before redirecting to login, try to refresh the token
+    const refreshed = await refreshToken(request);
+    if (!refreshed) {
+      url.pathname = '/login';
+      return NextResponse.redirect(url);
     }
-    // Redirect to login if refresh fails or any other issue
-    url.pathname = '/login';
-    return NextResponse.redirect(url);
+    // If the token was successfully refreshed, allow the request to proceed
+    return NextResponse.next();
   }
 
-  // Default action for other cases
+  // If there's an accessToken, or the user is accessing the login page, continue as normal.
   return NextResponse.next();
 }
 
 export const config = {
   matcher: ['/adminpanel/:path*', '/login'],
-}
+};
