@@ -21,7 +21,6 @@ const ProductsPage = ()=>{
       try {
         const response = await fetch(`http://localhost:3000/article/all?page=${currentPage}&limit=${itemsPerPage}`, {
           method: "GET",
-          credentials: 'include', // Include credentials to send cookies
         });
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);

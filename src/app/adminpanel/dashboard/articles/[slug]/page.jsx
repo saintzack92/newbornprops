@@ -2,7 +2,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import styles from "../../../ui/dashboard/users/addUser/singleUser/singleUser.module.css";
 import Input from "../../../ui/dashboard/input/input";
-import img from "../../../../../../public/7.jpg";
 import Image from "next/image";
 import { ReactQuil } from "@/app/adminpanel/ui/dashboard/component/quill";
 import { usePathname } from "next/navigation";
@@ -92,33 +91,23 @@ const SingleProductPage = () => {
       return;
     }
 
-    const userToken = localStorage.getItem("token"); // Retrieve token from localStorage
-    console.log(userToken, "userToken");
-
-    if (!userToken) {
-      console.log("No user token found");
-      return; // Early return if token is not available
-    }
-
     const fetchData = async () => {
       const response = await fetch(
         `http://localhost:3000/article/slug/${slug}`,
         {
           method: "GET",
-          credentials: "include", // Include credentials for cookies, etc.
-          headers: {
-            Authorization: `Bearer ${userToken}`, // Use userToken directly here
-          },
         }
       );
       if (response.ok) {
         const data = await response.json();
+        console.log(data, 'data from get article');
         setFormData((currentData) => ({
           ...currentData,
           ...data,
           category: data.category || "defaultCategoryValue", // Good practice
         }));
         setEditorContent(data.description || "");
+        setImagePreviewUrl(data.file || "")
       } else {
         console.error("Failed to fetch data:", response.statusText);
       }
@@ -144,10 +133,8 @@ const SingleProductPage = () => {
     try {
       const response = await fetch(`http://localhost:3000/article/update/${id}`, {
         method: "PATCH",
-        credentials: "include", // Include credentials for cookies, etc.
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${user}`,
         },
         body: JSON.stringify(updatedFormData),
       });
@@ -179,8 +166,10 @@ const SingleProductPage = () => {
             >
               
               <Image
-                src={'imagePreviewUrl'}
+                src={formData.file}
                 alt="Image Preview"
+                width={500}
+                height={300}
                 style={{ width: "100%" }} // Adjust styling as needed
                 className={`z-10 flex absolute object-contain h-full `}
               />
