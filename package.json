@@ -13,6 +13,7 @@
     "axios": "^1.6.7",
     "framer-motion": "^11.0.5",
     "js-cookie": "^3.0.5",
+    "jwt-decode": "^4.0.0",
     "mysql2": "^3.9.1",
     "next": "14.0.4",
     "next-iron-session": "^4.2.0",
@@ -31,6 +32,7 @@
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
+    "@types/jwt-decode": "^3.1.0",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",

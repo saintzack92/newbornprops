@@ -10,7 +10,21 @@ function getCookieValue(cookieString:any, cookieName:any) {
   }
   return '';
 }
+function decodeJwt(token:any) {
+  if (!token) return null;
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split('')
+      .map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join('')
+  );
 
+  return JSON.parse(jsonPayload);
+}
 // Attempts to refresh the access token
 async function refreshToken(request:any) {
   try {
@@ -19,6 +33,8 @@ async function refreshToken(request:any) {
       credentials: 'include', // Sends cookies along with the request
       headers: { 'Content-Type': 'application/json' },
     });
+    console.log('response status : ', response.status);
+    
 
     if (!response.ok) throw new Error('Failed to refresh token');
     // No need to manually set cookies here; if the refresh is successful,
@@ -35,18 +51,20 @@ export async function middleware(request:any) {
   const cookieString = request.headers.get('cookie');
   const accessToken = getCookieValue(cookieString, 'access_token');
 
-  if (!accessToken && url.pathname !== '/login') {
-    // Before redirecting to login, try to refresh the token
+  // Decode the JWT to check for expiration
+  const decodedToken = decodeJwt(accessToken);
+  const isTokenExpired = decodedToken ? Date.now() >= decodedToken.exp * 1000 : true;
+
+  // If the token is missing or expired, and not accessing /login, try to refresh
+  if ((isTokenExpired || !accessToken) && url.pathname !== '/login') {
     const refreshed = await refreshToken(request);
     if (!refreshed) {
       url.pathname = '/login';
       return NextResponse.redirect(url);
     }
-    // If the token was successfully refreshed, allow the request to proceed
-    return NextResponse.next();
   }
 
-  // If there's an accessToken, or the user is accessing the login page, continue as normal.
+  // If there's an accessToken (not expired), or accessing /login, proceed
   return NextResponse.next();
 }
 
