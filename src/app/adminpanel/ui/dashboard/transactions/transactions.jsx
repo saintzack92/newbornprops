@@ -59,7 +59,9 @@ const Transactions = () => {
           </tr>
         </thead>
         <tbody>
-          {formData.map((formDatas) => (
+          
+            {formData.length > 0 ? (
+          formData.map((formDatas) => (
             <CardTable
               key={formDatas.id}
               title={formDatas.title}
@@ -68,7 +70,16 @@ const Transactions = () => {
               isActive={formDatas.active}
               isHighlights={formDatas.highlights}
             />
-          ))}
+          ))
+          ) : (
+            <tr>
+              <th colspan="12">
+                <div className="text-center m-3 p-3">
+                  - Data tidak ditemukan -
+                </div>
+              </th>
+            </tr>
+          )}
         </tbody>
       </table>
       {/* <div className="pagination-controls">
