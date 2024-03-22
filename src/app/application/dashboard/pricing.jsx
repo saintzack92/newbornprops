@@ -48,7 +48,7 @@ const Bayar = () => {
             <ScrollAnimationWrapper className="flex justify-center">
               <motion.div
                 variants={scrollAnimation}
-                className="flex flex-col justify-center items-center border-2 border-gray-500 rounded-xl py-4 px-6 lg:px-12 xl:px-20"
+                className="flex flex-col justify-center items-center border-2 border-gray-500 rounded-xl py-4 px-12 lg:px-12 xl:px-20"
                 whileHover={{
                   scale: 1.1,
                   transition: {
@@ -87,7 +87,7 @@ const Bayar = () => {
             <ScrollAnimationWrapper className="flex justify-center">
               <motion.div
                 variants={scrollAnimation}
-                className="flex flex-col justify-center items-center border-2 border-gray-500 rounded-xl py-4 px-6 lg:px-12 xl:px-20"
+                className="flex flex-col justify-center items-center border-2 border-gray-500 rounded-xl py-4 px-12 lg:px-12 xl:px-20"
                 whileHover={{
                   scale: 1.1,
                   transition: {
@@ -134,7 +134,7 @@ const Bayar = () => {
             <ScrollAnimationWrapper className="flex justify-center">
               <motion.div
                 variants={scrollAnimation}
-                className="flex flex-col justify-center items-center border-2 border-gray-500 rounded-xl py-4 px-6 lg:px-12 xl:px-20"
+                className="flex flex-col justify-center items-center border-2 border-gray-500 rounded-xl py-4 px-12 lg:px-12 xl:px-20"
                 whileHover={{
                   scale: 1.1,
                   transition: {
@@ -202,10 +202,11 @@ const Bayar = () => {
           </ScrollAnimationWrapper>
           <ScrollAnimationWrapper>
             <motion.div className="mt-16" variants={scrollAnimation}>
-              {/* <Image src={Maps} className="w-full h-auto"  alt="foto"/> */}
-              <div className="flex justify-center">
+              <div className="w-full flex justify-evenly items-center mb-10 ">
+
                 <Maps />
               </div>
+
             </motion.div>
           </ScrollAnimationWrapper>
           <ScrollAnimationWrapper>

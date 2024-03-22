@@ -4,6 +4,7 @@ import './adminpanel/globals.css'
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import 'tailwindcss/tailwind.css';
+import './application/tailwind.output.css'
 
 const inter = Inter({ subsets: ['latin'] })
 export const metadata: Metadata = {
