@@ -33,7 +33,7 @@ const LoginPage = () => {
 
   // const handleLogin = async (e) => {
   //   e.preventDefault();
-  const handleLogin = async (data) => {
+  const handleLogin = async () => {
     setLoading(true);
     try {
       const res = await axios.post(
@@ -86,9 +86,9 @@ const LoginPage = () => {
             />
           </div>
           <div className="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
-            <div className="w-full">
+            <div className="w-full relative">
               {showAlert ? (
-                <div className="text-white px-6 py-4 text-sm border-0 rounded relative mb-4 bg-red-400">
+                <div className="text-white  px-6 py-4 text-sm border-0 rounded relative mb-4 bg-red-400 flex z-0">
                   <span className="inline-block align-middle mr-8">
                     {messageAlert}
                   </span>
@@ -101,7 +101,7 @@ const LoginPage = () => {
                 </div>
               ) : null}
               <h1 className="mb-4 text-xl font-semibold text-gray-700 text-center ">
-                SKALA DATA <br />
+                SKALADATA <br />
                 LOGIN
               </h1>
               <form onSubmit={handleSubmit(handleLogin)} id="reset">

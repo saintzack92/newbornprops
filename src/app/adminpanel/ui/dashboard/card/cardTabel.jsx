@@ -2,7 +2,7 @@ import { MdPeople } from "react-icons/md";
 import styles from "./card.module.css";
 import Link from "next/link";
 
-const CardTable = ({ isPositive, className, classTd, status, title, category, description, isActive, isHighlights, slug }) => {
+const CardTable = ({ isPositive, className, classTd, status, title, category, description, isActive, isHighlights, slug, onClick,id }) => {
   // Function to generate a random Tailwind CSS color class
   const getRandomColor = () => {
     const colors = ['bg-blue-500', 'bg-yellow-500', 'bg-indigo-500', 'bg-purple-500'];
@@ -24,6 +24,14 @@ const CardTable = ({ isPositive, className, classTd, status, title, category, de
     const text = html.replace(/<\/?[^>]+(>|$)/g, ""); // Strip HTML tags
     return text.length > length ? text.substr(0, length) + '...' : text; // Truncate
   };
+// Inside CardTable component
+const deleteButtonHandler = () => {
+  // Call the passed handleDelete function with the article's ID
+  onClick(id); // Assuming 'slug' uniquely identifies an article
+};
+
+// In the JSX of CardTable
+
 
   const processedDescription = stripHtmlAndTruncate(description);
 
@@ -62,7 +70,7 @@ const CardTable = ({ isPositive, className, classTd, status, title, category, de
               View
             </button>
           </Link>
-          <button
+          <button onClick={deleteButtonHandler}
             className={`${styles.button} py-[5px] px-[10px] rounded-[5px] text-[var(--text)] border-none cursor-pointer bg-[crimson]`}
           >
             Delete

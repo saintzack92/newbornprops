@@ -16,6 +16,7 @@ const Input = ({
   onChange,
   disabled = false,
   options = [],
+  onClick
 }) => {
   const finalClasses = `rounded-[5px] text-[var(--text)] bg-[var(--bg)] mx-[10px] p-[20px] border-solid border-[#2e374a] border-2 ${customClasses}`;
 
@@ -36,7 +37,7 @@ const Input = ({
           ))}
         </select>
       ) : isButton ? (
-        <button className={finalClasses + " bg-[#11665e]"}>{labelTxt}</button>
+        <button onClick={onClick} className={finalClasses + " bg-[#11665e]"}>{labelTxt}</button>
       ) : (
         <input {...{ type, name, placeholder, value: inputValue, onChange, disabled, className: finalClasses }} />
       )}

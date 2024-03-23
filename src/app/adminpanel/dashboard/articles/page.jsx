@@ -4,7 +4,7 @@ import Search from "../../ui/dashboard/search/search";
 import Link from "next/link";
 import Pagination from "../../ui/dashboard/pagination/pagination";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import CardTable from "../../ui/dashboard/card/cardTabel";
 
 const ProductsPage = () => {
@@ -15,33 +15,34 @@ const ProductsPage = () => {
   const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 10;
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:3000/article/all?page=${currentPage}&limit=${itemsPerPage}`,
-          {
-            method: "GET",
-          }
-        );
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
+  // Make fetchData a standalone function that can be called
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        `http://localhost:3000/article/all?page=${currentPage}&limit=${itemsPerPage}`,
+        {
+          method: "GET",
         }
-
-        const data = await response.json();
-        setFormData(data.articles);
-        setTotalPages(data.lastPage);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-        // Consider redirecting to login if unauthorized
-        if (error.message.includes("401")) {
-          router.push("/login");
-        }
+      );
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
       }
-    };
 
+      const data = await response.json();
+      setFormData(data.articles);
+      setTotalPages(data.lastPage);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+      if (error.message.includes("401")) {
+        router.push("/login");
+      }
+    }
+  };
+
+  useEffect(() => {
     fetchData();
-  }, [currentPage, router]);
+  }, [currentPage]); // Removed router from dependencies to avoid re-fetching on router change
+
   const handlePrevPage = () => {
     setCurrentPage((prevPage) => Math.max(1, prevPage - 1));
   };
@@ -49,9 +50,39 @@ const ProductsPage = () => {
   const handleNextPage = () => {
     setCurrentPage((prevPage) => Math.min(totalPages, prevPage + 1));
   };
-  const handleViewProduct = (slug) => {
-    router.push(`articles/${slug}`); // Navigate to the single product page
+  const handleDelete = async (articleId) => {
+    console.log(articleId, 'Attempting to delete article with ID');
+    if (!articleId) {
+      alert('Article ID is missing.');
+      return;
+    }
+
+    try {
+      console.log('In delete button for ID:', articleId);
+      const response = await fetch(`http://localhost:3000/article/delete/${articleId}`, {
+        method: 'DELETE', // Specify the request method
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete the article');
+      }
+
+      // Handle success response
+      alert('Article deleted successfully');
+      // After deletion, you might want to refresh the list of articles
+      // This could be a direct call to your fetchData function or another mechanism
+      // to ensure the UI reflects the current state of your data
+      const newFormData = formData.filter(article => article.id !== articleId);
+      setFormData(newFormData);
+      fetchData();
+      // Optionally, redirect or update UI upon successful deletion
+    } catch (error) {
+      console.error('Error deleting the article:', error);
+      alert('Error deleting the article');
+    }
   };
+
 
   return (
     <div
@@ -92,11 +123,12 @@ const ProductsPage = () => {
                 isActive={formDatas.active}
                 isHighlights={formDatas.highlights}
                 slug={formDatas.slug} // Ensure this is correctly passed
+                onClick={() => handleDelete(formDatas.id)}
               />
             ))
           ) : (
             <tr>
-              <th colspan="12">
+              <th colSpan="12">
                 <div className="text-center m-3 p-3">
                   - Data tidak ditemukan -
                 </div>

@@ -4,9 +4,11 @@ import { useEffect, useState } from "react";
 import styles from "./transactions.module.css";
 import CardTable from "../card/cardTabel";
 import Pagination from "../pagination/pagination";
+import { useRouter } from "next/navigation";
 // import CardTable from "../card/cardTable"; // Ensure this path is correct
 
 const Transactions = () => {
+  
   const [formData, setFormData] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
@@ -73,7 +75,7 @@ const Transactions = () => {
           ))
           ) : (
             <tr>
-              <th colspan="12">
+              <th colSpan="12">
                 <div className="text-center m-3 p-3">
                   - Data tidak ditemukan -
                 </div>

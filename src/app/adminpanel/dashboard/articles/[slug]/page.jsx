@@ -5,8 +5,10 @@ import Input from "../../../ui/dashboard/input/input";
 import Image from "next/image";
 import { ReactQuil } from "@/app/adminpanel/ui/dashboard/component/quill";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const SingleProductPage = () => {
+  const router = useRouter();
   const searchParams = usePathname();
   const slug = searchParams.split("/").pop();
   const [editorContent, setEditorContent] = useState("");
@@ -112,7 +114,7 @@ const SingleProductPage = () => {
         setImagePreviewUrl(reader.result); // Preview URL
       };
       reader.readAsDataURL(file);
-      setFileObject(file); 
+      setFileObject(file);
       setFormData((prevFormData) => ({
         ...prevFormData,
         file: file, // Consider storing the file object directly if you plan to upload it on form submission
@@ -198,11 +200,11 @@ const SingleProductPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Ensure formData is not directly mutated, create a copy instead
     let updatedFormData = { ...formData };
-  
-    if (imagePreviewUrl  && fileObject) {
+
+    if (imagePreviewUrl && fileObject) {
       // New image selected for upload
       const newImageURL = await uploadImageToAWS(fileObject);
       if (newImageURL) {
@@ -214,14 +216,14 @@ const SingleProductPage = () => {
       await deleteImage(updatedFormData.file); // Assume this function deletes the image from AWS
       updatedFormData.file = ""; // Clear the file URL in formData copya
     }
-  
+
     if (isImageMarkedForRemoval && imageKey) {
       // An existing image is marked for removal
-      await deleteImage(imageKey); 
+      await deleteImage(imageKey);
     }
-  
+
     updatedFormData.description = editorContent;
-  
+
     // Submit the updatedFormData to your backend
     try {
       const response = await fetch(`http://localhost:3000/article/update/${formData.id}`, {
@@ -232,11 +234,11 @@ const SingleProductPage = () => {
         credentials: "include",
         body: JSON.stringify(updatedFormData),
       });
-  
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
-  
+
       console.log("Article updated successfully!");
       alert("Article updated successfully!");
     } catch (error) {
@@ -244,7 +246,36 @@ const SingleProductPage = () => {
       alert("Failed to update the article.");
     }
   };
-  
+
+  const handleDelete = async () => {
+    // Assuming `id` is stored in `formData.id`
+    const articleId = formData.id;
+    if (!articleId) {
+      alert('Article ID is missing.');
+      return;
+    }
+
+    try {
+      console.log('in delete button');
+      const response = await fetch(`http://localhost:3000/article/delete/${articleId}`, {
+        method: 'DELETE', // Specify the request method
+        credentials: "include",
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to delete the article');
+      }
+
+      // Handle success response
+      alert('Article deleted successfully');
+      router.push('/adminpanel/dashboard/articles')
+      // Optionally, redirect or update UI upon successful deletion
+    } catch (error) {
+      console.error('Error deleting the article:', error);
+      alert('Error deleting the article');
+    }
+  };
+
 
   return (
     <div className={`${styles.container}  gap-[50px] mt-[20px]`}>
@@ -368,7 +399,19 @@ const SingleProductPage = () => {
             name={"Update"}
             labelTxt={"Update"}
           />
+
+
         </form>
+        <div className="flex flex-col">
+          <Input
+            onClick={handleDelete}
+            isButton={true}
+            customClasses={`mt-[20px] border-none p-[20px]  `}
+            name={"Delete"}
+            labelTxt={"Delete"}
+          />
+        </div>
+
       </div>
     </div>
   );
