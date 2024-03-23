@@ -23,7 +23,7 @@ const LoginPage = () => {
     // first_name: Yup.string().required("First Name is required"),
     // last_name: Yup.string().required("Last name is required"),
     email: Yup.string().required("Email is required").email("Email is invalid"),
-    password: Yup.string().required("password is required"),
+    password: Yup.string().required("Password is required"),
   });
 
   const formOptions = { resolver: yupResolver(validationSchema) };
@@ -88,12 +88,12 @@ const LoginPage = () => {
           <div className="flex items-center justify-center p-6 sm:p-12 md:w-1/2">
             <div className="w-full">
               {showAlert ? (
-                <div className="text-white px-6 py-4 text-sm border-0 rounded relative mb-4 bg-red-400">
+                <div className="text-white px-4 py-2 text-sm border-0 rounded relative mb-2 bg-red-400">
                   <span className="inline-block align-middle mr-8">
                     {messageAlert}
                   </span>
                   <button
-                    className="absolute bg-transparent text-2xl font-semibold leading-none right-0 top-0 mt-4 mr-6 outline-none focus:outline-none"
+                    className="absolute bg-transparent text-lg font-semibold leading-none right-0 top-0 mt-2 mr-4 outline-none focus:outline-none"
                     onClick={() => setShowAlert(false)}
                   >
                     <span>×</span>
@@ -104,6 +104,7 @@ const LoginPage = () => {
                 SKALA DATA <br />
                 LOGIN
               </h1>
+
               <form onSubmit={handleSubmit(handleLogin)} id="reset">
                 <label className="block text-sm">
                   <span className="text-gray-700">Email</span>
@@ -115,9 +116,9 @@ const LoginPage = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                   />
-                  <div className="text-red-500 text-sm ml-1 mt-1">
+                  <small className="text-red-500 text-sm ml-1 mt-1">
                     {errors.email?.message}
-                  </div>
+                  </small>
                 </label>
 
                 <label className="block text-sm mt-3">
@@ -130,9 +131,9 @@ const LoginPage = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
-                  <div className="text-red-500 text-sm ml-1 mt-1">
+                  <small className="text-red-500 text-sm ml-1 mt-1">
                     {errors.password?.message}
-                  </div>
+                  </small>
                 </label>
 
                 <button
