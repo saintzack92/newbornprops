@@ -26,14 +26,16 @@ function decodeJwt(token:any) {
   return JSON.parse(jsonPayload);
 }
 // Attempts to refresh the access token
-async function refreshToken(request:any) {
+async function refreshToken(refreshToken:any) {
   try {
     const response = await fetch(`http://localhost:3000/auth/refresh`, {
       method: 'POST',
       credentials: 'include', // Sends cookies along with the request
       headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ refresh_token: refreshToken }),
     });
     console.log('response status : ', response.status);
+    console.log('response : ', response);
     
 
     if (!response.ok) throw new Error('Failed to refresh token');
@@ -50,9 +52,12 @@ export async function middleware(request:any) {
   const url = request.nextUrl.clone();
   const cookieString = request.headers.get('cookie');
   const accessToken = getCookieValue(cookieString, 'access_token');
+  console.log('access token from session',(accessToken));
+  
 
   // Decode the JWT to check for expiration
   const decodedToken = decodeJwt(accessToken);
+  console.log('access token from session after decoded :',accessToken);
   const isTokenExpired = decodedToken ? Date.now() >= decodedToken.exp * 1000 : true;
 
   // If the token is missing or expired, and not accessing /login, try to refresh

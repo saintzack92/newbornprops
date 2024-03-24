@@ -101,7 +101,8 @@ const Sidebar = () => {
       );
 
       // Clear local storage if used for storing non-sensitive data (Optional)
-      localStorage.removeItem("user");
+      localStorage.removeItem("userDetails");
+      localStorage.removeItem("currentPage");
 
       // Redirect to login page
       router.push("/login");
