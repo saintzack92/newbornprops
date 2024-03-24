@@ -32,7 +32,7 @@ async function refreshToken(refreshToken:any) {
       method: 'POST',
       credentials: 'include', // Sends cookies along with the request
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ refresh_token: refreshToken }),
+      // body: JSON.stringify({ refresh_token: refreshToken }),
     });
     console.log('response status : ', response.status);
     console.log('response : ', response);
@@ -63,6 +63,7 @@ export async function middleware(request:any) {
   // If the token is missing or expired, and not accessing /login, try to refresh
   if ((isTokenExpired || !accessToken) && url.pathname !== '/login') {
     const refreshed = await refreshToken(request);
+    // console.log(refreshed)
     if (!refreshed) {
       url.pathname = '/login';
       return NextResponse.redirect(url);
