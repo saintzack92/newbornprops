@@ -38,18 +38,35 @@ const ProductsPage = () => {
       }
     }
   };
-
+  useEffect(() => {
+    // Read the current page number from localStorage when the component mounts
+    const savedPage = parseInt(localStorage.getItem('currentPage'), 10);
+    
+    if (savedPage && !isNaN(savedPage) && savedPage >= 1) {
+      setCurrentPage(savedPage);
+    } else {
+      setCurrentPage(1);
+    }
+    
+    fetchData();
+  }, []); // This effect should run once on mount
+  
   useEffect(() => {
     fetchData();
   }, [currentPage]); // Removed router from dependencies to avoid re-fetching on router change
 
   const handlePrevPage = () => {
-    setCurrentPage((prevPage) => Math.max(1, prevPage - 1));
+    const newPage = Math.max(1, currentPage - 1);
+    setCurrentPage(newPage);
+    localStorage.setItem('currentPage', newPage.toString());
   };
-
+  
   const handleNextPage = () => {
-    setCurrentPage((prevPage) => Math.min(totalPages, prevPage + 1));
+    const newPage = Math.min(totalPages, currentPage + 1);
+    setCurrentPage(newPage);
+    localStorage.setItem('currentPage', newPage.toString());
   };
+  
   const handleDelete = async (articleId) => {
     console.log(articleId, 'Attempting to delete article with ID');
     if (!articleId) {
@@ -73,8 +90,8 @@ const ProductsPage = () => {
       // After deletion, you might want to refresh the list of articles
       // This could be a direct call to your fetchData function or another mechanism
       // to ensure the UI reflects the current state of your data
-      const newFormData = formData.filter(article => article.id !== articleId);
-      setFormData(newFormData);
+      // const newFormData = formData.filter(article => article.id !== articleId);
+      // setFormData(newFormData);
       fetchData();
       // Optionally, redirect or update UI upon successful deletion
     } catch (error) {
