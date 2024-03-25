@@ -8,10 +8,10 @@ import Input from "@/app/adminpanel/ui/dashboard/input/input";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as Yup from "yup";
+import * as refreshTokens from "@/app/application/components/refreshToken";
 const style = `p-[30px] border-2 border-solid border-[#2e374a] w-[100%]`;
 
 const LoginPage = () => {
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -30,8 +30,6 @@ const LoginPage = () => {
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
 
-
-
   useEffect(() => {
     const refreshToken = async () => {
       try {
@@ -44,7 +42,6 @@ const LoginPage = () => {
           }
         );
         if (res.status === 201) {
-
           const userDetails = {
             user: res.data.user,
             role: res.data.role,
@@ -63,13 +60,20 @@ const LoginPage = () => {
       }
     };
 
-    refreshToken(); // Call refreshToken function
-
+    const user = JSON.parse(localStorage.getItem("userDetails"));
+    if (user !== null) {
+      refreshToken();
+    }
     // Since you are using an empty dependency array, this effect will only run once
   });
 
-  const onSubmit = async (data) => {
+  // // if (user) {
+  // const rf = refreshTokens;
+  // if (!user) {
+  //   rf;
+  // }
 
+  const onSubmit = async (data) => {
     setLoading(true);
 
     try {
@@ -142,33 +146,80 @@ const LoginPage = () => {
                 LOGIN
               </h1>
 
-              <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm mx-auto">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="max-w-sm mx-auto"
+              >
                 <div className="mb-5">
-                  <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
-                  <input {...register("email")} value={email} onChange={(e) => setEmail(e.target.value)} type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5" placeholder="Email" required />
-                  {errors.email &&
+                  <label
+                    htmlFor="email"
+                    className="block mb-2 text-sm font-medium text-gray-900 "
+                  >
+                    Your email
+                  </label>
+                  <input
+                    {...register("email")}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    type="email"
+                    id="email"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5"
+                    placeholder="Email"
+                    required
+                  />
+                  {errors.email && (
                     <small className="text-red-500 text-sm ml-1 mt-1">
                       {errors.email.message}
                     </small>
-                  }
+                  )}
                 </div>
-                <div class="mb-5">
-                  <label for="password" className="block mb-2 text-sm font-medium text-gray-900">Your password</label>
-                  <input {...register("password")} value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5" placeholder="********" required />
-                  {errors.password &&
+                <div className="mb-5">
+                  <label
+                    htmlFor="password"
+                    className="block mb-2 text-sm font-medium text-gray-900"
+                  >
+                    Your password
+                  </label>
+                  <input
+                    {...register("password")}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    type="password"
+                    id="password"
+                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5"
+                    placeholder="********"
+                    required
+                  />
+                  {errors.password && (
                     <small className="text-red-500 text-sm ml-1 mt-1">
                       {errors.password.message}
                     </small>
-                  }
+                  )}
                 </div>
-                <div class="flex items-start mb-5">
-                  <div class="flex items-center h-5">
-                    <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                <div className="flex items-start mb-5">
+                  <div className="flex items-center h-5">
+                    <input
+                      id="remember"
+                      type="checkbox"
+                      value=""
+                      className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 "
+                      required
+                    />
                   </div>
-                  <label for="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+                  <label
+                    htmlFor="remember"
+                    className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300"
+                  >
+                    Remember me
+                  </label>
                 </div>
-                <button type="submit" disabled={loading} className={`w-full px-4 py-2 mt-4  font-medium inline-flex items-center justify-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple ${loading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className={`w-full px-4 py-2 mt-4  font-medium inline-flex items-center justify-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple ${
+                    loading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}
+                >
                   {loading ? (
                     <>
                       <svg
@@ -194,8 +245,6 @@ const LoginPage = () => {
                   )}
                 </button>
               </form>
-
-
             </div>
           </div>
         </div>

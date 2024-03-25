@@ -31,7 +31,7 @@ export default function navLinka() {
       {isSideMenuOpen && <MobileNav closeSideMenu={closeSideMenu} />}
       <div className="hidden md:flex items-center gap-4 transition-all">
         {navItems().map((d, i) => (
-          <div key={i} className="relative group  px-2 py-1 transition-all ">
+          <div key={i} className="relative group px-2 py-1 transition-all ">
             <Link
               href={d.link ?? "#"}
               className="flex cursor-pointer items-center gap-2 text-neutral-400 group-hover:text-black "
