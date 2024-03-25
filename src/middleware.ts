@@ -67,7 +67,7 @@ export async function middleware(request:any) {
    
     // const refreshed = await refreshToken(request);
     const refreshed = refreshTokens
-    console.log(refreshed)
+    // console.log(refreshed)
     if (!refreshed) {
       
       url.pathname = '/login';
