@@ -49,6 +49,7 @@ async function refreshToken(refreshToken:any) {
 }
 
 export async function middleware(request:any) {
+  
   const url = request.nextUrl.clone();
   const cookieString = request.headers.get('cookie');
   const accessToken = getCookieValue(cookieString, 'access_token');
@@ -62,9 +63,11 @@ export async function middleware(request:any) {
 
   // If the token is missing or expired, and not accessing /login, try to refresh
   if ((isTokenExpired || !accessToken) && url.pathname !== '/login') {
+   
     const refreshed = await refreshToken(request);
     // console.log(refreshed)
     if (!refreshed) {
+      
       url.pathname = '/login';
       return NextResponse.redirect(url);
     }

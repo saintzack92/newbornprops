@@ -11,6 +11,7 @@ import * as Yup from "yup";
 const style = `p-[30px] border-2 border-solid border-[#2e374a] w-[100%]`;
 
 const LoginPage = () => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
@@ -20,8 +21,6 @@ const LoginPage = () => {
   const router = useRouter();
 
   const validationSchema = Yup.object().shape({
-    // first_name: Yup.string().required("First Name is required"),
-    // last_name: Yup.string().required("Last name is required"),
     email: Yup.string().required("Email is required").email("Email is invalid"),
     password: Yup.string().required("Password is required"),
   });
@@ -31,48 +30,46 @@ const LoginPage = () => {
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
 
-  // const handleLogin = async (e) => {
-  //   e.preventDefault();
 
-  useEffect(() => {
-    const refreshToken = async () => {
-      try {
-        const res = await axios.post(
-          `http://localhost:3000/auth/refresh`,
-          {}, // empty body if not needed
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true, // This is crucial
-          }
-        );
-        if (res.status === 201) {
-          // Store user details in local storage
-          // localStorage.setItem("userDetails", JSON.stringify(userDetails));
-          // console.log("Before navigating to dashboard");
-          const userDetails = {
-            user: res.data.user,
-            role: res.data.role,
-            email: res.data.email,
-          };
 
-          // Store user details in local storage
-          localStorage.setItem("userDetails", JSON.stringify(userDetails));
-          router.push("/adminpanel/dashboard");
-        }
+  // useEffect(() => {
+  //   const refreshToken = async () => {
+  //     try {
+  //       const res = await axios.post(
+  //         `http://localhost:3000/auth/refresh`,
+  //         {}, // empty body if not needed
+  //         {
+  //           headers: { "Content-Type": "application/json" },
+  //           withCredentials: true, // This is crucial
+  //         }
+  //       );
+  //       if (res.status === 201) {
 
-        // Handle response if needed
-      } catch (error) {
-        console.error("Refresh token error:", error);
-        // Handle error if needed
-      }
-    };
+  //         const userDetails = {
+  //           user: res.data.user,
+  //           role: res.data.role,
+  //           email: res.data.email,
+  //         };
 
-    refreshToken(); // Call refreshToken function
+  //         // Store user details in local storage
+  //         localStorage.setItem("userDetails", JSON.stringify(userDetails));
+  //         router.push("/adminpanel/dashboard");
+  //       }
 
-    // Since you are using an empty dependency array, this effect will only run once
-  });
+  //       // Handle response if needed
+  //     } catch (error) {
+  //       console.error("Refresh token error:", error);
+  //       // Handle error if needed
+  //     }
+  //   };
 
-  const handleLogin = async () => {
+  //   refreshToken(); // Call refreshToken function
+
+  //   // Since you are using an empty dependency array, this effect will only run once
+  // });
+
+  const onSubmit = async (data) => {
+
     setLoading(true);
 
     try {
@@ -145,7 +142,7 @@ const LoginPage = () => {
                 LOGIN
               </h1>
 
-              <form onSubmit={handleSubmit(handleLogin)} id="reset">
+              {/* <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm mx-auto" >
                 <label className="block text-sm">
                   <span className="text-gray-700">Email</span>
                   <input
@@ -155,35 +152,94 @@ const LoginPage = () => {
                     placeholder="Email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
+
                   />
-                  <small className="text-red-500 text-sm ml-1 mt-1">
-                    {errors.email?.message}
-                  </small>
+                  {errors.email &&
+                    <small className="text-red-500 text-sm ml-1 mt-1">
+                      {errors.email?.message}
+                    </small>
+                  }
                 </label>
 
                 <label className="block text-sm mt-3">
                   <span className="text-gray-700">Password</span>
                   <input
                     {...register("password")}
-                    className={`block w-full mt-2 text-sm form-input `}
+                    className={`block w-full mt-2 text-sm form-input focus:border-purple-400 focus:shadow-outline-purple`}
                     type="password"
                     placeholder="********"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <small className="text-red-500 text-sm ml-1 mt-1">
-                    {errors.password?.message}
-                  </small>
+
+                  />{errors.password &&
+                    <small className="text-red-500 text-sm ml-1 mt-1">
+                      {errors.password?.message}
+
+                    </small>
+                  }
                 </label>
 
                 <button
-                  className={`w-full px-4 py-2 mt-4  font-medium inline-flex items-center justify-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple ${
-                    loading ? "opacity-50 cursor-not-allowed" : ""
-                  }`}
+                  className={`w-full px-4 py-2 mt-4  font-medium inline-flex items-center justify-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple ${loading ? "opacity-50 cursor-not-allowed" : ""
+                    }`}
                   type="submit"
                   disabled={loading}
                 >
-                  {/* {loading ? `<span className="ml-3">Loading... </span>` : `Login`} */}
+                  {loading ? (
+                    <>
+                      <svg
+                        aria-hidden="true"
+                        className="w-6 h-6 text-white animate-spin  fill-blue-600"
+                        viewBox="0 0 100 101"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                          fill="currentColor"
+                        />
+                        <path
+                          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+                          fill="currentFill"
+                        />
+                      </svg>
+                      <span className="ml-3">Loading... </span>
+                    </>
+                  ) : (
+                    `Login`
+                  )}
+                </button>
+              </form> */}
+
+
+
+              <form onSubmit={handleSubmit(onSubmit)} className="max-w-sm mx-auto">
+                <div className="mb-5">
+                  <label for="email" className="block mb-2 text-sm font-medium text-gray-900 ">Your email</label>
+                  <input {...register("email")} value={email} onChange={(e) => setEmail(e.target.value)} type="email" id="email" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5" placeholder="Email" required />
+                  {errors.email &&
+                    <small className="text-red-500 text-sm ml-1 mt-1">
+                      {errors.email.message}
+                    </small>
+                  }
+                </div>
+                <div class="mb-5">
+                  <label for="password" className="block mb-2 text-sm font-medium text-gray-900">Your password</label>
+                  <input {...register("password")} value={password} onChange={(e) => setPassword(e.target.value)} type="password" id="password" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:border-purple-400 focus:shadow-outline-purple block w-full p-2.5" placeholder="********" required />
+                  {errors.password &&
+                    <small className="text-red-500 text-sm ml-1 mt-1">
+                      {errors.password.message}
+                    </small>
+                  }
+                </div>
+                <div class="flex items-start mb-5">
+                  <div class="flex items-center h-5">
+                    <input id="remember" type="checkbox" value="" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 " required />
+                  </div>
+                  <label for="remember" className="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Remember me</label>
+                </div>
+                <button type="submit" disabled={loading} className={`w-full px-4 py-2 mt-4  font-medium inline-flex items-center justify-center text-white transition-colors duration-150 bg-purple-600 border border-transparent rounded-lg active:bg-purple-600 hover:bg-purple-700 focus:outline-none focus:shadow-outline-purple ${loading ? "opacity-50 cursor-not-allowed" : ""
+                  }`}>
                   {loading ? (
                     <>
                       <svg
@@ -209,6 +265,8 @@ const LoginPage = () => {
                   )}
                 </button>
               </form>
+
+
             </div>
           </div>
         </div>
