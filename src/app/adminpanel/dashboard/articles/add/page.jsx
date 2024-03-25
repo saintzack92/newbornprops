@@ -3,6 +3,7 @@ import styles from "../../../ui/dashboard/products/addProduct/addProduct.module.
 import React, { useEffect, useRef, useState } from "react";
 import { ReactQuil } from "../../../ui/dashboard/component/quill"; // Adjust the path as necessary
 import { useRouter } from "next/router";
+import img from '../../../../../../public/7.jpg'
 
 const AddProductPage = () => {
   const [formValues, setFormValues] = useState({
@@ -19,6 +20,7 @@ const AddProductPage = () => {
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const fileInputRef = useRef(null);
 
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormValues((prevState) => ({
@@ -36,7 +38,6 @@ const AddProductPage = () => {
   };
 
   const generateSlug = (title) => {
-    // Ensure title is a string before proceeding
     if (typeof title === "string" && title) {
       return title
         .toLowerCase()
@@ -53,15 +54,12 @@ const AddProductPage = () => {
     }
     const file = e.target.files[0];
 
-    // FileReader to convert image file to base64 string
     const reader = new FileReader();
     reader.onloadend = () => {
-      // Use reader.result
       setImagePreviewUrl(reader.result);
     };
     reader.readAsDataURL(file);
 
-    // Keep the File object in formValues for later upload
     setFormValues((prev) => ({ ...prev, file: file }));
   };
 
@@ -71,16 +69,11 @@ const AddProductPage = () => {
   };
 
   const replaceBase64Images = async () => {
-    const doc = new DOMParser().parseFromString(
-      formValues.description,
-      "text/html"
-    );
+    const doc = new DOMParser().parseFromString(formValues.description, "text/html");
     const images = doc.querySelectorAll("img");
     for (let img of images) {
       if (img.src.startsWith("data:")) {
-        const imageUrl = await uploadImageToAWS(
-          await fetch(img.src).then((r) => r.blob())
-        );
+        const imageUrl = await uploadImageToAWS(await fetch(img.src).then((r) => r.blob()));
         img.src = imageUrl;
       }
     }
@@ -110,42 +103,64 @@ const AddProductPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+  
     // Replace inline base64 images in ReactQuil editor with AWS URLs
     await replaceBase64Images();
-
-    // Check if there's a file to upload
+    const defaultImageUrl = '/7.jpg'
+    let imageUrl = formValues.file && formValues.file instanceof File ? "" : defaultImageUrl;
+  
+    // Check if there's a file to upload, if not use default image
     if (formValues.file && formValues.file instanceof File) {
       try {
-        const imageUrl = await uploadImageToAWS(formValues.file);
-        setFormValues((prev) => ({ ...prev, file: imageUrl }));
+        imageUrl = await uploadImageToAWS(formValues.file);
         console.log("Image uploaded to AWS, URL:", imageUrl);
-
-        // Now, submit the formValues including the AWS URL for the main image and updated content
-        const response = await fetch("http://localhost:3000/article/create", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          credentials: "include", // Ensure credentials are included with fetch requests
-          body: JSON.stringify({ ...formValues, file: imageUrl }), // Use the AWS image URL
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! status: ${response.status}`);
-        }
-
-        alert("Article added successfully!");
-        // Redirect or reset form as necessary
       } catch (error) {
-        console.error("Failed to submit article:", error);
-        alert("Failed to add the article.");
+        console.error("Failed to upload main image:", error);
+        alert("Failed to upload the main image. Using default image instead.");
+        // Using a default image URL
+        imageUrl = defaultImageUrl; // Adjust this path as necessary
       }
     } else {
-      console.log("No main image selected for upload.");
-      // Handle case where there's no image selected (optional)
+      console.log("No main image selected for upload. Using default image.");
+      // Set the URL to the default image if no file was selected
+      imageUrl = defaultImageUrl; // Adjust this path as necessary
+    }
+  
+    // Now, submit the formValues including the image URL (AWS URL or default image)
+    try {
+      const payload = {
+        ...formValues,
+        file: imageUrl, // Ensure this is a string URL
+      };
+  
+      // Make sure to remove the File object from the payload, if it exists
+      if (payload.file instanceof File) {
+        delete payload.file;
+        payload.file = imageUrl; // Default or AWS URL as fallback
+      }
+  
+      const response = await fetch("http://localhost:3000/article/create", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include", // Ensure credentials are included with fetch requests
+        body: JSON.stringify(payload), // Use the modified payload
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      alert("Article added successfully!");
+      // Redirect or reset form as necessary
+    } catch (error) {
+      console.error("Failed to submit article:", error);
+      alert("Failed to add the article.");
     }
   };
+  
+  
 
   return (
     <div
