@@ -19,7 +19,7 @@ const AddProductPage = () => {
   });
   const [imagePreviewUrl, setImagePreviewUrl] = useState("");
   const fileInputRef = useRef(null);
-
+  const defaultImageUrl = '/7.jpg'
   
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -64,9 +64,11 @@ const AddProductPage = () => {
   };
 
   const handleRemoveImage = () => {
-    setImagePreviewUrl("");
+    setImagePreviewUrl(""); // Clear image preview
+    setFormValues(prev => ({ ...prev, file: "" })); // Clear file value
     if (fileInputRef.current) fileInputRef.current.value = "";
   };
+  
 
   const replaceBase64Images = async () => {
     const doc = new DOMParser().parseFromString(formValues.description, "text/html");
@@ -104,48 +106,38 @@ const AddProductPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
-    // Replace inline base64 images in ReactQuil editor with AWS URLs
-    await replaceBase64Images();
-    const defaultImageUrl = '/7.jpg'
-    let imageUrl = formValues.file && formValues.file instanceof File ? "" : defaultImageUrl;
+    // Validate required fields
+    if (!formValues.description) {
+      alert("Please fill in all required fields.");
+      return; // Stop the form submission process
+    }
   
-    // Check if there's a file to upload, if not use default image
+    await replaceBase64Images();
+    
+    // Use default image if no image has been selected
+    let imageUrl = formValues.file || defaultImageUrl;
+  
+    // Attempt to upload the file if it exists
     if (formValues.file && formValues.file instanceof File) {
       try {
         imageUrl = await uploadImageToAWS(formValues.file);
-        console.log("Image uploaded to AWS, URL:", imageUrl);
       } catch (error) {
         console.error("Failed to upload main image:", error);
         alert("Failed to upload the main image. Using default image instead.");
-        // Using a default image URL
-        imageUrl = defaultImageUrl; // Adjust this path as necessary
+        imageUrl = defaultImageUrl;
       }
-    } else {
-      console.log("No main image selected for upload. Using default image.");
-      // Set the URL to the default image if no file was selected
-      imageUrl = defaultImageUrl; // Adjust this path as necessary
     }
   
-    // Now, submit the formValues including the image URL (AWS URL or default image)
+    // Prepare and submit formValues, including handling of image URL
     try {
-      const payload = {
-        ...formValues,
-        file: imageUrl, // Ensure this is a string URL
-      };
+      const payload = { ...formValues, file: imageUrl };
   
-      // Make sure to remove the File object from the payload, if it exists
-      if (payload.file instanceof File) {
-        delete payload.file;
-        payload.file = imageUrl; // Default or AWS URL as fallback
-      }
-  
+      // Submit the form data
       const response = await fetch("http://localhost:3000/article/create", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // Ensure credentials are included with fetch requests
-        body: JSON.stringify(payload), // Use the modified payload
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(payload),
       });
   
       if (!response.ok) {
@@ -153,12 +145,12 @@ const AddProductPage = () => {
       }
   
       alert("Article added successfully!");
-      // Redirect or reset form as necessary
     } catch (error) {
       console.error("Failed to submit article:", error);
       alert("Failed to add the article.");
     }
   };
+  
   
   
 
@@ -274,6 +266,7 @@ const AddProductPage = () => {
                 className={`w-[100%] h-full  gap-[20px] relative flex-col rounded-[5px]  bg-[var(--bg)] justify-center text-center items-center border-none inline-block `}
               >
                 <button
+                type="button"
                   onClick={handleRemoveImage}
                   className="bg-[#dc3e3edd] hover:bg-[#dc3e3e] text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline right-2 z-50 absolute  "
                 >
