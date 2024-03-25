@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import * as refreshTokens from '@/app/application/components/refreshToken'
 
 // Helper to parse cookies
 function getCookieValue(cookieString:any, cookieName:any) {
@@ -64,8 +65,9 @@ export async function middleware(request:any) {
   // If the token is missing or expired, and not accessing /login, try to refresh
   if ((isTokenExpired || !accessToken) && url.pathname !== '/login') {
    
-    const refreshed = await refreshToken(request);
-    // console.log(refreshed)
+    // const refreshed = await refreshToken(request);
+    const refreshed = refreshTokens
+    console.log(refreshed)
     if (!refreshed) {
       
       url.pathname = '/login';
