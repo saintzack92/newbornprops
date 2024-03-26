@@ -5,6 +5,7 @@ import { ReactQuil } from "../../../ui/dashboard/component/quill"; // Adjust the
 import { useRouter } from "next/router";
 import img from '../../../../../../public/7.jpg'
 
+
 const AddProductPage = () => {
   const [formValues, setFormValues] = useState({
     title: "",
@@ -105,6 +106,7 @@ const AddProductPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
   
     // Validate required fields
     if (!formValues.description) {
@@ -140,7 +142,8 @@ const AddProductPage = () => {
         body: JSON.stringify(payload),
       });
   
-      if (!response.ok) {
+      if (!response.ok || response.status === 401) {
+      
         throw new Error(`HTTP error! status: ${response.status}`);
       }
   

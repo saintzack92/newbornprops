@@ -64,10 +64,9 @@ export async function middleware(request:any) {
 
   // If the token is missing or expired, and not accessing /login, try to refresh
   if ((isTokenExpired || !accessToken) && url.pathname !== '/login') {
+    
+    const refreshed = await refreshToken(request);
    
-    // const refreshed = await refreshToken(request);
-    const refreshed = refreshTokens
-    // console.log(refreshed)
     if (!refreshed) {
       
       url.pathname = '/login';
