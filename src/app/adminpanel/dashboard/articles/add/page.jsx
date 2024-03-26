@@ -4,8 +4,10 @@ import React, { useEffect, useRef, useState } from "react";
 import { ReactQuil } from "../../../ui/dashboard/component/quill"; // Adjust the path as necessary
 import { useRouter } from "next/router";
 import img from '../../../../../../public/7.jpg'
+import useAuthCheck from "@/app/application/components/refreshToken";
 
 const AddProductPage = () => {
+  useAuthCheck()
   const [formValues, setFormValues] = useState({
     title: "",
     category: "",

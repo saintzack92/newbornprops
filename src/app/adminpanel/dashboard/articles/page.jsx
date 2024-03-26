@@ -6,8 +6,10 @@ import Pagination from "../../ui/dashboard/pagination/pagination";
 import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import CardTable from "../../ui/dashboard/card/cardTabel";
+import useAuthCheck from "@/app/application/components/refreshToken";
 
 const ProductsPage = () => {
+  
   const router = useRouter();
 
   const [formData, setFormData] = useState([]);

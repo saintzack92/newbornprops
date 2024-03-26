@@ -6,8 +6,10 @@ import Image from "next/image";
 import { ReactQuil } from "@/app/adminpanel/ui/dashboard/component/quill";
 import { usePathname } from "next/navigation";
 import { useRouter } from "next/navigation";
+import useAuthCheck from "@/app/application/components/refreshToken";
 
 const SingleProductPage = () => {
+  useAuthCheck()
   const router = useRouter();
   const searchParams = usePathname();
   const slug = searchParams.split("/").pop();
@@ -199,7 +201,9 @@ const SingleProductPage = () => {
   }, [slug]); // The dependency array is empty, meaning this effect runs once on mount
 
   const handleSubmit = async (e) => {
+    
     e.preventDefault();
+    
 
     // Ensure formData is not directly mutated, create a copy instead
     let updatedFormData = { ...formData };

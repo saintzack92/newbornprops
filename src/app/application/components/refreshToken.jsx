@@ -1,38 +1,43 @@
-import { useEffect, useHistory } from "react";
-import axios from "axios";
+"use client"
+import { useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 
-export function RefreshToken() {
-  const history = useHistory();
+const useAuthCheck = () => {
+  const router = useRouter();
 
   useEffect(() => {
-    const refreshToken = async () => {
+    // Function to check authentication status
+    const checkAuthStatus = async () => {
       try {
-        const res = await axios.post(
-          `http://localhost:3000/auth/refresh`,
-          {},
-          {
-            headers: { "Content-Type": "application/json" },
-            withCredentials: true,
-          }
-        );
-        if (res.status === 201) {
-          const userDetails = {
-            user: res.data.user,
-            role: res.data.role,
-            email: res.data.email,
-          };
+        const statusResponse = await fetch('http://localhost:3000/auth/status', {
+          credentials: 'include',
+        });
 
-          localStorage.setItem("userDetails", JSON.stringify(userDetails));
-          history.push("/adminpanel/dashboard");
-        }
+        if (!statusResponse.ok) throw new Error('Auth status check failed');
+
+        // If auth status is ok, no action needed
       } catch (error) {
-        console.error("Refresh token error:", error);
-        // Handle error if needed
+        // If auth status check fails, attempt to refresh the token
+        try {
+          const refreshResponse = await fetch('http://localhost:3000/auth/refresh', {
+            method: 'POST',
+            credentials: 'include',
+          });
+
+          if (!refreshResponse.ok) throw new Error('Token refresh failed');
+          
+          // Handle successful token refresh if needed
+        } catch (refreshError) {
+          // If token refresh fails, clear cookies and redirect to login
+          // Note: Actual cookie clearing should be done server-side or via a specific endpoint that clears cookies
+          console.error('Token refresh failed, redirecting to login.', refreshError);
+          router.push('/login');
+        }
       }
     };
 
-    refreshToken();
-  }, []); // Empty dependency array to run the effect only once
+    checkAuthStatus();
+  }, []);
+};
 
-  return null; // You can return null or any other component since this component doesn't render anything
-}
+export default useAuthCheck;
