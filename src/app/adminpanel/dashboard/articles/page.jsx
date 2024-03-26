@@ -9,7 +9,7 @@ import CardTable from "../../ui/dashboard/card/cardTabel";
 import useAuthCheck from "@/app/application/components/refreshToken";
 
 const ProductsPage = () => {
-  
+  useAuthCheck()
   const router = useRouter();
 
   const [formData, setFormData] = useState([]);
@@ -44,18 +44,20 @@ const ProductsPage = () => {
     // Read the current page number from localStorage when the component mounts
     const savedPage = parseInt(localStorage.getItem('currentPage'), 10);
     
-    if (savedPage && !isNaN(savedPage) && savedPage >= 1) {
-      setCurrentPage(savedPage);
+    if (savedPage) {
+      setCurrentPage(parseInt(savedPage, 10));
     } else {
       setCurrentPage(1);
+      localStorage.setItem('currentPage', '1'); // Initialize if not present
     }
     
     fetchData();
   }, []); // This effect should run once on mount
   
   useEffect(() => {
-    fetchData();
-  }, [currentPage]); // Removed router from dependencies to avoid re-fetching on router change
+    fetchData(); // Call fetchData whenever currentPage changes
+    localStorage.setItem('currentPage', currentPage.toString()); // Update localStorage with the new current page
+  }, [currentPage]) // Removed router from dependencies to avoid re-fetching on router change
 
   const handlePrevPage = () => {
     const newPage = Math.max(1, currentPage - 1);
