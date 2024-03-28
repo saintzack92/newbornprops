@@ -148,6 +148,7 @@ const AddProductPage = () => {
       
         throw new Error(`HTTP error! status: ${response.status}`);
       }
+      
   
       alert("Article added successfully!");
     } catch (error) {

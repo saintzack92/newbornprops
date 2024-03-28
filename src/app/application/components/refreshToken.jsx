@@ -24,8 +24,11 @@ const useAuthCheck = () => {
             credentials: 'include',
           });
 
-          if (!refreshResponse.ok) throw new Error('Token refresh failed');
+          if (!refreshResponse.ok) {
+          throw new Error('Token refresh failed');
           
+          }
+         
           // Handle successful token refresh if needed
         } catch (refreshError) {
           // If token refresh fails, clear cookies and redirect to login
