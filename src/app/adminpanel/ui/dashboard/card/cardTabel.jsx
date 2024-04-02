@@ -1,11 +1,30 @@
 import { MdPeople } from "react-icons/md";
 import styles from "./card.module.css";
 import Link from "next/link";
+import Toggle from "../component/switch";
 
-const CardTable = ({ isPositive, className, classTd, status, title, category, description, isActive, isHighlights, slug, onClick,id }) => {
+const CardTable = ({
+  isPositive,
+  className,
+  classTd,
+  status,
+  title,
+  category,
+  description,
+  isActive,
+  isHighlights,
+  slug,
+  onClick,
+  id,
+}) => {
   // Function to generate a random Tailwind CSS color class
   const getRandomColor = () => {
-    const colors = ['bg-blue-500', 'bg-yellow-500', 'bg-indigo-500', 'bg-purple-500'];
+    const colors = [
+      "bg-blue-500",
+      "bg-yellow-500",
+      "bg-indigo-500",
+      "bg-purple-500",
+    ];
     return colors[Math.floor(Math.random() * colors.length)];
   };
 
@@ -13,37 +32,42 @@ const CardTable = ({ isPositive, className, classTd, status, title, category, de
   const isStatusDefined = status !== undefined && status !== null;
 
   // Determine the color based on the status
-  const statusColor = isStatusDefined ? (status === 'cancel' ? 'text-indigo-500'
-    : status === 'done' ? 'text-green-500'
-      : status === 'pending' ? 'text-red-500' : 'text-yellow-200')
-    : '';
+  const statusColor = isStatusDefined
+    ? status === "cancel"
+      ? "text-indigo-500"
+      : status === "done"
+      ? "text-green-500"
+      : status === "pending"
+      ? "text-red-500"
+      : "text-yellow-200"
+    : "";
 
   // Handle status text display
   const stripHtmlAndTruncate = (html, length = 50) => {
     if (html === null || html === undefined) return ""; // Return empty string if input is null or undefined
     const text = html.replace(/<\/?[^>]+(>|$)/g, ""); // Strip HTML tags
-    return text.length > length ? text.substr(0, length) + '...' : text; // Truncate
+    return text.length > length ? text.substr(0, length) + "..." : text; // Truncate
   };
-// Inside CardTable component
-const deleteButtonHandler = () => {
-  // Call the passed handleDelete function with the article's ID
-  onClick(id); // Assuming 'slug' uniquely identifies an article
-};
+  // Inside CardTable component
+  const deleteButtonHandler = () => {
+    // Call the passed handleDelete function with the article's ID
+    onClick(id); // Assuming 'slug' uniquely identifies an article
+  };
 
-// In the JSX of CardTable
-
+  // In the JSX of CardTable
 
   const processedDescription = stripHtmlAndTruncate(description);
 
-  const statusText = isStatusDefined ? status.charAt(0).toUpperCase() + status.slice(1) : '';
+  const statusText = isStatusDefined
+    ? status.charAt(0).toUpperCase() + status.slice(1)
+    : "";
   const activeText = isActive ? "On" : "Off";
   const highlightsText = isHighlights ? "On" : "Off";
   // Determine icon color
   const iconColorClass = isPositive ? getRandomColor() : "bg-green-500";
 
-
   return (
-    <tr className="items-center *:p-[10px]" >
+    <tr className="items-center *:p-[10px]">
       <td className={`flex items-center gap-[10px] ${classTd}`}>
         <MdPeople
           size={40}
@@ -55,22 +79,21 @@ const deleteButtonHandler = () => {
         <span className={`${styles.status} ${statusColor}`}>{category}</span>
       </td>
       <td className={`${classTd}`}>{processedDescription}</td>
-      <td className={`${classTd}`}><label className="toggle-switch inline-block relative w-14 h-7">
-        <input type="checkbox" checked={isActive} readOnly className="peer sr-only" />
-        <span className="slider absolute peer-checked:bg-blue-500 bg-gray-300 inset-y-1 left-1 w-5 h-5 rounded-full transition-all duration-300 ease-in-out after:absolute after:left-1 after:w-5 after:h-5 after:bg-white after:rounded-full after:shadow-lg after:transition-all after:duration-300 after:ease-in-out"></span>
-      </label></td>
+      <td className={`${classTd}`}>
+        <Toggle checked={isActive} />
+      </td>
       <td className={`${classTd}`}>{highlightsText}</td>
       <td>
         <div className={`${styles.button} flex gap-[10px]`}>
-          <Link
-            href={`articles/${slug}`}>
+          <Link href={`articles/${slug}`}>
             <button
-              className={`${styles.button} py-[5px] px-[10px] rounded-[5px] text-[var(--text)] border-none cursor-pointer bg-[teal]`} 
+              className={`${styles.button} py-[5px] px-[10px] rounded-[5px] text-[var(--text)] border-none cursor-pointer bg-[teal]`}
             >
               View
             </button>
           </Link>
-          <button onClick={deleteButtonHandler}
+          <button
+            onClick={deleteButtonHandler}
             className={`${styles.button} py-[5px] px-[10px] rounded-[5px] text-[var(--text)] border-none cursor-pointer bg-[crimson]`}
           >
             Delete
