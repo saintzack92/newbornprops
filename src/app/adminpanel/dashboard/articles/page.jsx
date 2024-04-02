@@ -4,12 +4,13 @@ import Search from "../../ui/dashboard/search/search";
 import Link from "next/link";
 import Pagination from "../../ui/dashboard/pagination/pagination";
 import { useRouter } from "next/navigation";
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import CardTable from "../../ui/dashboard/card/cardTabel";
 import useAuthCheck from "@/app/application/components/refreshToken";
+import Dialog from "../../ui/dashboard/component/dialogModal";
 
 const ProductsPage = () => {
-  useAuthCheck()
+  useAuthCheck();
   const router = useRouter();
 
   const [formData, setFormData] = useState([]);
@@ -35,75 +36,129 @@ const ProductsPage = () => {
       setTotalPages(data.lastPage);
     } catch (error) {
       console.error("Failed to fetch data:", error);
-      if (error.message.includes("401")) {
-        router.push("/login");
-      }
     }
   };
   useEffect(() => {
     // Read the current page number from localStorage when the component mounts
-    const savedPage = parseInt(localStorage.getItem('currentPage'), 10);
-    
+    const savedPage = parseInt(localStorage.getItem("currentPage"), 10);
+
     if (savedPage) {
       setCurrentPage(parseInt(savedPage, 10));
     } else {
       setCurrentPage(1);
-      localStorage.setItem('currentPage', '1'); // Initialize if not present
+      localStorage.setItem("currentPage", "1"); // Initialize if not present
     }
-    
+
     fetchData();
   }, []); // This effect should run once on mount
-  
+
   useEffect(() => {
     fetchData(); // Call fetchData whenever currentPage changes
-    localStorage.setItem('currentPage', currentPage.toString()); // Update localStorage with the new current page
-  }, [currentPage]) // Removed router from dependencies to avoid re-fetching on router change
+    localStorage.setItem("currentPage", currentPage.toString()); // Update localStorage with the new current page
+  }, [currentPage]); // Removed router from dependencies to avoid re-fetching on router change
+  //==
+
+  const [dialogContent, setDialogContent] = useState({
+    message: "",
+    nameProduct: "",
+  });
+
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // const idTargetRef = useRef();
+
+  const [confirmDialogContext, setConfirmDialogContext] = useState(null);
+
+  const handleToggleActive = (articleId, newActiveState) => {
+    console.log(`handleToggleActive called for ID: ${articleId}, newActiveState: ${newActiveState}`);
+    setConfirmDialogContext({ articleId, newActiveState });
+    console.log(setConfirmDialogContext({ articleId, newActiveState }));
+    setDialogContent({
+      message: `Are you sure you want to change active state to ${newActiveState ? "true" : "false"}?`,
+      nameProduct: `Product ID: ${articleId}`,
+    });
+    console.log(`Setting confirmDialogContext:`, { articleId, newActiveState });
+
+    setIsDialogOpen(true);
+    console.log(`Executing areUSureConfirm with context:`, confirmDialogContext);
+
+  };
+  const areUSureConfirm = async (choose,  articleId, newActiveState) => {
+    setIsDialogOpen(false); // Close the dialog
+    if (choose) {
+      console.log(`Confirming active state toggle for ID: ${articleId}, New State: ${newActiveState}`);
+
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/article/update/${articleId}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ active: newActiveState }),
+            credentials: "include", // Ensure credentials are included if needed for authentication
+          }
+        );
+
+        if (!response.ok)
+          throw new Error(
+            `Failed to update the article: ${response.statusText}`
+          );
+
+        fetchData(); // Reload your articles to reflect the change
+        setConfirmDialogContext(null);
+      } catch (error) {
+        console.error("Error updating the article:", error);
+        alert("Error updating the article");
+      }
+    } else {
+      console.error("ID is undefined:", idTargetRef.current);
+    }
+  };
 
   const handlePrevPage = () => {
     const newPage = Math.max(1, currentPage - 1);
     setCurrentPage(newPage);
-    localStorage.setItem('currentPage', newPage.toString());
+    localStorage.setItem("currentPage", newPage.toString());
   };
-  
+
   const handleNextPage = () => {
     const newPage = Math.min(totalPages, currentPage + 1);
     setCurrentPage(newPage);
-    localStorage.setItem('currentPage', newPage.toString());
+    localStorage.setItem("currentPage", newPage.toString());
   };
-  
+
   const handleDelete = async (articleId) => {
-    console.log(articleId, 'Attempting to delete article with ID');
+    console.log(articleId, "Attempting to delete article with ID");
     if (!articleId) {
-      alert('Article ID is missing.');
+      alert("Article ID is missing.");
       return;
     }
 
     try {
-      console.log('In delete button for ID:', articleId);
-      const response = await fetch(`http://localhost:3000/article/delete/${articleId}`, {
-        method: 'DELETE', // Specify the request method
-        credentials: "include",
-      });
+      console.log("In delete button for ID:", articleId);
+      const response = await fetch(
+        `http://localhost:3000/article/delete/${articleId}`,
+        {
+          method: "DELETE", // Specify the request method
+          credentials: "include",
+        }
+      );
 
       if (!response.ok) {
-        throw new Error('Failed to delete the article');
+        throw new Error("Failed to delete the article");
       }
 
       // Handle success response
-      alert('Article deleted successfully');
-      // After deletion, you might want to refresh the list of articles
-      // This could be a direct call to your fetchData function or another mechanism
-      // to ensure the UI reflects the current state of your data
-      // const newFormData = formData.filter(article => article.id !== articleId);
-      // setFormData(newFormData);
+      alert("Article deleted successfully");
       fetchData();
       // Optionally, redirect or update UI upon successful deletion
     } catch (error) {
-      console.error('Error deleting the article:', error);
-      alert('Error deleting the article');
+      console.error("Error deleting the article:", error);
+      alert("Error deleting the article");
     }
   };
-
 
   return (
     <div
@@ -137,14 +192,17 @@ const ProductsPage = () => {
           {formData.length > 0 ? (
             formData.map((formDatas) => (
               <CardTable
+                id={formDatas.id}
                 key={formDatas.id}
                 title={formDatas.title}
                 category={formDatas.category}
                 description={formDatas.description}
                 isActive={formDatas.active}
                 isHighlights={formDatas.highlights}
-                slug={formDatas.slug} // Ensure this is correctly passed
+                slug={formDatas.slug}
                 onClick={() => handleDelete(formDatas.id)}
+                onToggleActive={(id, newState) => handleToggleActive(id, newState)}
+
               />
             ))
           ) : (
@@ -158,6 +216,22 @@ const ProductsPage = () => {
           )}
         </tbody>
       </table>
+      {isDialogOpen && (
+        <Dialog
+  message={dialogContent.message}
+  nameTarget={dialogContent.nameProduct}
+  onDialog={(choice) => {
+  setIsDialogOpen(false);
+  if (choice) {
+    areUSureConfirm(true, confirmDialogContext.articleId, confirmDialogContext.newActiveState);
+  }
+}}
+  yesConfirmation="Yes"
+  noConfirmation="No"
+/>
+
+      )}
+
       <Pagination
         nextFunc={handleNextPage}
         prevPage={handlePrevPage}

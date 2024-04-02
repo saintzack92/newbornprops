@@ -15,6 +15,7 @@ const CardTable = ({
   isHighlights,
   slug,
   onClick,
+  onToggleActive,
   id,
 }) => {
   // Function to generate a random Tailwind CSS color class
@@ -50,18 +51,16 @@ const CardTable = ({
   };
   // Inside CardTable component
   const deleteButtonHandler = () => {
-    // Call the passed handleDelete function with the article's ID
-    onClick(id); // Assuming 'slug' uniquely identifies an article
+    onClick(id); 
   };
-
+  
+  const handleToggle = (id, newState) => {
+    onToggleActive(id, newState); // Pass the ID up the component chain
+  };
   // In the JSX of CardTable
 
   const processedDescription = stripHtmlAndTruncate(description);
 
-  const statusText = isStatusDefined
-    ? status.charAt(0).toUpperCase() + status.slice(1)
-    : "";
-  const activeText = isActive ? "On" : "Off";
   const highlightsText = isHighlights ? "On" : "Off";
   // Determine icon color
   const iconColorClass = isPositive ? getRandomColor() : "bg-green-500";
@@ -80,7 +79,10 @@ const CardTable = ({
       </td>
       <td className={`${classTd}`}>{processedDescription}</td>
       <td className={`${classTd}`}>
-        <Toggle checked={isActive} />
+        <Toggle
+          checked={isActive}
+          onChange={() => handleToggle(id, !isActive)}
+        />
       </td>
       <td className={`${classTd}`}>{highlightsText}</td>
       <td>
