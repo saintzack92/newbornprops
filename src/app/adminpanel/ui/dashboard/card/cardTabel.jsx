@@ -16,33 +16,10 @@ const CardTable = ({
   slug,
   onClick,
   id,
+  checked,
+  onChange,
 }) => {
-  // Function to generate a random Tailwind CSS color class
-  const getRandomColor = () => {
-    const colors = [
-      "bg-blue-500",
-      "bg-yellow-500",
-      "bg-indigo-500",
-      "bg-purple-500",
-    ];
-    return colors[Math.floor(Math.random() * colors.length)];
-  };
 
-  // Check if status is defined
-  const isStatusDefined = status !== undefined && status !== null;
-
-  // Determine the color based on the status
-  const statusColor = isStatusDefined
-    ? status === "cancel"
-      ? "text-indigo-500"
-      : status === "done"
-      ? "text-green-500"
-      : status === "pending"
-      ? "text-red-500"
-      : "text-yellow-200"
-    : "";
-
-  // Handle status text display
   const stripHtmlAndTruncate = (html, length = 50) => {
     if (html === null || html === undefined) return ""; // Return empty string if input is null or undefined
     const text = html.replace(/<\/?[^>]+(>|$)/g, ""); // Strip HTML tags
@@ -50,37 +27,41 @@ const CardTable = ({
   };
   // Inside CardTable component
   const deleteButtonHandler = () => {
-    // Call the passed handleDelete function with the article's ID
-    onClick(id); // Assuming 'slug' uniquely identifies an article
+    onClick(id);
   };
+  // CardTable Component
+const changeToggleHandler = () => {
+  const newActiveState = !isActive; // Toggle the current state
+  if (typeof onChange === 'function') {
+    onChange(id, newActiveState); // Pass the toggled state
+  }
+};
 
-  // In the JSX of CardTable
 
   const processedDescription = stripHtmlAndTruncate(description);
 
-  const statusText = isStatusDefined
-    ? status.charAt(0).toUpperCase() + status.slice(1)
-    : "";
-  const activeText = isActive ? "On" : "Off";
   const highlightsText = isHighlights ? "On" : "Off";
   // Determine icon color
-  const iconColorClass = isPositive ? getRandomColor() : "bg-green-500";
 
   return (
     <tr className="items-center *:p-[10px]">
       <td className={`flex items-center gap-[10px] ${classTd}`}>
         <MdPeople
           size={40}
-          className={`${iconColorClass} text-[red] bg-green-300 rounded-full p-[3px] object-cover ${className}`}
+          className={` text-[red] bg-green-300 rounded-full p-[3px] object-cover ${className}`}
         />
         <div>{title}</div>
       </td>
       <td className={`${classTd}`}>
-        <span className={`${styles.status} ${statusColor}`}>{category}</span>
+        <span className={`${styles.status}`}>{category}</span>
       </td>
       <td className={`${classTd}`}>{processedDescription}</td>
       <td className={`${classTd}`}>
-        <Toggle checked={isActive} />
+        <Toggle
+          id={id}
+          checked={isActive} // Assuming `isActive` reflects the current state
+          onChange={() => changeToggleHandler()} // Adapt as needed, may pass `e` or specific data
+        />
       </td>
       <td className={`${classTd}`}>{highlightsText}</td>
       <td>

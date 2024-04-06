@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { Suspense, useEffect, useState } from "react";
 import CardTable from "../../ui/dashboard/card/cardTabel";
 import useAuthCheck from "@/app/application/components/refreshToken";
+import Dialog from "../../ui/dashboard/component/dialogModal";
 
 const ProductsPage = () => {
   useAuthCheck()
@@ -16,7 +17,14 @@ const ProductsPage = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(0);
   const itemsPerPage = 10;
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // const idTargetRef = useRef();
 
+  const [confirmDialogContext, setConfirmDialogContext] = useState(null);
+  const [dialogContent, setDialogContent] = useState({
+    message: "",
+    nameProduct: "",
+  });
   // Make fetchData a standalone function that can be called
   const fetchData = async () => {
     try {
@@ -43,17 +51,17 @@ const ProductsPage = () => {
   useEffect(() => {
     // Read the current page number from localStorage when the component mounts
     const savedPage = parseInt(localStorage.getItem('currentPage'), 10);
-    
+
     if (savedPage) {
       setCurrentPage(parseInt(savedPage, 10));
     } else {
       setCurrentPage(1);
       localStorage.setItem('currentPage', '1'); // Initialize if not present
     }
-    
+
     fetchData();
   }, []); // This effect should run once on mount
-  
+
   useEffect(() => {
     fetchData(); // Call fetchData whenever currentPage changes
     localStorage.setItem('currentPage', currentPage.toString()); // Update localStorage with the new current page
@@ -64,13 +72,13 @@ const ProductsPage = () => {
     setCurrentPage(newPage);
     localStorage.setItem('currentPage', newPage.toString());
   };
-  
+
   const handleNextPage = () => {
     const newPage = Math.min(totalPages, currentPage + 1);
     setCurrentPage(newPage);
     localStorage.setItem('currentPage', newPage.toString());
   };
-  
+
   const handleDelete = async (articleId) => {
     console.log(articleId, 'Attempting to delete article with ID');
     if (!articleId) {
@@ -88,21 +96,65 @@ const ProductsPage = () => {
       if (!response.ok) {
         throw new Error('Failed to delete the article');
       }
-
-      // Handle success response
       alert('Article deleted successfully');
-      // After deletion, you might want to refresh the list of articles
-      // This could be a direct call to your fetchData function or another mechanism
-      // to ensure the UI reflects the current state of your data
-      // const newFormData = formData.filter(article => article.id !== articleId);
-      // setFormData(newFormData);
       fetchData();
-      // Optionally, redirect or update UI upon successful deletion
     } catch (error) {
       console.error('Error deleting the article:', error);
       alert('Error deleting the article');
     }
   };
+
+ 
+  const handleToggleActive = (articleId, newActiveState) => {
+    console.log(`handleToggleActive called for ID: ${articleId}, newActiveState: ${newActiveState}`);
+    setConfirmDialogContext({ articleId, newActiveState });
+    console.log(setConfirmDialogContext({ articleId, newActiveState }));
+    setDialogContent({
+      message: `Are you sure you want to change active state to ${newActiveState ? "true" : "false"}?`,
+      nameProduct: `Product ID: ${articleId}`,
+    });
+    console.log(`Setting confirmDialogContext:`, { articleId, newActiveState });
+
+    setIsDialogOpen(true);
+    console.log(`Executing areUSureConfirm with context:`, confirmDialogContext);
+
+  };
+  const areUSureConfirm = async (choose) => {
+    setIsDialogOpen(false); // Close the dialog
+    if (choose && confirmDialogContext) {
+      const { articleId, newActiveState } = confirmDialogContext;
+      console.log(`Confirming active state toggle for ID: ${articleId}, New State: ${newActiveState}`);
+
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/article/update/${articleId}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ active: newActiveState }),
+            credentials: "include", // Ensure credentials are included if needed for authentication
+          }
+        );
+
+        if (!response.ok)
+          throw new Error(
+            `Failed to update the article: ${response.statusText}`
+          );
+
+        fetchData(); // Reload your articles to reflect the change
+        setConfirmDialogContext(null);
+      } catch (error) {
+        console.error("Error updating the article:", error);
+        alert("Error updating the article");
+      }
+    } else {
+      console.error("ID is undefined:", idTargetRef.current);
+    }
+  };
+
 
 
   return (
@@ -137,6 +189,7 @@ const ProductsPage = () => {
           {formData.length > 0 ? (
             formData.map((formDatas) => (
               <CardTable
+                id={formDatas.id}
                 key={formDatas.id}
                 title={formDatas.title}
                 category={formDatas.category}
@@ -145,6 +198,7 @@ const ProductsPage = () => {
                 isHighlights={formDatas.highlights}
                 slug={formDatas.slug} // Ensure this is correctly passed
                 onClick={() => handleDelete(formDatas.id)}
+                onChange={handleToggleActive}
               />
             ))
           ) : (
@@ -158,6 +212,20 @@ const ProductsPage = () => {
           )}
         </tbody>
       </table>
+      {isDialogOpen && (
+        <Dialog
+          message={dialogContent.message}
+          nameTarget={dialogContent.nameProduct}
+          onDialog={(choice) => {
+            setIsDialogOpen(false);
+            if (choice) {
+              areUSureConfirm(true);
+            }
+          }}
+          yesConfirmation="Yes"
+          noConfirmation="No"
+        />
+      )}
       <Pagination
         nextFunc={handleNextPage}
         prevPage={handlePrevPage}
