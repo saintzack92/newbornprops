@@ -40,7 +40,8 @@ const ProductsPage = () => {
   };
   useEffect(() => {
     // Read the current page number from localStorage when the component mounts
-    const savedPage = parseInt(localStorage.getItem("currentPage"), 10);
+
+    const savedPage = parseInt(localStorage.getItem('currentPage'), 10);
 
     if (savedPage) {
       setCurrentPage(parseInt(savedPage, 10));
@@ -68,54 +69,6 @@ const ProductsPage = () => {
 
   const [confirmDialogContext, setConfirmDialogContext] = useState(null);
 
-  const handleToggleActive = (articleId, newActiveState) => {
-    console.log(`handleToggleActive called for ID: ${articleId}, newActiveState: ${newActiveState}`);
-    setConfirmDialogContext({ articleId, newActiveState });
-    console.log(setConfirmDialogContext({ articleId, newActiveState }));
-    setDialogContent({
-      message: `Are you sure you want to change active state to ${newActiveState ? "true" : "false"}?`,
-      nameProduct: `Product ID: ${articleId}`,
-    });
-    console.log(`Setting confirmDialogContext:`, { articleId, newActiveState });
-
-    setIsDialogOpen(true);
-    console.log(`Executing areUSureConfirm with context:`, confirmDialogContext);
-
-  };
-  const areUSureConfirm = async (choose,  articleId, newActiveState) => {
-    setIsDialogOpen(false); // Close the dialog
-    if (choose) {
-      console.log(`Confirming active state toggle for ID: ${articleId}, New State: ${newActiveState}`);
-
-
-      try {
-        const response = await fetch(
-          `http://localhost:3000/article/update/${articleId}`,
-          {
-            method: "PATCH",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ active: newActiveState }),
-            credentials: "include", // Ensure credentials are included if needed for authentication
-          }
-        );
-
-        if (!response.ok)
-          throw new Error(
-            `Failed to update the article: ${response.statusText}`
-          );
-
-        fetchData(); // Reload your articles to reflect the change
-        setConfirmDialogContext(null);
-      } catch (error) {
-        console.error("Error updating the article:", error);
-        alert("Error updating the article");
-      }
-    } else {
-      console.error("ID is undefined:", idTargetRef.current);
-    }
-  };
 
   const handlePrevPage = () => {
     const newPage = Math.max(1, currentPage - 1);
@@ -149,16 +102,66 @@ const ProductsPage = () => {
       if (!response.ok) {
         throw new Error("Failed to delete the article");
       }
-
-      // Handle success response
-      alert("Article deleted successfully");
+      alert('Article deleted successfully');
       fetchData();
-      // Optionally, redirect or update UI upon successful deletion
     } catch (error) {
       console.error("Error deleting the article:", error);
       alert("Error deleting the article");
     }
   };
+
+  const handleToggleActive = (articleId, newActiveState) => {
+    console.log(`handleToggleActive called for ID: ${articleId}, newActiveState: ${newActiveState}`);
+    setConfirmDialogContext({ articleId, newActiveState });
+    console.log(setConfirmDialogContext({ articleId, newActiveState }));
+    setDialogContent({
+      message: `Are you sure you want to change active state to ${newActiveState ? "true" : "false"}?`,
+      nameProduct: `Product ID: ${articleId}`,
+    });
+    console.log(`Setting confirmDialogContext:`, { articleId, newActiveState });
+
+    setIsDialogOpen(true);
+    console.log(`Executing areUSureConfirm with context:`, confirmDialogContext);
+
+  };
+  const areUSureConfirm = async (choose) => {
+    setIsDialogOpen(false); // Close the dialog
+    if (choose && confirmDialogContext) {
+      const { articleId, newActiveState } = confirmDialogContext;
+      console.log(`Confirming active state toggle for ID: ${articleId}, New State: ${newActiveState}`);
+
+
+      try {
+        const response = await fetch(
+          `http://localhost:3000/article/update/${articleId}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ active: newActiveState }),
+            credentials: "include", // Ensure credentials are included if needed for authentication
+          }
+        );
+
+        if (!response.ok)
+          throw new Error(
+            `Failed to update the article: ${response.statusText}`
+          );
+
+        fetchData(); // Reload your articles to reflect the change
+        setConfirmDialogContext(null);
+      } catch (error) {
+        console.error("Error updating the article:", error);
+        alert("Error updating the article");
+      }
+    } else {
+      console.error("ID is undefined:", idTargetRef.current);
+    }
+  };
+
+
+
 
   return (
     <div
@@ -201,8 +204,7 @@ const ProductsPage = () => {
                 isHighlights={formDatas.highlights}
                 slug={formDatas.slug}
                 onClick={() => handleDelete(formDatas.id)}
-                onToggleActive={(id, newState) => handleToggleActive(id, newState)}
-
+                onChange={handleToggleActive}
               />
             ))
           ) : (
@@ -218,20 +220,19 @@ const ProductsPage = () => {
       </table>
       {isDialogOpen && (
         <Dialog
-  message={dialogContent.message}
-  nameTarget={dialogContent.nameProduct}
-  onDialog={(choice) => {
-  setIsDialogOpen(false);
-  if (choice) {
-    areUSureConfirm(true, confirmDialogContext.articleId, confirmDialogContext.newActiveState);
-  }
-}}
-  yesConfirmation="Yes"
-  noConfirmation="No"
-/>
 
+          message={dialogContent.message}
+          nameTarget={dialogContent.nameProduct}
+          onDialog={(choice) => {
+            setIsDialogOpen(false);
+            if (choice) {
+              areUSureConfirm(true);
+            }
+          }}
+          yesConfirmation="Yes"
+          noConfirmation="No"
+        />
       )}
-
       <Pagination
         nextFunc={handleNextPage}
         prevPage={handlePrevPage}
