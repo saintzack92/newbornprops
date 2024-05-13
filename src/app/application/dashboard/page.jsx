@@ -3,6 +3,7 @@ import Footers from "../components/footer.jsx";
 import Hero from "./hero.jsx";
 import Feature from "./feature.jsx";
 import Pricing from "./pricing.jsx";
+import { SlidersExample } from "./slider.jsx";
 
 const Application = () => {
   return (
@@ -13,6 +14,7 @@ const Application = () => {
       <main>
         <Hero />
         <Feature />
+        <SlidersExample />
         <Pricing />
       </main>
       <footer>
