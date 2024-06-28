@@ -13,8 +13,8 @@ const Application = () => {
       </header>
       <main>
         <Hero />
-        <Feature />
         <SlidersExample />
+        <Feature />
         <Pricing />
       </main>
       <footer>

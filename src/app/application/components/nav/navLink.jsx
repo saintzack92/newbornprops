@@ -29,9 +29,9 @@ export default function navLinka() {
   return (
     <>
       {isSideMenuOpen && <MobileNav closeSideMenu={closeSideMenu} />}
-      <div className="hidden md:flex justify-end gap-4 transition-all">
+      <div className="hidden md:flex justify-end gap-4 transition-all ">
         {navItems().map((d, i) => (
-          <div key={i} className="relative group px-2 py-1 transition-all ">
+          <div key={i} className="relative group px-2 py-1 transition-transform ease-out duration-500 ">
             <Link
               href={d.link ?? "#"}
               className="flex cursor-pointer items-center gap-2 text-neutral-400 group-hover:text-black "
@@ -71,8 +71,8 @@ export default function navLinka() {
 
 function MobileNav({ closeSideMenu }) {
   return (
-    <div className="fixed left-0 top-0 flex h-full min-h-screen w-full justify-end bg-black/60 md:hidden">
-      <div className=" h-full w-[65%] bg-white px-4 py-4">
+    <div className="fixed left-0 top-0 flex h-full min-h-screen w-full justify-end bg-black/60 md:hidden ">
+      <div className=" h-full w-[65%] bg-white px-4 py-4 transition-transform ease-out duration-500">
         <section className="flex justify-end">
           <AiOutlineClose
             onClick={closeSideMenu}
@@ -130,7 +130,7 @@ function SingleNavItem({ d }) {
 
       {/* dropdown */}
       {isItemOpen && d.children && (
-        <div className="  w-auto  flex-col gap-1   rounded-lg bg-white py-3   transition-all flex ">
+        <div className="  w-auto  flex-col gap-1   rounded-lg bg-white py-3   transition-all flexa ">
           {d.children.map((ch, i) => (
             <Link
               key={i}
